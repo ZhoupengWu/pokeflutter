@@ -4,6 +4,8 @@ void main() {
   runApp(const MyApp());
 }
 
+const grey = Color(0xFF283141);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          selectedItemColor: Color(0xFF283141),
+          selectedItemColor: grey,
           unselectedItemColor: Color(0xFF8D9DB9),
           backgroundColor: Colors.white
         )
@@ -29,6 +31,16 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Color(0xFFFFCC00),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 0,
+        icon: Icon(Icons.auto_awesome_rounded, color: grey),
+        label: Text("Random", style: TextStyle(color: grey),),
+        onPressed: () {
+          // Button pressed action can be implemented here
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(items: [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.compare_arrows_rounded), label: "Compare"),
