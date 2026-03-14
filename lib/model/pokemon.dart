@@ -1,10 +1,10 @@
 class Pokemon {
-  final String id;
+  final int id;
   final String name;
   final String urlSprite;
   final String urlImage;
-  final int weight;
-  final int height;
+  final double weight;
+  final double height;
   final List<String> typesList;
 
   Pokemon({
