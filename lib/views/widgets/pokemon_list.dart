@@ -5,15 +5,18 @@ import '../../views/widgets/grid_item.dart';
 
 class PokemonList extends StatelessWidget {
   final List<PokemonListItem> pokemonList;
+  final Set<String> activeTypeFilters;
 
-  const PokemonList({super.key, required this.pokemonList});
+  const PokemonList({
+    super.key,
+    required this.pokemonList,
+    this.activeTypeFilters = const {},
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
-      // No fixed height — the Expanded in HomePage drives the size.
-      // clipBehavior keeps the pokeball SVGs from bleeding outside the grid.
       child: GridView.builder(
         clipBehavior: Clip.hardEdge,
         itemCount: pokemonList.length,
@@ -24,7 +27,10 @@ class PokemonList extends StatelessWidget {
           mainAxisExtent: 100.h,
         ),
         itemBuilder: (BuildContext context, int index) {
-          return GridItem(pokemon: pokemonList[index]);
+          return GridItem(
+            pokemon: pokemonList[index],
+            activeTypeFilters: activeTypeFilters,
+          );
         },
       ),
     );

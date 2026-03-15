@@ -1,4 +1,4 @@
-package com.example.pokeflutter
+package com.wux.pokeflutter
 
 import io.flutter.embedding.android.FlutterActivity
 
