@@ -4,8 +4,15 @@ import '../../utils/palette.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final ValueChanged<String> onSearch;
+  final VoidCallback? onFilterTap;
+  final int activeFilterCount;
 
-  const SearchBarWidget({super.key, required this.onSearch});
+  const SearchBarWidget({
+    super.key,
+    required this.onSearch,
+    this.onFilterTap,
+    this.activeFilterCount = 0,
+  });
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
@@ -40,16 +47,52 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     );
   }
 
-  Widget _filterButton() => Container(
-    height: 48.r,
-    width: 48.r,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16.r),
-      color: gray[200],
-    ),
-    alignment: Alignment.center,
-    child: Icon(Icons.filter_alt_rounded, size: 24.r),
-  );
+  Widget _filterButton() {
+    final hasActive = widget.activeFilterCount > 0;
+
+    return GestureDetector(
+      onTap: widget.onFilterTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: 48.r,
+            width: 48.r,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.r),
+              color: hasActive ? gray[500] : gray[200],
+            ),
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.filter_alt_rounded,
+              size: 24.r,
+              color: hasActive ? Colors.white : gray[400],
+            ),
+          ),
+          if (hasActive)
+            Positioned(
+              top: -4,
+              right: -4,
+              child: Container(
+                padding: EdgeInsets.all(4.r),
+                decoration: const BoxDecoration(
+                  color: Colors.redAccent,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  '${widget.activeFilterCount}',
+                  style: TextStyle(
+                    fontSize: 9.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 
   Widget _searchBar(BuildContext context) => Container(
     decoration: BoxDecoration(
@@ -80,7 +123,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             ),
           ),
         ),
-        // Clear button — visible only when there is text
         ValueListenableBuilder<TextEditingValue>(
           valueListenable: _controller,
           builder: (_, value, __) {

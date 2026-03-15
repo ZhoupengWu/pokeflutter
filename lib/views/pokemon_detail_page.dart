@@ -7,6 +7,7 @@ import '../utils/pokemon_api.dart';
 import '../utils/pokemon_costants.dart';
 import '../utils/capitalize.dart';
 import '../utils/palette.dart';
+import '../utils/favourites_manager.dart';
 import 'widgets/styled_text.dart';
 
 class PokemonDetailPage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
   Pokemon? _pokemon;
   bool _isLoading = true;
   bool _hasError = false;
-  Color _bgColor = const Color(0xFF919AA2); // fallback: normal grey
+  Color _bgColor = const Color(0xFF919AA2);
 
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
         _pokemon = result;
         _bgColor = result != null
             ? (listPokemonTypeColor[result.typesList[0].toLowerCase()] ??
-                _bgColor)
+                  _bgColor)
             : _bgColor;
         _isLoading = false;
       });
@@ -58,42 +59,42 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.white))
           : _hasError
-              ? _errorView()
-              : _detailView(),
+          ? _errorView()
+          : _detailView(),
     );
   }
 
   Widget _errorView() => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, color: Colors.white, size: 48),
-            const SizedBox(height: 12),
-            Text('Failed to load Pokémon',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Colors.white)),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isLoading = true;
-                  _hasError = false;
-                });
-                _fetchDetails();
-              },
-              child: const Text('Retry'),
-            ),
-          ],
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.error_outline, color: Colors.white, size: 48),
+        const SizedBox(height: 12),
+        Text(
+          'Failed to load Pokémon',
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(color: Colors.white),
         ),
-      );
+        const SizedBox(height: 12),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _isLoading = true;
+              _hasError = false;
+            });
+            _fetchDetails();
+          },
+          child: const Text('Retry'),
+        ),
+      ],
+    ),
+  );
 
   Widget _detailView() {
     final pokemon = _pokemon!;
     return Stack(
       children: [
-        // Background pokeball watermark
         Positioned(
           top: -20.r,
           right: -40.r,
@@ -101,59 +102,76 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
             'assets/pokeball.svg',
             height: 220.r,
             width: 220.r,
-            colorFilter:
-                const ColorFilter.mode(Colors.white12, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(
+              Colors.white12,
+              BlendMode.srcIn,
+            ),
           ),
         ),
-
         SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ── Header ──────────────────────────────────────────────────
+              // ── Header ────────────────────────────────────────────────
               Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded,
-                          color: Colors.white),
+                      icon: const Icon(
+                        Icons.arrow_back_rounded,
+                        color: Colors.white,
+                      ),
                       onPressed: () => Navigator.pop(context),
                     ),
                     Expanded(
                       child: Text(
                         pokemon.name.capitalize(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
+                        style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
+                    ),
+                    // Favourite button
+                    ValueListenableBuilder(
+                      valueListenable: FavouritesManager.instance.notifier,
+                      builder: (_, __, ___) {
+                        final isFav = FavouritesManager.instance.isFavourite(
+                          widget.pokemon.name,
+                        );
+                        return IconButton(
+                          icon: Icon(
+                            isFav
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            color: isFav ? Colors.redAccent : Colors.white,
+                          ),
+                          onPressed: () =>
+                              FavouritesManager.instance.toggle(widget.pokemon),
+                        );
+                      },
                     ),
                     Text(
                       '#${pokemon.id.toString().padLeft(3, '0')}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(color: Colors.white70),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium?.copyWith(color: Colors.white70),
                     ),
                   ],
                 ),
               ),
 
-              // ── Type chips ──────────────────────────────────────────────
+              // ── Type chips ─────────────────────────────────────────────
               Padding(
                 padding: EdgeInsets.only(left: 32.w, bottom: 8.h),
                 child: Row(
-                  children: pokemon.typesList
-                      .map((t) => _typeChip(t))
-                      .toList(),
+                  children: pokemon.typesList.map((t) => _typeChip(t)).toList(),
                 ),
               ),
 
-              // ── Pokémon image ────────────────────────────────────────────
+              // ── Pokémon image ──────────────────────────────────────────
               Center(
                 child: Image.network(
                   pokemon.urlImage,
@@ -168,21 +186,23 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                 ),
               ),
 
-              // ── White card ───────────────────────────────────────────────
+              // ── White card ─────────────────────────────────────────────
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(32.r)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(32.r),
+                    ),
                   ),
                   child: SingleChildScrollView(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 24.w, vertical: 24.h),
+                      horizontal: 24.w,
+                      vertical: 24.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ── Physical info ──────────────────────────────────
                         _sectionTitle('About'),
                         SizedBox(height: 12.h),
                         Row(
@@ -200,10 +220,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                             ),
                           ],
                         ),
-
                         SizedBox(height: 24.h),
-
-                        // ── Abilities ──────────────────────────────────────
                         _sectionTitle('Abilities'),
                         SizedBox(height: 8.h),
                         Wrap(
@@ -213,10 +230,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                               .map((a) => _abilityChip(a))
                               .toList(),
                         ),
-
                         SizedBox(height: 24.h),
-
-                        // ── Base stats ─────────────────────────────────────
                         _sectionTitle('Base Stats'),
                         SizedBox(height: 12.h),
                         ...pokemon.stats.map((s) => _statRow(s)),
@@ -232,92 +246,78 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
     );
   }
 
-  // ── Helper widgets ─────────────────────────────────────────────────────────
-
   Widget _sectionTitle(String title) => Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: _bgColor,
-              fontWeight: FontWeight.w700,
-            ),
-      );
+    title,
+    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+      color: _bgColor,
+      fontWeight: FontWeight.w700,
+    ),
+  );
 
   Widget _typeChip(String type) => Container(
-        margin: EdgeInsets.only(right: 8.w),
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-        decoration: BoxDecoration(
-          color: Colors.white24,
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Text(
-          type.capitalize(),
-          style: Theme.of(context)
-              .textTheme
-              .labelMedium
-              ?.copyWith(color: Colors.white),
-        ),
-      );
+    margin: EdgeInsets.only(right: 8.w),
+    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+    decoration: BoxDecoration(
+      color: Colors.white24,
+      borderRadius: BorderRadius.circular(20.r),
+    ),
+    child: Text(
+      type.capitalize(),
+      style: Theme.of(
+        context,
+      ).textTheme.labelMedium?.copyWith(color: Colors.white),
+    ),
+  );
 
   Widget _abilityChip(String ability) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-        decoration: BoxDecoration(
-          color: _bgColor.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: _bgColor.withValues(alpha: 0.3)),
-        ),
-        child: Text(
-          ability.capitalize(),
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: _bgColor),
-        ),
-      );
+    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+    decoration: BoxDecoration(
+      color: _bgColor.withValues(alpha: 0.1),
+      borderRadius: BorderRadius.circular(20.r),
+      border: Border.all(color: _bgColor.withValues(alpha: 0.3)),
+    ),
+    child: Text(
+      ability.capitalize(),
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: _bgColor),
+    ),
+  );
 
   Widget _infoTile({
     required IconData icon,
     required String label,
     required String value,
-  }) =>
-      Expanded(
-        child: Column(
+  }) => Expanded(
+    child: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, size: 16.r, color: gray[400]),
-                SizedBox(width: 4.w),
-                StyledText(
-                  text: value,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: gray[500]),
-                  textHeight: 20.h,
-                ),
-              ],
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              label,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: gray[300]),
+            Icon(icon, size: 16.r, color: gray[400]),
+            SizedBox(width: 4.w),
+            StyledText(
+              text: value,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium!.copyWith(color: gray[500]),
+              textHeight: 20.h,
             ),
           ],
         ),
-      );
+        SizedBox(height: 4.h),
+        Text(
+          label,
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: gray[300]),
+        ),
+      ],
+    ),
+  );
 
-  Widget _divider() => Container(
-        height: 32.h,
-        width: 1.w,
-        color: gray[200],
-      );
+  Widget _divider() => Container(height: 32.h, width: 1.w, color: gray[200]);
 
   Widget _statRow(PokemonStat stat) {
     const maxStat = 255.0;
-    final statLabel = _statLabel(stat.name);
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: Row(
@@ -325,11 +325,11 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
           SizedBox(
             width: 40.w,
             child: Text(
-              statLabel,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: _bgColor, fontWeight: FontWeight.w700),
+              _statLabel(stat.name),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: _bgColor,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           SizedBox(width: 8.w),
@@ -337,10 +337,9 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
             width: 28.w,
             child: Text(
               stat.value.toString(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: gray[500]),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: gray[500]),
               textAlign: TextAlign.end,
             ),
           ),

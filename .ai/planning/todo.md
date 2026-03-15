@@ -2,74 +2,42 @@
 
 This is a prioritized list of missing or incomplete features in the PokéFlutter app.
 
-## 🔴 High Priority
+## ✅ Completed — Phase 1 (v1.1.0)
 
-### ✅ Pokemon Detail Page
-- **Description**: Detail screen with image, types, stats, abilities, height, weight
-- **Priority**: high
-- **Complexity**: medium
-- **Status**: DONE — `lib/views/pokemon_detail_page.dart`
+- ✅ **Pokemon Detail Page** — `lib/views/pokemon_detail_page.dart`
+- ✅ **Search Functionality** — `lib/views/widgets/search_bar.dart`, `lib/views/homepage.dart`
+- ✅ **Navigation System** — `lib/views/shell_page.dart`
+- ✅ **Random Pokemon Button** — `lib/views/widgets/random_floating_button.dart`
+- ✅ **Error Handling** — `lib/utils/pokemon_api.dart`, `grid_item.dart`, `pokemon_detail_page.dart`
 
-### ✅ Search Functionality
-- **Description**: Real-time filtering by Pokémon name via search bar
-- **Priority**: high
-- **Complexity**: small
-- **Status**: DONE — `lib/views/widgets/search_bar.dart`, `lib/views/homepage.dart`
+## ✅ Completed — Phase 2 (v1.2.0)
 
-### ✅ Navigation System
-- **Description**: Bottom navigation with IndexedStack across Home, Compare, Quiz, Favourite
-- **Priority**: high
-- **Complexity**: medium
-- **Status**: DONE — `lib/views/shell_page.dart` + placeholder pages
+- ✅ **Filter Functionality** — `lib/views/widgets/type_filter_sheet.dart`, `search_bar.dart`, `homepage.dart`, `grid_item.dart`
+- ✅ **Favourites System** — `lib/utils/favourites_manager.dart`, `lib/views/favourite_page.dart`, `pokemon_detail_page.dart`
+- ✅ **Pokemon Comparison** — `lib/views/compare_page.dart`
 
-### ✅ Random Pokemon Button
-- **Description**: Navigates to a random Pokémon detail page
-- **Priority**: high
-- **Complexity**: small
-- **Status**: DONE — wired in `homepage.dart`, `random_floating_button.dart`
-
-### ✅ Error Handling
-- **Description**: API errors handled gracefully with retry in detail page and null-safe grid items
-- **Priority**: high
-- **Complexity**: small
-- **Status**: DONE — `lib/utils/pokemon_api.dart`, `grid_item.dart`, `pokemon_detail_page.dart`
-
-## 🟡 Medium Priority
-
-### Filter Functionality
-- **Description**: Add type-based filtering for the Pokémon list via the filter button
-- **Priority**: medium
-- **Complexity**: medium
-- **Files**: Modify `lib/views/widgets/search_bar.dart`, `lib/views/homepage.dart`, new `lib/views/widgets/type_filter_dialog.dart`
-
-## 🟢 Low Priority
-
-### Pokemon Comparison Feature
-- **Description**: Allow comparing two Pokémon side by side
-- **Priority**: low
-- **Complexity**: large
-- **Files**: `lib/views/compare_page.dart`, `lib/model/comparison_model.dart`
+## 🟢 Low Priority — Phase 3
 
 ### Quiz Feature
-- **Description**: Implement a Pokémon quiz game
+- **Description**: Implement a Pokémon quiz game (guess the Pokémon from the sprite or stats)
 - **Priority**: low
 - **Complexity**: large
 - **Files**: `lib/views/quiz_page.dart`, `lib/model/quiz_model.dart`, `lib/utils/quiz_logic.dart`
 
-### Favourites System
-- **Description**: Allow users to mark and view favourite Pokémon with local persistence
-- **Priority**: low
-- **Complexity**: medium
-- **Files**: `lib/views/favourite_page.dart`, add local storage, modify `lib/model/pokemon.dart`
-
 ### Caching System
-- **Description**: Local caching for Pokémon data to reduce API calls
+- **Description**: Local caching for Pokémon data to reduce repeated API calls
 - **Priority**: low
 - **Complexity**: medium
 - **Files**: `lib/utils/cache_manager.dart`, modify `lib/utils/pokemon_api.dart`
 
+### Persistent Favourites
+- **Description**: Persist favourites across app restarts using `shared_preferences` or `Hive`
+- **Priority**: low
+- **Complexity**: small
+- **Files**: Modify `lib/utils/favourites_manager.dart`, add `shared_preferences` to `pubspec.yaml`
+
 ### State Management Refactor
-- **Description**: Replace setState with Provider or Riverpod
+- **Description**: Replace `setState` with Provider or Riverpod for cleaner state flow
 - **Priority**: low
 - **Complexity**: large
 - **Files**: All stateful widgets

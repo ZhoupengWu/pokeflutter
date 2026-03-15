@@ -12,17 +12,22 @@ import '../../views/pokemon_detail_page.dart';
 
 class GridItem extends StatefulWidget {
   final PokemonListItem pokemon;
+  final Set<String> activeTypeFilters;
 
-  const GridItem({super.key, required this.pokemon});
+  const GridItem({
+    super.key,
+    required this.pokemon,
+    this.activeTypeFilters = const {},
+  });
 
   @override
   State<GridItem> createState() => _GridItemState();
 }
 
 class _GridItemState extends State<GridItem> {
-  Pokemon? pokemon;
+  Pokemon? _pokemon;
   bool _isLoading = true;
-  Color? pokemonColor;
+  Color? _pokemonColor;
 
   @override
   void initState() {
@@ -36,14 +41,22 @@ class _GridItemState extends State<GridItem> {
       final color = listPokemonTypeColor[result?.typesList[0].toLowerCase()];
       if (!mounted) return;
       setState(() {
-        pokemon = result;
-        pokemonColor = color;
+        _pokemon = result;
+        _pokemonColor = color;
         _isLoading = false;
       });
     } catch (_) {
       if (!mounted) return;
       setState(() => _isLoading = false);
     }
+  }
+
+  bool get _isVisible {
+    if (widget.activeTypeFilters.isEmpty) return true;
+    if (_pokemon == null) return true; // show while loading
+    return _pokemon!.typesList.any(
+      (t) => widget.activeTypeFilters.contains(t.toLowerCase()),
+    );
   }
 
   void _navigateToDetail() {
@@ -57,6 +70,8 @@ class _GridItemState extends State<GridItem> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isVisible) return const SizedBox.shrink();
+
     if (_isLoading) {
       return Container(
         decoration: BoxDecoration(
@@ -67,7 +82,7 @@ class _GridItemState extends State<GridItem> {
       );
     }
 
-    if (pokemon == null) {
+    if (_pokemon == null) {
       return Container(
         decoration: BoxDecoration(
           color: gray[100],
@@ -82,7 +97,7 @@ class _GridItemState extends State<GridItem> {
       onTap: _navigateToDetail,
       child: Container(
         decoration: BoxDecoration(
-          color: pokemonColor,
+          color: _pokemonColor,
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Stack(
@@ -116,13 +131,13 @@ class _GridItemState extends State<GridItem> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _typeList(pokemon!),
+                          children: _typeList(_pokemon!),
                         ),
                         SizedBox(
                           height: 48.r,
                           width: 48.r,
                           child: Image.network(
-                            pokemon!.urlSprite,
+                            _pokemon!.urlSprite,
                             fit: BoxFit.contain,
                             errorBuilder: (_, __, ___) => Icon(
                               Icons.catching_pokemon,
@@ -191,14 +206,14 @@ class _GridItemState extends State<GridItem> {
         style: Theme.of(
           context,
         ).textTheme.bodySmall!.copyWith(color: Colors.white),
-        text: pokemon?.name.capitalize(),
+        text: _pokemon?.name.capitalize(),
         textHeight: 16.h,
       ),
       StyledText(
         style: Theme.of(
           context,
         ).textTheme.bodySmall!.copyWith(color: Colors.white),
-        text: '#${pokemon?.id.toString().padLeft(3, '0')}',
+        text: '#${_pokemon?.id.toString().padLeft(3, '0')}',
         textHeight: 16.h,
       ),
     ],
