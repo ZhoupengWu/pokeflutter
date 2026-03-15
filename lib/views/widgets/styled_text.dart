@@ -9,12 +9,14 @@ class StyledText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = style.fontSize ?? 0;
+    TextStyle effectiveStyle = style;
+    final fontSize = style.fontSize;
+    
+    if (textHeight > 0 && fontSize != null && fontSize > 0) {
+      // Flutter height multiplier = desired line height / font size
+      effectiveStyle = style.copyWith(height: textHeight / fontSize);
+    }
 
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: (textHeight-fontSize)/2),
-      height: fontSize,
-      child: Text(text ?? "", style: style,)
-    );
+    return Text(text ?? '', style: effectiveStyle);
   }
 }

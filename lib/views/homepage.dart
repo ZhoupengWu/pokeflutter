@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/palette.dart';
 import 'widgets/random_floating_button.dart';
 import 'widgets/bottom_nav_bar.dart';
-import 'widgets/styled_text.dart';
 import 'widgets/pokemon_list.dart';
 import 'widgets/search_bar.dart';
 import '../model/pokemon_list_item.dart';
@@ -22,20 +21,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    readJSONFile();
     super.initState();
+    readJSONFile();
   }
 
   void readJSONFile() async {
-    final jsonFile = await rootBundle.loadString("assets/pokemonList.json");
+    final jsonFile = await rootBundle.loadString('assets/pokemonList.json');
     final decoded = jsonDecode(jsonFile);
 
-    for (var item in decoded["pokemonList"]) {
-      final pokemonListItem = PokemonListItem(name: item["name"], url: item["url"]);
-      pokemonList.add(pokemonListItem);
-    }
+    final items = (decoded['pokemonList'] as List)
+      .map((item) => PokemonListItem(name: item['name'], url: item['url']))
+      .toList();
 
-    setState(() {});
+    if (!mounted) return;
+
+    setState(() {
+      pokemonList.addAll(items);
+    });
   }
 
   @override
@@ -43,23 +45,31 @@ class _HomePageState extends State<HomePage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      // FAB floats above content — not inside the Column
       floatingActionButton: const RandomFloatingButton(),
       bottomNavigationBar: const BottomNavBar(),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(top: 76.h, left: 24.w, right: 24.w),
-            child: StyledText(text: "Pokédex", style: textTheme.displaySmall!, textHeight: 44.h,)
+          // Respect status bar height + a small fixed gap
+          SizedBox(height: MediaQuery.of(context).padding.top + 16),
+          // Title
+          Padding(
+            padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 4.h),
+            child: Text('Pokédex', style: textTheme.displaySmall),
           ),
-          Container(
+          // Subtitle
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Text("Use the advanced search to find Pokémon by type, weakness, ability and more!", style: textTheme.bodyLarge?.copyWith(color: gray[400], height: 24/16))
+            child: Text(
+              'Use the advanced search to find Pokémon by type, weakness, ability and more!',
+              style: textTheme.bodyLarge?.copyWith(color: gray[400], height: 1.5),
+            ),
           ),
-          SizedBox(height: 16.h,),
+          SizedBox(height: 16.h),
           SearchBarWidget(),
-          SizedBox(height: 24.h,),
-          PokemonList(pokemonList: pokemonList,),
+          SizedBox(height: 24.h),
+          Expanded(child: PokemonList(pokemonList: pokemonList)),
         ],
       ),
     );

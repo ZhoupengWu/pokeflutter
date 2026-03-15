@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'palette.dart';
 
 final pokeFlutterTheme = ThemeData(
   primarySwatch: gray,
   textTheme: TextTheme(
     displaySmall: GoogleFonts.roboto(
-      fontSize: 36.sp,
+      fontSize: 36,
       fontWeight: FontWeight.w400,
       color: gray[500]
     ),

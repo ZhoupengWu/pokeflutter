@@ -10,22 +10,23 @@ class PokemonList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-
-    return Container(
-      height: 532.h,
-      padding: EdgeInsets.symmetric(horizontal: 24),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      // No fixed height — the Expanded in HomePage drives the size.
+      // clipBehavior keeps the pokeball SVGs from bleeding outside the grid.
       child: GridView.builder(
+        clipBehavior: Clip.hardEdge,
         itemCount: pokemonList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          mainAxisExtent: 100
+          crossAxisSpacing: 8.w,
+          mainAxisSpacing: 8.h,
+          mainAxisExtent: 100.h,
         ),
         itemBuilder: (BuildContext context, int index) {
           return GridItem(pokemon: pokemonList[index]);
-        }),
+        },
+      ),
     );
   }
 }
