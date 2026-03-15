@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'views/homepage.dart';
+import 'views/shell_page.dart';
 import 'utils/theme.dart';
 
 void main() {
@@ -13,13 +13,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(360, 979),
+      designSize: const Size(360, 979),
       minTextAdapt: true,
       builder: (context, child) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'PokéFlutter',
+          debugShowCheckedModeBanner: false,
           theme: pokeFlutterTheme,
-          home: const HomePage(),
+          home: const ShellPage(),
         );
       },
     );

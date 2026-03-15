@@ -4,72 +4,72 @@ This is a prioritized list of missing or incomplete features in the PokéFlutter
 
 ## 🔴 High Priority
 
-### Pokemon Detail Page
-- **Description**: Create a detail screen showing full Pokemon information (stats, abilities, evolution, etc.)
+### ✅ Pokemon Detail Page
+- **Description**: Detail screen with image, types, stats, abilities, height, weight
 - **Priority**: high
 - **Complexity**: medium
-- **Files**: `lib/views/pokemon_detail.dart`, `lib/model/pokemon_detail.dart`, modify `lib/views/widgets/grid_item.dart` for navigation
+- **Status**: DONE — `lib/views/pokemon_detail_page.dart`
 
-### Search Functionality
-- **Description**: Implement search by Pokemon name in the search bar
+### ✅ Search Functionality
+- **Description**: Real-time filtering by Pokémon name via search bar
 - **Priority**: high
 - **Complexity**: small
-- **Files**: Modify `lib/views/homepage.dart`, `lib/views/widgets/search_bar.dart`
+- **Status**: DONE — `lib/views/widgets/search_bar.dart`, `lib/views/homepage.dart`
 
-### Navigation System
-- **Description**: Implement bottom navigation to switch between Home, Compare, Quiz, Favourite screens
+### ✅ Navigation System
+- **Description**: Bottom navigation with IndexedStack across Home, Compare, Quiz, Favourite
 - **Priority**: high
 - **Complexity**: medium
-- **Files**: `lib/views/compare_page.dart`, `lib/views/quiz_page.dart`, `lib/views/favourite_page.dart`, modify `lib/views/homepage.dart`, `lib/views/widgets/bottom_nav_bar.dart`
+- **Status**: DONE — `lib/views/shell_page.dart` + placeholder pages
+
+### ✅ Random Pokemon Button
+- **Description**: Navigates to a random Pokémon detail page
+- **Priority**: high
+- **Complexity**: small
+- **Status**: DONE — wired in `homepage.dart`, `random_floating_button.dart`
+
+### ✅ Error Handling
+- **Description**: API errors handled gracefully with retry in detail page and null-safe grid items
+- **Priority**: high
+- **Complexity**: small
+- **Status**: DONE — `lib/utils/pokemon_api.dart`, `grid_item.dart`, `pokemon_detail_page.dart`
 
 ## 🟡 Medium Priority
 
-### Random Pokemon Button
-- **Description**: Implement random Pokemon selection and navigation to detail page
-- **Priority**: medium
-- **Complexity**: small
-- **Files**: Modify `lib/views/widgets/random_floating_button.dart`, `lib/views/homepage.dart`
-
 ### Filter Functionality
-- **Description**: Add type-based filtering for the Pokemon list
+- **Description**: Add type-based filtering for the Pokémon list via the filter button
 - **Priority**: medium
 - **Complexity**: medium
-- **Files**: Modify `lib/views/widgets/search_bar.dart`, `lib/views/homepage.dart`, add filter state management
-
-### Error Handling
-- **Description**: Add proper error handling for API calls and loading states
-- **Priority**: medium
-- **Complexity**: small
-- **Files**: Modify `lib/utils/pokemon_api.dart`, `lib/views/widgets/grid_item.dart`, `lib/views/homepage.dart`
+- **Files**: Modify `lib/views/widgets/search_bar.dart`, `lib/views/homepage.dart`, new `lib/views/widgets/type_filter_dialog.dart`
 
 ## 🟢 Low Priority
 
 ### Pokemon Comparison Feature
-- **Description**: Allow comparing two Pokemon side by side
+- **Description**: Allow comparing two Pokémon side by side
 - **Priority**: low
 - **Complexity**: large
-- **Files**: `lib/views/compare_page.dart`, `lib/model/comparison_model.dart`, add selection state
+- **Files**: `lib/views/compare_page.dart`, `lib/model/comparison_model.dart`
 
 ### Quiz Feature
-- **Description**: Implement a Pokemon quiz game
+- **Description**: Implement a Pokémon quiz game
 - **Priority**: low
 - **Complexity**: large
 - **Files**: `lib/views/quiz_page.dart`, `lib/model/quiz_model.dart`, `lib/utils/quiz_logic.dart`
 
 ### Favourites System
-- **Description**: Allow users to mark and view favourite Pokemon
+- **Description**: Allow users to mark and view favourite Pokémon with local persistence
 - **Priority**: low
 - **Complexity**: medium
 - **Files**: `lib/views/favourite_page.dart`, add local storage, modify `lib/model/pokemon.dart`
 
 ### Caching System
-- **Description**: Implement local caching for Pokemon data to reduce API calls
+- **Description**: Local caching for Pokémon data to reduce API calls
 - **Priority**: low
 - **Complexity**: medium
 - **Files**: `lib/utils/cache_manager.dart`, modify `lib/utils/pokemon_api.dart`
 
 ### State Management Refactor
-- **Description**: Replace setState with a proper state management solution (Provider/Riverpod)
+- **Description**: Replace setState with Provider or Riverpod
 - **Priority**: low
 - **Complexity**: large
-- **Files**: Add state management package, refactor `lib/views/homepage.dart`, `lib/views/widgets/grid_item.dart`
+- **Files**: All stateful widgets

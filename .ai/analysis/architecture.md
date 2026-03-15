@@ -2,25 +2,27 @@
 
 ## Feature Organization
 The app is organized into basic folders:
-- `model/`: Data models (Pokemon, PokemonListItem)
+- `model/`: Data models (`Pokemon`, `PokemonListItem`)
 - `utils/`: Utility functions and constants (API, theme, palette, etc.)
-- `views/`: UI components (homepage and widgets)
-
-This is a simple organization without clear feature boundaries.
+- `views/`: UI screens and widgets
 
 ## Widget Hierarchy
-- `MyApp` (Stateless) → `MaterialApp` → `HomePage` (Stateful)
-- `HomePage` contains: `SearchBarWidget`, `PokemonList` (Stateless) → `GridItem` (Stateful)
-- Other widgets: `BottomNavBar`, `RandomFloatingButton`, `StyledText`
+- `MyApp` (Stateless) → `MaterialApp` → `ShellPage` (Stateful)
+- `ShellPage` manages the `BottomNavigationBar` + `IndexedStack` with 4 pages:
+  - `HomePage` (Stateful) → `SearchBarWidget`, `PokemonList` → `GridItem` (Stateful)
+  - `ComparePage` (placeholder)
+  - `QuizPage` (placeholder)
+  - `FavouritePage` (placeholder)
+- `PokemonDetailPage` (Stateful) — pushed via `Navigator.push` from `GridItem` and `RandomFloatingButton`
 
 ## Separation Between UI and Business Logic
-Limited separation - business logic (API calls, data parsing) is mixed within Stateful widgets like `GridItem` and `HomePage`. No dedicated service layer or state management pattern.
+Limited — business logic (API calls, filtering) is still inside widgets. No dedicated service or state management layer. This is acceptable for the current scale.
 
 ## Service Layers
-- `PokemonApi`: Static class for API calls
+- `PokemonApi`: Static class for API calls (returns `null` on error)
 - No repository pattern or data layer abstraction
 
 ## Data Layers
-- Local JSON asset for Pokemon list
-- Remote API for Pokemon details
-- No local storage or caching implemented
+- Local JSON asset for Pokémon list
+- Remote API (PokéAPI) for Pokémon details
+- No local storage or caching yet
