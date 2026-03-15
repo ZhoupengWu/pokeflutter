@@ -1,9 +1,25 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'views/shell_page.dart';
+import 'model/pokemon_list_item.dart';
+import 'utils/favourites_manager.dart';
 import 'utils/theme.dart';
+import 'views/shell_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load the full Pokémon list so FavouritesManager can re-hydrate
+  // saved names into proper PokemonListItem objects.
+  final jsonFile = await rootBundle.loadString('assets/pokemonList.json');
+  final decoded = jsonDecode(jsonFile);
+  final allPokemon = (decoded['pokemonList'] as List)
+      .map((item) => PokemonListItem(name: item['name'], url: item['url']))
+      .toList();
+
+  await FavouritesManager.instance.init(allPokemon);
+
   runApp(const MyApp());
 }
 
