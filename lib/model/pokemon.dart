@@ -5,6 +5,10 @@ class Pokemon {
   /// It is also the key used by the cache and by the Pokémon list.
   final String name;
 
+  /// Name of the species this variety belongs to (`charizard` for
+  /// `charizard-mega-x`). Evolution data is keyed by species.
+  final String speciesName;
+
   /// Small sprite; empty when PokéAPI has none for this Pokémon.
   final String urlSprite;
 
@@ -19,6 +23,7 @@ class Pokemon {
   Pokemon({
     required this.id,
     required this.name,
+    String? speciesName,
     required this.urlSprite,
     required this.urlImage,
     required this.weight,
@@ -26,7 +31,7 @@ class Pokemon {
     required this.typesList,
     required this.stats,
     required this.abilities,
-  });
+  }) : speciesName = speciesName ?? name;
 
   /// Parses a PokéAPI `/pokemon/{name}` response.
   ///
@@ -46,6 +51,8 @@ class Pokemon {
     return Pokemon(
       id: json['id'] as int,
       name: json['name'] as String,
+      speciesName:
+          (json['species'] as Map<String, dynamic>?)?['name'] as String?,
       urlSprite: sprite ?? artwork,
       urlImage: artwork,
       // PokéAPI uses hectograms and decimetres.
