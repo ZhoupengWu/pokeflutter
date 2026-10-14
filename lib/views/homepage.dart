@@ -27,12 +27,21 @@ class _HomePageState extends State<HomePage> {
   Set<String> _activeTypeFilters = {};
   bool _isFilterLoading = false;
   bool _filterFailed = false;
+  bool _typesUnavailable = false; // type index could not be loaded
   int _filterRequest = 0; // discards results of superseded filter runs
 
   @override
   void initState() {
     super.initState();
     _readJSONFile();
+    _loadTypes();
+  }
+
+  /// Types colour the cards; without them the grid still works, in grey.
+  Future<void> _loadTypes() async {
+    final loaded = await PokemonTypeIndex.instance.ensureLoaded();
+    if (!mounted) return;
+    setState(() => _typesUnavailable = !loaded);
   }
 
   Future<void> _readJSONFile() async {
@@ -171,6 +180,7 @@ class _HomePageState extends State<HomePage> {
             activeFilterCount: _activeTypeFilters.length,
             onFilterTap: _openFilterSheet,
           ),
+          if (_typesUnavailable) _TypesUnavailableBanner(onRetry: _loadTypes),
           if (_activeTypeFilters.isNotEmpty) ...[
             SizedBox(height: 8.h),
             _ActiveFilterChips(
@@ -218,6 +228,35 @@ class _Message extends StatelessWidget {
             ),
           ),
           ?action,
+        ],
+      ),
+    );
+  }
+}
+
+// ── "Types could not be loaded" banner ────────────────────────────────────────
+class _TypesUnavailableBanner extends StatelessWidget {
+  final VoidCallback onRetry;
+
+  const _TypesUnavailableBanner({required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(24.w, 8.h, 24.w, 0),
+      child: Row(
+        children: [
+          Icon(Icons.wifi_off_rounded, size: 16.r, color: gray[300]),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: Text(
+              'Types unavailable offline.',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: gray[300]),
+            ),
+          ),
+          TextButton(onPressed: onRetry, child: const Text('Retry')),
         ],
       ),
     );
