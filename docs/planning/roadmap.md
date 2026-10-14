@@ -28,6 +28,6 @@ Type Filter, Favourites System, Pokémon Comparison.
 - **Accessibility**: tooltips/semantics on icon-only controls.
 - **Tooling**: stricter lints, `pokemon_constants.dart` rename, removed dead code, real tests
   (replaced the failing counter template), GitHub Actions CI (format, analyze, test),
-  new README, refreshed `.ai/` docs.
+  new README, refreshed `docs/` docs.
 
 See [`backlog.md`](backlog.md) for what is next.

@@ -52,8 +52,8 @@ assets/                    # pokemonList.json, pokeball.svg, type icons, Roboto 
 test/                      # unit and widget tests
 ```
 
-How the pieces fit together is described in [`.ai/analysis/architecture.md`](.ai/analysis/architecture.md);
-what is planned next is in [`.ai/planning/backlog.md`](.ai/planning/backlog.md).
+How the pieces fit together is described in [`docs/analysis/architecture.md`](docs/analysis/architecture.md);
+what is planned next is in [`docs/planning/backlog.md`](docs/planning/backlog.md).
 
 ## Releasing
 
