@@ -30,4 +30,18 @@ Type Filter, Favourites System, Pokémon Comparison.
   (replaced the failing counter template), GitHub Actions CI (format, analyze, test),
   new README, refreshed `docs/` docs.
 
+## ✅ Phase 6 — Design, features and structure (v1.5.0)
+- **Dark theme** and semantic colours (`AppColors`); the status and navigation bars take the page
+  colour (edge-to-edge); Settings sheet (theme mode, language).
+- **Italian / English** localisation (gen-l10n), including type names and screen-reader labels.
+- **Type matchups** (weaknesses, resistances, immunities) and **evolution chain** on the detail
+  page; hero animation from the grid; section colours kept readable on both themes.
+- **Quiz**: difficulty levels, per-question timer, streaks and points, saved records, feedback after
+  each answer, options exposed as buttons to screen readers.
+- **Structure**: controllers for Home, Detail, Compare and Quiz; the large pages are split into
+  widgets under `views/home|detail|compare|quiz`; shared `PokeApiClient`.
+- **Compare**: Total row. **Home**: subtitle no longer promises searches the app does not have.
+- **CI**: release APK build job that also checks the merged manifest for `INTERNET`.
+- Documentation moved from `.ai/` to `docs/`.
+
 See [`backlog.md`](backlog.md) for what is next.
