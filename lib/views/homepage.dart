@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/palette.dart';
 import '../utils/capitalize.dart';
 import '../utils/pokemon_constants.dart';
+import '../utils/pokemon_repository.dart';
 import '../utils/pokemon_type_index.dart';
 import 'widgets/random_floating_button.dart';
 import 'widgets/pokemon_list.dart';
@@ -36,14 +35,8 @@ class _HomePageState extends State<HomePage> {
     _readJSONFile();
   }
 
-  void _readJSONFile() async {
-    final jsonFile = await rootBundle.loadString('assets/pokemonList.json');
-    final decoded = jsonDecode(jsonFile);
-
-    final items = (decoded['pokemonList'] as List)
-        .map((item) => PokemonListItem(name: item['name'], url: item['url']))
-        .toList();
-
+  Future<void> _readJSONFile() async {
+    final items = await PokemonRepository.instance.getAll();
     if (!mounted) return;
 
     setState(() {

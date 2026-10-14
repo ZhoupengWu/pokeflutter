@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../model/pokemon_list_item.dart';
 import '../model/pokemon.dart';
 import '../utils/pokemon_api.dart';
+import '../utils/pokemon_repository.dart';
 import '../utils/pokemon_constants.dart';
 import '../utils/capitalize.dart';
 import '../utils/palette.dart';
@@ -33,12 +32,8 @@ class _ComparePageState extends State<ComparePage> {
     _loadList();
   }
 
-  void _loadList() async {
-    final jsonFile = await rootBundle.loadString('assets/pokemonList.json');
-    final decoded = jsonDecode(jsonFile);
-    final items = (decoded['pokemonList'] as List)
-        .map((item) => PokemonListItem(name: item['name'], url: item['url']))
-        .toList();
+  Future<void> _loadList() async {
+    final items = await PokemonRepository.instance.getAll();
     if (!mounted) return;
     setState(() => _allPokemon = items);
   }
