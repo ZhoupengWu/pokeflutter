@@ -7,7 +7,7 @@ import '../model/pokemon.dart';
 import '../utils/pokemon_api.dart';
 import '../utils/pokemon_constants.dart';
 import '../utils/capitalize.dart';
-import '../utils/palette.dart';
+import '../utils/app_colors.dart';
 import '../utils/theme.dart';
 import '../utils/favourites_manager.dart';
 import 'widgets/styled_text.dart';
@@ -58,7 +58,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: coloredPageOverlayStyle,
+      value: coloredPageOverlayStyle(Theme.of(context).brightness),
       child: Scaffold(
         backgroundColor: _bgColor,
         body: _isLoading
@@ -202,7 +202,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: context.colors.surface,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(32.r),
                     ),
@@ -304,13 +304,13 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 16.r, color: gray[400]),
+            Icon(icon, size: 16.r, color: context.colors.muted),
             SizedBox(width: 4.w),
             StyledText(
               text: value,
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium!.copyWith(color: gray[500]),
+              ).textTheme.bodyMedium!.copyWith(color: context.colors.strong),
               textHeight: 20.h,
             ),
           ],
@@ -320,13 +320,14 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
           label,
           style: Theme.of(
             context,
-          ).textTheme.bodySmall?.copyWith(color: gray[300]),
+          ).textTheme.bodySmall?.copyWith(color: context.colors.subtle),
         ),
       ],
     ),
   );
 
-  Widget _divider() => Container(height: 32.h, width: 1.w, color: gray[200]);
+  Widget _divider() =>
+      Container(height: 32.h, width: 1.w, color: context.colors.border);
 
   Widget _statRow(PokemonStat stat) {
     const maxStat = 255.0;
@@ -351,7 +352,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
               stat.value.toString(),
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall?.copyWith(color: gray[500]),
+              ).textTheme.bodySmall?.copyWith(color: context.colors.strong),
               textAlign: TextAlign.end,
             ),
           ),
@@ -362,7 +363,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
               child: LinearProgressIndicator(
                 value: stat.value / maxStat,
                 minHeight: 6.h,
-                backgroundColor: gray[100],
+                backgroundColor: context.colors.fill,
                 valueColor: AlwaysStoppedAnimation<Color>(_bgColor),
               ),
             ),

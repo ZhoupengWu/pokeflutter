@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../model/pokemon_list_item.dart';
 import '../../utils/capitalize.dart';
-import '../../utils/palette.dart';
+import '../../utils/app_colors.dart';
 import '../../utils/pokemon_constants.dart';
 import '../../utils/pokemon_type_index.dart';
 import '../../views/pokemon_detail_page.dart';
@@ -43,7 +43,7 @@ class GridItem extends StatelessWidget {
         final types = _index.typesOf(pokemon.name) ?? [];
         final color =
             listPokemonTypeColor[types.firstOrNull?.toLowerCase()] ??
-            gray[300]!;
+            context.colors.subtle;
         return _card(context, types, color);
       },
     );
@@ -133,7 +133,7 @@ class GridItem extends StatelessWidget {
       widgets.add(
         Container(
           decoration: BoxDecoration(
-            color: gray[500]?.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(24.r),
           ),
           padding: EdgeInsets.only(

@@ -7,7 +7,7 @@ import '../utils/pokemon_api.dart';
 import '../utils/pokemon_repository.dart';
 import '../utils/quiz_logic.dart';
 import '../utils/capitalize.dart';
-import '../utils/palette.dart';
+import '../utils/app_colors.dart';
 import '../utils/pokemon_constants.dart';
 
 class QuizPage extends StatefulWidget {
@@ -148,11 +148,18 @@ class _QuizPageState extends State<QuizPage> {
           SizedBox(height: 8.h),
           Text(
             'Test your Pokémon knowledge!\n10 questions — guess the name from the silhouette or the type from the name.',
-            style: textTheme.bodyLarge?.copyWith(color: gray[400], height: 1.5),
+            style: textTheme.bodyLarge?.copyWith(
+              color: context.colors.muted,
+              height: 1.5,
+            ),
           ),
           const Spacer(),
           Center(
-            child: Icon(Icons.quiz_rounded, size: 96.r, color: gray[200]),
+            child: Icon(
+              Icons.quiz_rounded,
+              size: 96.r,
+              color: context.colors.border,
+            ),
           ),
           const Spacer(),
           SizedBox(
@@ -160,7 +167,7 @@ class _QuizPageState extends State<QuizPage> {
             child: ElevatedButton(
               onPressed: _allPokemon.isEmpty ? null : _startQuiz,
               style: ElevatedButton.styleFrom(
-                backgroundColor: gray[500],
+                backgroundColor: context.colors.strong,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 16.h),
                 shape: RoundedRectangleBorder(
@@ -189,8 +196,8 @@ class _QuizPageState extends State<QuizPage> {
     // Background colour from Pokémon type (if loaded)
     final bgColor = _currentPokemon != null
         ? (listPokemonTypeColor[_currentPokemon!.typesList[0].toLowerCase()] ??
-              gray[200]!)
-        : gray[200]!;
+              context.colors.border)
+        : context.colors.border;
 
     return Column(
       children: [
@@ -204,11 +211,15 @@ class _QuizPageState extends State<QuizPage> {
                 children: [
                   Text(
                     'Question ${_currentIndex + 1} / ${_questions.length}',
-                    style: textTheme.bodySmall?.copyWith(color: gray[400]),
+                    style: textTheme.bodySmall?.copyWith(
+                      color: context.colors.muted,
+                    ),
                   ),
                   Text(
                     '✓ ${_result.correct}   ✗ ${_result.wrong}',
-                    style: textTheme.bodySmall?.copyWith(color: gray[400]),
+                    style: textTheme.bodySmall?.copyWith(
+                      color: context.colors.muted,
+                    ),
                   ),
                 ],
               ),
@@ -218,7 +229,7 @@ class _QuizPageState extends State<QuizPage> {
                 child: LinearProgressIndicator(
                   value: (_currentIndex + 1) / _questions.length,
                   minHeight: 6.h,
-                  backgroundColor: gray[100],
+                  backgroundColor: context.colors.fill,
                   valueColor: AlwaysStoppedAnimation<Color>(bgColor),
                 ),
               ),
@@ -408,7 +419,9 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 Text(
                   '${_result.correct} / ${_result.totalQuestions}',
-                  style: textTheme.bodyMedium?.copyWith(color: gray[400]),
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: context.colors.muted,
+                  ),
                 ),
               ],
             ),
@@ -444,7 +457,7 @@ class _QuizPageState extends State<QuizPage> {
             child: ElevatedButton(
               onPressed: _startQuiz,
               style: ElevatedButton.styleFrom(
-                backgroundColor: gray[500],
+                backgroundColor: context.colors.strong,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 16.h),
                 shape: RoundedRectangleBorder(
@@ -498,9 +511,9 @@ class _OptionButton extends StatelessWidget {
         border = const Color(0xFFE0306A);
         text = const Color(0xFFE0306A);
       case _OptionState.idle:
-        bg = gray[100]!;
-        border = gray[200]!;
-        text = gray[500]!;
+        bg = context.colors.fill;
+        border = context.colors.border;
+        text = context.colors.strong;
     }
 
     return GestureDetector(

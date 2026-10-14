@@ -6,7 +6,7 @@ import '../utils/pokemon_api.dart';
 import '../utils/pokemon_repository.dart';
 import '../utils/pokemon_constants.dart';
 import '../utils/capitalize.dart';
-import '../utils/palette.dart';
+import '../utils/app_colors.dart';
 
 class ComparePage extends StatefulWidget {
   const ComparePage({super.key});
@@ -108,7 +108,7 @@ class _ComparePageState extends State<ComparePage> {
               child: Text(
                 'Select two Pokémon to compare their stats.',
                 style: textTheme.bodyLarge?.copyWith(
-                  color: gray[400],
+                  color: context.colors.muted,
                   height: 1.5,
                 ),
               ),
@@ -137,7 +137,7 @@ class _ComparePageState extends State<ComparePage> {
                     child: Text(
                       'VS',
                       style: textTheme.titleLarge?.copyWith(
-                        color: gray[300],
+                        color: context.colors.subtle,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -177,7 +177,9 @@ class _ComparePageState extends State<ComparePage> {
                         : _selectedA == null && _selectedB == null
                         ? 'Select two Pokémon to start comparing'
                         : 'Select the second Pokémon to compare',
-                    style: textTheme.bodyMedium?.copyWith(color: gray[300]),
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: context.colors.subtle,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -211,8 +213,8 @@ class _PokemonSlot extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = pokemon != null
         ? (listPokemonTypeColor[pokemon!.typesList[0].toLowerCase()] ??
-              gray[200]!)
-        : gray[100]!;
+              context.colors.border)
+        : context.colors.fill;
 
     return Semantics(
       button: true,
@@ -249,13 +251,13 @@ class _PokemonSlot extends StatelessWidget {
   Widget _errorSlot(BuildContext context) => Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Icon(Icons.refresh_rounded, size: 32.r, color: gray[300]),
+      Icon(Icons.refresh_rounded, size: 32.r, color: context.colors.subtle),
       SizedBox(height: 8.h),
       Text(
         'Tap to retry',
         style: Theme.of(
           context,
-        ).textTheme.bodySmall?.copyWith(color: gray[300]),
+        ).textTheme.bodySmall?.copyWith(color: context.colors.subtle),
       ),
     ],
   );
@@ -263,13 +265,17 @@ class _PokemonSlot extends StatelessWidget {
   Widget _emptySlot(BuildContext context) => Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Icon(Icons.add_circle_outline_rounded, size: 32.r, color: gray[300]),
+      Icon(
+        Icons.add_circle_outline_rounded,
+        size: 32.r,
+        color: context.colors.subtle,
+      ),
       SizedBox(height: 8.h),
       Text(
         label,
         style: Theme.of(
           context,
-        ).textTheme.bodySmall?.copyWith(color: gray[300]),
+        ).textTheme.bodySmall?.copyWith(color: context.colors.subtle),
       ),
     ],
   );
@@ -324,9 +330,11 @@ class _StatsComparison extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorA =
-        listPokemonTypeColor[a.typesList[0].toLowerCase()] ?? gray[400]!;
+        listPokemonTypeColor[a.typesList[0].toLowerCase()] ??
+        context.colors.muted;
     final colorB =
-        listPokemonTypeColor[b.typesList[0].toLowerCase()] ?? gray[400]!;
+        listPokemonTypeColor[b.typesList[0].toLowerCase()] ??
+        context.colors.muted;
 
     return Column(
       children: [
@@ -392,7 +400,7 @@ class _StatsComparison extends StatelessWidget {
                             child: LinearProgressIndicator(
                               value: statA.value / 255.0,
                               minHeight: 8.h,
-                              backgroundColor: gray[100],
+                              backgroundColor: context.colors.fill,
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 _colorA(statA.value, statB.value),
                               ),
@@ -410,7 +418,7 @@ class _StatsComparison extends StatelessWidget {
                   child: Text(
                     label,
                     style: textTheme.labelSmall?.copyWith(
-                      color: gray[400],
+                      color: context.colors.muted,
                       fontWeight: FontWeight.w700,
                     ),
                     textAlign: TextAlign.center,
@@ -427,7 +435,7 @@ class _StatsComparison extends StatelessWidget {
                           child: LinearProgressIndicator(
                             value: statB.value / 255.0,
                             minHeight: 8.h,
-                            backgroundColor: gray[100],
+                            backgroundColor: context.colors.fill,
                             valueColor: AlwaysStoppedAnimation<Color>(
                               _colorA(statB.value, statA.value),
                             ),
@@ -488,7 +496,7 @@ class _PokemonPickerSheetState extends State<_PokemonPickerSheet> {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: gray[200],
+                color: context.colors.border,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -503,7 +511,7 @@ class _PokemonPickerSheetState extends State<_PokemonPickerSheet> {
                 prefixIcon: const Icon(Icons.search_rounded),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide(color: gray[200]!),
+                  borderSide: BorderSide(color: context.colors.border),
                 ),
                 contentPadding: EdgeInsets.symmetric(vertical: 10.h),
               ),

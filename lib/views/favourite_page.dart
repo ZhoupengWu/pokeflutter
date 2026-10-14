@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/palette.dart';
+import '../utils/app_colors.dart';
 import '../utils/favourites_manager.dart';
 import 'widgets/grid_item.dart';
 
@@ -26,7 +26,7 @@ class FavouritePage extends StatelessWidget {
               child: Text(
                 "Pokémon you've saved for quick access.",
                 style: textTheme.bodyLarge?.copyWith(
-                  color: gray[400],
+                  color: context.colors.muted,
                   height: 1.5,
                 ),
               ),
@@ -44,20 +44,20 @@ class FavouritePage extends StatelessWidget {
                           Icon(
                             Icons.favorite_border_rounded,
                             size: 64.r,
-                            color: gray[200],
+                            color: context.colors.border,
                           ),
                           SizedBox(height: 16.h),
                           Text(
                             'No favourites yet',
                             style: textTheme.titleMedium?.copyWith(
-                              color: gray[300],
+                              color: context.colors.subtle,
                             ),
                           ),
                           SizedBox(height: 8.h),
                           Text(
                             'Tap the ♥ on any Pokémon to save it here.',
                             style: textTheme.bodySmall?.copyWith(
-                              color: gray[300],
+                              color: context.colors.subtle,
                             ),
                             textAlign: TextAlign.center,
                           ),

@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/palette.dart';
+import '../utils/app_colors.dart';
 import '../utils/capitalize.dart';
 import '../utils/pokemon_constants.dart';
 import '../utils/pokemon_repository.dart';
@@ -9,6 +9,7 @@ import '../utils/pokemon_type_index.dart';
 import 'widgets/random_floating_button.dart';
 import 'widgets/pokemon_list.dart';
 import 'widgets/search_bar.dart';
+import 'widgets/settings_sheet.dart';
 import 'widgets/type_filter_sheet.dart';
 import '../model/pokemon_list_item.dart';
 import 'pokemon_detail_page.dart';
@@ -118,6 +119,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _openSettings() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (_) => SettingsSheet(),
+    );
+  }
+
   void _goToRandomPokemon() {
     if (_allPokemon.isEmpty) return;
     final random = _allPokemon[Random().nextInt(_allPokemon.length)];
@@ -161,15 +169,27 @@ class _HomePageState extends State<HomePage> {
         children: [
           SizedBox(height: MediaQuery.of(context).padding.top + 16),
           Padding(
-            padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 4.h),
-            child: Text('Pokédex', style: textTheme.displaySmall),
+            padding: EdgeInsets.only(left: 24.w, right: 12.w, bottom: 4.h),
+            child: Row(
+              children: [
+                Expanded(child: Text('Pokédex', style: textTheme.displaySmall)),
+                IconButton(
+                  tooltip: 'Settings',
+                  icon: Icon(
+                    Icons.settings_rounded,
+                    color: context.colors.muted,
+                  ),
+                  onPressed: _openSettings,
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Text(
               'Use the advanced search to find Pokémon by type, weakness, ability and more!',
               style: textTheme.bodyLarge?.copyWith(
-                color: gray[400],
+                color: context.colors.muted,
                 height: 1.5,
               ),
             ),
@@ -215,7 +235,7 @@ class _Message extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 64.r, color: gray[200]),
+          Icon(icon, size: 64.r, color: context.colors.border),
           SizedBox(height: 8.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -223,7 +243,7 @@ class _Message extends StatelessWidget {
               text,
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall?.copyWith(color: gray[300]),
+              ).textTheme.bodySmall?.copyWith(color: context.colors.subtle),
               textAlign: TextAlign.center,
             ),
           ),
@@ -246,14 +266,18 @@ class _TypesUnavailableBanner extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(24.w, 8.h, 24.w, 0),
       child: Row(
         children: [
-          Icon(Icons.wifi_off_rounded, size: 16.r, color: gray[300]),
+          Icon(
+            Icons.wifi_off_rounded,
+            size: 16.r,
+            color: context.colors.subtle,
+          ),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
               'Types unavailable offline.',
               style: Theme.of(
                 context,
-              ).textTheme.bodySmall?.copyWith(color: gray[300]),
+              ).textTheme.bodySmall?.copyWith(color: context.colors.subtle),
             ),
           ),
           TextButton(onPressed: onRetry, child: const Text('Retry')),
@@ -284,7 +308,7 @@ class _ActiveFilterChips extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         children: [
           ...filters.map((type) {
-            final color = listPokemonTypeColor[type] ?? gray[400]!;
+            final color = listPokemonTypeColor[type] ?? context.colors.muted;
             return Container(
               margin: EdgeInsets.only(right: 8.w),
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
@@ -325,14 +349,14 @@ class _ActiveFilterChips extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
               decoration: BoxDecoration(
-                border: Border.all(color: gray[300]!),
+                border: Border.all(color: context.colors.subtle),
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(
                 'Clear all',
                 style: Theme.of(
                   context,
-                ).textTheme.labelSmall?.copyWith(color: gray[400]),
+                ).textTheme.labelSmall?.copyWith(color: context.colors.muted),
               ),
             ),
           ),

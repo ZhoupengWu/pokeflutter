@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/palette.dart';
+import '../utils/app_colors.dart';
 import 'homepage.dart';
 import 'compare_page.dart';
 import 'quiz_page.dart';
@@ -34,7 +34,7 @@ class _ShellPageState extends State<ShellPage> {
         selectedLabelStyle: Theme.of(context).textTheme.labelMedium,
         unselectedLabelStyle: Theme.of(
           context,
-        ).textTheme.labelMedium?.copyWith(color: gray[300]),
+        ).textTheme.labelMedium?.copyWith(color: context.colors.subtle),
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
         items: [
