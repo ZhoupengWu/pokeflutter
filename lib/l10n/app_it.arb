@@ -130,5 +130,20 @@
   "evolutionSpecial": "Speciale",
   "evolutionStageSemantics": "{name}, numero {id}",
   "evolutionStageSemanticsWith": "{name}, numero {id}, {requirement}",
-  "evolutionCurrent": "attuale"
+  "evolutionCurrent": "attuale",
+  "compareTitle": "Confronta",
+  "compareSubtitle": "Scegli due Pokémon per confrontare le loro statistiche.",
+  "compareSlotA": "Pokémon A",
+  "compareSlotB": "Pokémon B",
+  "compareVersus": "VS",
+  "compareEmpty": "Scegli due Pokémon per iniziare il confronto",
+  "compareSelectSecond": "Scegli il secondo Pokémon da confrontare",
+  "compareFailed": "Impossibile caricare un Pokémon. Tocca la sua scheda per riprovare.",
+  "compareTapToRetry": "Tocca per riprovare",
+  "compareSlotFailedSemantics": "{slot}: caricamento non riuscito, tocca per riprovare",
+  "compareSlotLoadedSemantics": "{slot}: {name}, tocca per cambiare",
+  "compareSlotSelectSemantics": "Scegli {slot}",
+  "comparePickerHint": "Cerca un Pokémon...",
+  "compareTotal": "Totale",
+  "compareStatSemantics": "{stat}: {first} contro {second}"
 }

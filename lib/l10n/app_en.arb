@@ -342,5 +342,57 @@
       }
     }
   },
-  "evolutionCurrent": "current"
+  "evolutionCurrent": "current",
+  "compareTitle": "Compare",
+  "compareSubtitle": "Select two Pokémon to compare their stats.",
+  "compareSlotA": "Pokémon A",
+  "compareSlotB": "Pokémon B",
+  "compareVersus": "VS",
+  "compareEmpty": "Select two Pokémon to start comparing",
+  "compareSelectSecond": "Select the second Pokémon to compare",
+  "compareFailed": "Couldn't load a Pokémon. Tap its card to retry.",
+  "compareTapToRetry": "Tap to retry",
+  "compareSlotFailedSemantics": "{slot}: failed to load, tap to retry",
+  "@compareSlotFailedSemantics": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "compareSlotLoadedSemantics": "{slot}: {name}, tap to change",
+  "@compareSlotLoadedSemantics": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "compareSlotSelectSemantics": "Select {slot}",
+  "@compareSlotSelectSemantics": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "comparePickerHint": "Search Pokémon...",
+  "compareTotal": "Total",
+  "compareStatSemantics": "{stat}: {first} against {second}",
+  "@compareStatSemantics": {
+    "placeholders": {
+      "stat": {
+        "type": "String"
+      },
+      "first": {
+        "type": "int"
+      },
+      "second": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -4,12 +4,6 @@ import '../../l10n/l10n_extensions.dart';
 import '../../model/quiz_model.dart';
 import '../../utils/app_colors.dart';
 
-/// Green used for correct answers and good scores.
-const quizGreen = Color(0xFF38BF4B);
-
-/// Red used for wrong answers and low scores.
-const quizRed = Color(0xFFE0306A);
-
 String difficultyName(AppLocalizations l10n, QuizDifficulty difficulty) =>
     switch (difficulty) {
       QuizDifficulty.easy => l10n.difficultyEasy,
@@ -94,11 +88,11 @@ class QuizOptionButton extends StatelessWidget {
     final Color text;
     switch (state) {
       case OptionState.correct:
-        fill = quizGreen.withValues(alpha: 0.15);
-        border = text = quizGreen;
+        fill = successGreen.withValues(alpha: 0.15);
+        border = text = successGreen;
       case OptionState.wrong:
-        fill = quizRed.withValues(alpha: 0.15);
-        border = text = quizRed;
+        fill = dangerRed.withValues(alpha: 0.15);
+        border = text = dangerRed;
       case OptionState.idle:
         fill = colors.fill;
         border = colors.border;

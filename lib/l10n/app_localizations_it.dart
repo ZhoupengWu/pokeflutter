@@ -457,4 +457,59 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get evolutionCurrent => 'attuale';
+
+  @override
+  String get compareTitle => 'Confronta';
+
+  @override
+  String get compareSubtitle =>
+      'Scegli due Pokémon per confrontare le loro statistiche.';
+
+  @override
+  String get compareSlotA => 'Pokémon A';
+
+  @override
+  String get compareSlotB => 'Pokémon B';
+
+  @override
+  String get compareVersus => 'VS';
+
+  @override
+  String get compareEmpty => 'Scegli due Pokémon per iniziare il confronto';
+
+  @override
+  String get compareSelectSecond => 'Scegli il secondo Pokémon da confrontare';
+
+  @override
+  String get compareFailed =>
+      'Impossibile caricare un Pokémon. Tocca la sua scheda per riprovare.';
+
+  @override
+  String get compareTapToRetry => 'Tocca per riprovare';
+
+  @override
+  String compareSlotFailedSemantics(String slot) {
+    return '$slot: caricamento non riuscito, tocca per riprovare';
+  }
+
+  @override
+  String compareSlotLoadedSemantics(String slot, String name) {
+    return '$slot: $name, tocca per cambiare';
+  }
+
+  @override
+  String compareSlotSelectSemantics(String slot) {
+    return 'Scegli $slot';
+  }
+
+  @override
+  String get comparePickerHint => 'Cerca un Pokémon...';
+
+  @override
+  String get compareTotal => 'Totale';
+
+  @override
+  String compareStatSemantics(String stat, int first, int second) {
+    return '$stat: $first contro $second';
+  }
 }

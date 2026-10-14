@@ -175,10 +175,10 @@ class _TimerBar extends StatelessWidget {
       valueListenable: controller.timeLeft,
       builder: (context, fraction, _) {
         final color = fraction > 0.5
-            ? quizGreen
+            ? successGreen
             : fraction > 0.25
             ? const Color(0xFFFF9741)
-            : quizRed;
+            : dangerRed;
         return Semantics(
           label: context.l10n.quizTimeLeft((fraction * total).ceil()),
           child: ClipRRect(
@@ -292,7 +292,7 @@ class _Feedback extends StatelessWidget {
             child: Text(
               verdict,
               style: textTheme.titleSmall?.copyWith(
-                color: correct ? quizGreen : quizRed,
+                color: correct ? successGreen : dangerRed,
                 fontWeight: FontWeight.w700,
               ),
             ),

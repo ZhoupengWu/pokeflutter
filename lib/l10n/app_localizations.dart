@@ -883,6 +883,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'current'**
   String get evolutionCurrent;
+
+  /// No description provided for @compareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get compareTitle;
+
+  /// No description provided for @compareSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select two Pokémon to compare their stats.'**
+  String get compareSubtitle;
+
+  /// No description provided for @compareSlotA.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokémon A'**
+  String get compareSlotA;
+
+  /// No description provided for @compareSlotB.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokémon B'**
+  String get compareSlotB;
+
+  /// No description provided for @compareVersus.
+  ///
+  /// In en, this message translates to:
+  /// **'VS'**
+  String get compareVersus;
+
+  /// No description provided for @compareEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Select two Pokémon to start comparing'**
+  String get compareEmpty;
+
+  /// No description provided for @compareSelectSecond.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the second Pokémon to compare'**
+  String get compareSelectSecond;
+
+  /// No description provided for @compareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load a Pokémon. Tap its card to retry.'**
+  String get compareFailed;
+
+  /// No description provided for @compareTapToRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to retry'**
+  String get compareTapToRetry;
+
+  /// No description provided for @compareSlotFailedSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{slot}: failed to load, tap to retry'**
+  String compareSlotFailedSemantics(String slot);
+
+  /// No description provided for @compareSlotLoadedSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{slot}: {name}, tap to change'**
+  String compareSlotLoadedSemantics(String slot, String name);
+
+  /// No description provided for @compareSlotSelectSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Select {slot}'**
+  String compareSlotSelectSemantics(String slot);
+
+  /// No description provided for @comparePickerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Pokémon...'**
+  String get comparePickerHint;
+
+  /// No description provided for @compareTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get compareTotal;
+
+  /// No description provided for @compareStatSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{stat}: {first} against {second}'**
+  String compareStatSemantics(String stat, int first, int second);
 }
 
 class _AppLocalizationsDelegate

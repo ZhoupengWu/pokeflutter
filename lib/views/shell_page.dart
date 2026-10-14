@@ -3,7 +3,7 @@ import '../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 import 'homepage.dart';
-import 'compare_page.dart';
+import 'compare/compare_page.dart';
 import 'quiz/quiz_page.dart';
 import 'favourite_page.dart';
 

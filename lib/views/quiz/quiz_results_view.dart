@@ -20,13 +20,13 @@ class QuizResultsView extends StatelessWidget {
     final Color scoreColor;
     final String verdict;
     if (pct >= 80) {
-      scoreColor = quizGreen;
+      scoreColor = successGreen;
       verdict = l10n.quizVerdictMaster;
     } else if (pct >= 50) {
       scoreColor = const Color(0xFFFF9741);
       verdict = l10n.quizVerdictOk;
     } else {
-      scoreColor = quizRed;
+      scoreColor = dangerRed;
       verdict = l10n.quizVerdictLow;
     }
 
@@ -93,12 +93,12 @@ class QuizResultsView extends StatelessWidget {
               QuizStatPill(
                 label: l10n.quizCorrectLabel,
                 value: result.correct,
-                color: quizGreen,
+                color: successGreen,
               ),
               QuizStatPill(
                 label: l10n.quizWrongLabel,
                 value: result.wrong,
-                color: quizRed,
+                color: dangerRed,
               ),
               QuizStatPill(
                 label: l10n.quizScoreLabel,

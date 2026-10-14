@@ -103,3 +103,9 @@ extension AppColorsContext on BuildContext {
       Theme.of(this).extension<AppColors>() ??
       AppColors.of(Theme.of(this).brightness);
 }
+
+/// Right answers, winning stats, good scores.
+const successGreen = Color(0xFF38BF4B);
+
+/// Wrong answers, losing stats, low scores.
+const dangerRed = Color(0xFFE0306A);
