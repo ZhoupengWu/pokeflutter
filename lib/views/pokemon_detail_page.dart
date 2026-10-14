@@ -33,14 +33,15 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
 
   void _fetchDetails() async {
     try {
-      final result = await PokemonApi.getPokemonDetails(widget.pokemon.name);
+      final result = await PokemonApi.instance.getPokemonDetails(
+        widget.pokemon.name,
+      );
       if (!mounted) return;
       setState(() {
         _pokemon = result;
-        _bgColor = result != null
-            ? (listPokemonTypeColor[result.typesList[0].toLowerCase()] ??
-                  _bgColor)
-            : _bgColor;
+        _bgColor =
+            listPokemonTypeColor[result.typesList.first.toLowerCase()] ??
+            _bgColor;
         _isLoading = false;
       });
     } catch (_) {

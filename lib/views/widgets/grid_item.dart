@@ -32,8 +32,10 @@ class _GridItemState extends State<GridItem> {
 
   void _fetchPokemonData() async {
     try {
-      final result = await PokemonApi.getPokemonDetails(widget.pokemon.name);
-      final color = listPokemonTypeColor[result?.typesList[0].toLowerCase()];
+      final result = await PokemonApi.instance.getPokemonDetails(
+        widget.pokemon.name,
+      );
+      final color = listPokemonTypeColor[result.typesList[0].toLowerCase()];
       if (!mounted) return;
       setState(() {
         _pokemon = result;

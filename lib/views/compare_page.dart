@@ -24,6 +24,8 @@ class _ComparePageState extends State<ComparePage> {
   Pokemon? _pokemonB;
   bool _loadingA = false;
   bool _loadingB = false;
+  bool _failedA = false;
+  bool _failedB = false;
 
   @override
   void initState() {
@@ -53,31 +55,43 @@ class _ComparePageState extends State<ComparePage> {
     );
     if (result == null) return;
 
-    if (isA) {
-      setState(() {
-        _selectedA = result;
+    await _loadPokemon(isA, result);
+  }
+
+  Future<void> _loadPokemon(bool isA, PokemonListItem item) async {
+    setState(() {
+      if (isA) {
+        _selectedA = item;
         _pokemonA = null;
         _loadingA = true;
-      });
-      final data = await PokemonApi.getPokemonDetails(result.name);
-      if (!mounted) return;
-      setState(() {
-        _pokemonA = data;
-        _loadingA = false;
-      });
-    } else {
-      setState(() {
-        _selectedB = result;
+        _failedA = false;
+      } else {
+        _selectedB = item;
         _pokemonB = null;
         _loadingB = true;
-      });
-      final data = await PokemonApi.getPokemonDetails(result.name);
-      if (!mounted) return;
-      setState(() {
+        _failedB = false;
+      }
+    });
+
+    Pokemon? data;
+    try {
+      data = await PokemonApi.instance.getPokemonDetails(item.name);
+    } on PokemonApiException {
+      data = null; // the slot offers a retry
+    }
+    if (!mounted) return;
+
+    setState(() {
+      if (isA) {
+        _pokemonA = data;
+        _loadingA = false;
+        _failedA = data == null;
+      } else {
         _pokemonB = data;
         _loadingB = false;
-      });
-    }
+        _failedB = data == null;
+      }
+    });
   }
 
   @override
@@ -116,8 +130,11 @@ class _ComparePageState extends State<ComparePage> {
                       pokemon: _pokemonA,
                       selected: _selectedA,
                       isLoading: _loadingA,
+                      hasError: _failedA,
                       label: 'Pokémon A',
-                      onTap: () => _selectPokemon(true),
+                      onTap: _failedA
+                          ? () => _loadPokemon(true, _selectedA!)
+                          : () => _selectPokemon(true),
                     ),
                   ),
                   Padding(
@@ -135,8 +152,11 @@ class _ComparePageState extends State<ComparePage> {
                       pokemon: _pokemonB,
                       selected: _selectedB,
                       isLoading: _loadingB,
+                      hasError: _failedB,
                       label: 'Pokémon B',
-                      onTap: () => _selectPokemon(false),
+                      onTap: _failedB
+                          ? () => _loadPokemon(false, _selectedB!)
+                          : () => _selectPokemon(false),
                     ),
                   ),
                 ],
@@ -157,7 +177,9 @@ class _ComparePageState extends State<ComparePage> {
               Expanded(
                 child: Center(
                   child: Text(
-                    _selectedA == null && _selectedB == null
+                    _failedA || _failedB
+                        ? "Couldn't load a Pokémon. Tap its card to retry."
+                        : _selectedA == null && _selectedB == null
                         ? 'Select two Pokémon to start comparing'
                         : 'Select the second Pokémon to compare',
                     style: textTheme.bodyMedium?.copyWith(color: gray[300]),
@@ -177,6 +199,7 @@ class _PokemonSlot extends StatelessWidget {
   final Pokemon? pokemon;
   final PokemonListItem? selected;
   final bool isLoading;
+  final bool hasError;
   final String label;
   final VoidCallback onTap;
 
@@ -184,6 +207,7 @@ class _PokemonSlot extends StatelessWidget {
     required this.pokemon,
     required this.selected,
     required this.isLoading,
+    required this.hasError,
     required this.label,
     required this.onTap,
   });
@@ -208,12 +232,28 @@ class _PokemonSlot extends StatelessWidget {
             ? const Center(
                 child: CircularProgressIndicator(color: Colors.white),
               )
+            : hasError
+            ? _errorSlot(context)
             : pokemon != null
             ? _loadedSlot(context, pokemon!)
             : _emptySlot(context),
       ),
     );
   }
+
+  Widget _errorSlot(BuildContext context) => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(Icons.refresh_rounded, size: 32.r, color: gray[300]),
+      SizedBox(height: 8.h),
+      Text(
+        'Tap to retry',
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: gray[300]),
+      ),
+    ],
+  );
 
   Widget _emptySlot(BuildContext context) => Column(
     mainAxisAlignment: MainAxisAlignment.center,

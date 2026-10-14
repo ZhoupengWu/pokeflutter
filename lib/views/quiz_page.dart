@@ -75,9 +75,14 @@ class _QuizPageState extends State<QuizPage> {
       _selectedOption = null;
     });
     final index = _currentIndex;
-    final pokemon = await PokemonApi.getPokemonDetails(
-      _questions[index].subject.name,
-    );
+    Pokemon? pokemon;
+    try {
+      pokemon = await PokemonApi.instance.getPokemonDetails(
+        _questions[index].subject.name,
+      );
+    } on PokemonApiException {
+      pokemon = null; // the question shows a Retry button
+    }
     if (!mounted) return;
     setState(() {
       _currentPokemon = pokemon;
