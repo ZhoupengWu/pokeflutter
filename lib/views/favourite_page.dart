@@ -77,8 +77,10 @@ class FavouritePage extends StatelessWidget {
                         mainAxisSpacing: 8.h,
                         mainAxisExtent: 100.h,
                       ),
-                      itemBuilder: (_, index) =>
-                          GridItem(pokemon: favourites[index]),
+                      itemBuilder: (_, index) => GridItem(
+                        key: ValueKey(favourites[index].name),
+                        pokemon: favourites[index],
+                      ),
                     ),
                   );
                 },

@@ -17,6 +17,14 @@
 - ✅ Persistent Favourites (`shared_preferences` via `FavouritesManager.init()`)
 - ✅ Quiz Feature (10 questions, silhouette guess, results screen with score)
 
+## ✅ Phase 4 — Critical fixes (v1.3.1)
+- ✅ Android INTERNET permission
+- ✅ Quiz "guess the type" bug
+- ✅ Type filter on the list + grid cell keys
+
+## 🔲 Next
+See [`backlog.md`](backlog.md) for the prioritised list of remaining fixes and features.
+
 ## 🔲 Future (not planned)
 - State Management Refactor (Provider / Riverpod)
 - Evolution chain on detail page

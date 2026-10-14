@@ -42,6 +42,16 @@ Optimize performance, add persistence, and complete the quiz feature.
 
 ---
 
+## ✅ Phase 4 — Critical fixes (v1.3.1)
+- ✅ Android `INTERNET` permission in the main manifest
+- ✅ Quiz "guess the type" uses the Pokémon's real types
+- ✅ Type filter applied to the list before the grid (`PokemonTypeIndex`), grid cells keyed by name
+
+Everything else identified in the project review (robustness, architecture, CI, new features)
+is tracked in [`backlog.md`](backlog.md).
+
+---
+
 ## 🔲 Future ideas
 - State Management Refactor (Provider / Riverpod)
 - Evolution chain on detail page
