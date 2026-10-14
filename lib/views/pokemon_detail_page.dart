@@ -119,6 +119,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                 child: Row(
                   children: [
                     IconButton(
+                      tooltip: 'Back',
                       icon: const Icon(
                         Icons.arrow_back_rounded,
                         color: Colors.white,
@@ -143,6 +144,9 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                           widget.pokemon.name,
                         );
                         return IconButton(
+                          tooltip: isFav
+                              ? 'Remove from favourites'
+                              : 'Add to favourites',
                           icon: Icon(
                             isFav
                                 ? Icons.favorite_rounded

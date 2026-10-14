@@ -214,24 +214,34 @@ class _PokemonSlot extends StatelessWidget {
               gray[200]!)
         : gray[100]!;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: hasError
+          ? '$label: failed to load, tap to retry'
+          : pokemon != null
+          ? '$label: ${pokemon!.name.capitalize()}, tap to change'
+          : 'Select $label',
+      excludeSemantics: true,
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        height: 140.h,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(20.r),
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          height: 140.h,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                )
+              : hasError
+              ? _errorSlot(context)
+              : pokemon != null
+              ? _loadedSlot(context, pokemon!)
+              : _emptySlot(context),
         ),
-        child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              )
-            : hasError
-            ? _errorSlot(context)
-            : pokemon != null
-            ? _loadedSlot(context, pokemon!)
-            : _emptySlot(context),
       ),
     );
   }

@@ -263,12 +263,18 @@ class _ActiveFilterChips extends StatelessWidget {
                     ).textTheme.labelSmall?.copyWith(color: Colors.white),
                   ),
                   SizedBox(width: 4.w),
-                  GestureDetector(
+                  Semantics(
+                    button: true,
+                    label: 'Remove ${type.capitalize()} filter',
+                    excludeSemantics: true,
                     onTap: () => onRemove(type),
-                    child: Icon(
-                      Icons.close_rounded,
-                      size: 14.r,
-                      color: Colors.white,
+                    child: GestureDetector(
+                      onTap: () => onRemove(type),
+                      child: Icon(
+                        Icons.close_rounded,
+                        size: 14.r,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],

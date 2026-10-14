@@ -96,27 +96,34 @@ class _TypeFilterSheetState extends State<TypeFilterSheet> {
             children: types.map((type) {
               final color = listPokemonTypeColor[type]!;
               final isSelected = _selected.contains(type);
-              return GestureDetector(
+              return Semantics(
+                button: true,
+                selected: isSelected,
                 onTap: () => _toggle(type),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 14.w,
-                    vertical: 8.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected ? color : color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(20.r),
-                    border: Border.all(
-                      color: isSelected ? color : color.withValues(alpha: 0.3),
-                      width: 1.5,
+                child: GestureDetector(
+                  onTap: () => _toggle(type),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 14.w,
+                      vertical: 8.h,
                     ),
-                  ),
-                  child: Text(
-                    type.capitalize(),
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: isSelected ? Colors.white : color,
-                      fontWeight: FontWeight.w600,
+                    decoration: BoxDecoration(
+                      color: isSelected ? color : color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(20.r),
+                      border: Border.all(
+                        color: isSelected
+                            ? color
+                            : color.withValues(alpha: 0.3),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Text(
+                      type.capitalize(),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: isSelected ? Colors.white : color,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
