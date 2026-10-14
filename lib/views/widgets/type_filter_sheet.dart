@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../utils/capitalize.dart';
 import '../../utils/palette.dart';
-import '../../utils/pokemon_costants.dart';
+import '../../utils/pokemon_constants.dart';
 
 class TypeFilterSheet extends StatefulWidget {
   final Set<String> selectedTypes;

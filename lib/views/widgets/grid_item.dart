@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../model/pokemon_list_item.dart';
 import '../../model/pokemon.dart';
 import '../../utils/pokemon_api.dart';
-import '../../utils/pokemon_costants.dart';
+import '../../utils/pokemon_constants.dart';
 import '../../utils/capitalize.dart';
 import '../../utils/palette.dart';
 import '../../views/widgets/styled_text.dart';

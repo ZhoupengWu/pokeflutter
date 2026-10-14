@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/palette.dart';
 import '../utils/capitalize.dart';
-import '../utils/pokemon_costants.dart';
+import '../utils/pokemon_constants.dart';
 import '../utils/pokemon_type_index.dart';
 import 'widgets/random_floating_button.dart';
 import 'widgets/pokemon_list.dart';

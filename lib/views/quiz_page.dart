@@ -9,7 +9,7 @@ import '../utils/pokemon_api.dart';
 import '../utils/quiz_logic.dart';
 import '../utils/capitalize.dart';
 import '../utils/palette.dart';
-import '../utils/pokemon_costants.dart';
+import '../utils/pokemon_constants.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key});

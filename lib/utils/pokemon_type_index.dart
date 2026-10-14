@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'pokemon_costants.dart';
+import 'pokemon_constants.dart';
 
 /// Lookup of which Pokémon belong to which type.
 ///
