@@ -1,6 +1,6 @@
 # Flutter Feature Implementation Prompt
 
-Use this prompt template when asking an AI assistant to implement a specific feature from the to-do list.
+Use this prompt template when asking an AI assistant to implement a specific feature from the backlog.
 
 ## Prompt Template
 
@@ -11,10 +11,9 @@ You are a senior Flutter developer implementing a feature for the PokéFlutter a
 
 **Instructions:**
 1. First, read the relevant planning files:
-   - `.ai/planning/todo.md` (for feature details)
-   - `.ai/planning/features.md` (for detailed specifications)
-   - `.ai/analysis/architecture.md` (for existing code patterns)
-   - `.ai/analysis/project-structure.md` (for file organization)
+   - `.ai/planning/backlog.md` (what is planned and why)
+   - `.ai/analysis/architecture.md` (layout, data flow, testing conventions)
+   - `.ai/analysis/technical-debt.md` (known weak spots to avoid making worse)
 
 2. Follow the existing code style and architecture patterns from the codebase.
 
@@ -22,15 +21,18 @@ You are a senior Flutter developer implementing a feature for the PokéFlutter a
 
 4. Implement ONLY the requested feature - do not add extra functionality.
 
-5. Ensure the implementation does not break existing functionality.
+5. Add tests (inject fakes for HTTP / storage, never hit the network) and make sure these pass,
+   they are what CI runs:
+   `dart format --output=none --set-exit-if-changed lib test`, `flutter analyze`, `flutter test`.
 
-6. Test the feature manually after implementation.
+6. Commit in small, focused commits and update `.ai/planning/` (move the item from the backlog
+   to `roadmap.md` / `todo.md`) and `.ai/analysis/architecture.md` if the structure changed.
 
 **Feature Details:**
-[PASTE FEATURE DETAILS FROM features.md]
+[PASTE THE BACKLOG ENTRY]
 
 **Files to work with:**
-[LIST FILES FROM PLANNING DOCS]
+[LIST FILES, SEE architecture.md]
 
 **Implementation steps:**
 - [STEP 1]
@@ -40,12 +42,12 @@ You are a senior Flutter developer implementing a feature for the PokéFlutter a
 
 ## Example Usage
 
-For implementing the "Search Functionality" feature:
+For implementing the "Evolution chain" feature:
 
 ```
 You are a senior Flutter developer implementing a feature for the PokéFlutter app.
 
-**Feature to implement:** Search Functionality
+**Feature to implement:** Evolution chain on the detail page
 
 **Instructions:**
 1. First, read the relevant planning files...
