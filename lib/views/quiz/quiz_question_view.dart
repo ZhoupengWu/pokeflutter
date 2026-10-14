@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
+import '../../model/pokemon.dart';
 import '../../model/quiz_model.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/capitalize.dart';
@@ -37,9 +38,8 @@ class QuizQuestionView extends StatelessWidget {
       children: [
         _Header(controller: controller, accent: accent),
 
-        // ── Sprite card ────────────────────────────────────────────────────
+        // ── Sprite card (takes the space the other parts leave) ────────────
         Expanded(
-          flex: 3,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             margin: EdgeInsets.symmetric(horizontal: 24.w),
@@ -67,28 +67,36 @@ class QuizQuestionView extends StatelessWidget {
 
         SizedBox(height: 12.h),
 
-        // ── Answer options ─────────────────────────────────────────────────
-        Expanded(
-          flex: 4,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.w,
-              mainAxisSpacing: 8.h,
-              childAspectRatio: 2.8,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (var i = 0; i < question.options.length; i++)
-                  QuizOptionButton(
-                    label: question.mode == QuizMode.guessType
-                        ? l10n.typeName(question.options[i])
-                        : question.options[i].capitalize(),
-                    state: _optionState(i),
-                    onTap: () => controller.answer(i),
+        // ── Answer options (two per row) ───────────────────────────────────
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Column(
+            children: [
+              for (var row = 0; row < question.options.length; row += 2) ...[
+                if (row > 0) SizedBox(height: 8.h),
+                SizedBox(
+                  height: 60,
+                  child: Row(
+                    children: [
+                      for (var i = row; i < row + 2; i++) ...[
+                        if (i > row) SizedBox(width: 8.w),
+                        Expanded(
+                          child: i < question.options.length
+                              ? QuizOptionButton(
+                                  label: question.mode == QuizMode.guessType
+                                      ? l10n.typeName(question.options[i])
+                                      : question.options[i].capitalize(),
+                                  state: _optionState(i),
+                                  onTap: () => controller.answer(i),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ],
+                    ],
                   ),
+                ),
               ],
-            ),
+            ],
           ),
         ),
 
@@ -238,12 +246,27 @@ class _SpriteCard extends StatelessWidget {
 
     final hidden =
         controller.question.mode == QuizMode.guessName && !controller.answered;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Fill most of the card, within reason.
+        final size = (constraints.maxHeight * 0.75).clamp(96.0, 240.0);
+        return _sprite(context, pokemon, hidden, size);
+      },
+    );
+  }
+
+  Widget _sprite(
+    BuildContext context,
+    Pokemon pokemon,
+    bool hidden,
+    double size,
+  ) {
     return Center(
       child: Image.network(
         // The small sprite blacked out is the "silhouette".
         hidden ? pokemon.urlSprite : pokemon.urlImage,
-        height: 140.r,
-        width: 140.r,
+        height: size,
+        width: size,
         fit: BoxFit.contain,
         color: hidden ? Colors.black : null,
         colorBlendMode: BlendMode.srcATop,

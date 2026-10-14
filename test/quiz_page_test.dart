@@ -189,4 +189,24 @@ void main() {
     await tester.pump(const Duration(seconds: 11));
     expect(controller.timedOut, isTrue);
   });
+
+  testWidgets('fits a small phone, before and after answering', (tester) async {
+    final controller = await _pump(tester);
+    // 360 × 568 dp, an old compact phone (the helper's default is taller).
+    tester.view.physicalSize = const Size(1080, 1704);
+    tester.view.devicePixelRatio = 3;
+    controller.setDifficulty(QuizDifficulty.hard);
+    await tester.pump();
+    await tester.tap(find.text('Start Quiz'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.byType(QuizOptionButton), findsNWidgets(4));
+    expect(tester.takeException(), isNull); // no RenderFlex overflow
+
+    controller.answer(controller.question.correctIndex);
+    await tester.pump();
+    expect(find.text('Next Question'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
