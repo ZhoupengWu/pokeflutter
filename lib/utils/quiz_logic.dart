@@ -1,7 +1,7 @@
 import 'dart:math';
 import '../model/pokemon_list_item.dart';
 import '../model/quiz_model.dart';
-import 'pokemon_costants.dart';
+import 'pokemon_constants.dart';
 
 class QuizLogic {
   static final _random = Random();

@@ -1,15 +1,14 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../model/pokemon_list_item.dart';
 import '../model/pokemon.dart';
 import '../model/quiz_model.dart';
 import '../utils/pokemon_api.dart';
+import '../utils/pokemon_repository.dart';
 import '../utils/quiz_logic.dart';
 import '../utils/capitalize.dart';
 import '../utils/palette.dart';
-import '../utils/pokemon_costants.dart';
+import '../utils/pokemon_constants.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key});
@@ -43,11 +42,7 @@ class _QuizPageState extends State<QuizPage> {
   // ── Data loading ──────────────────────────────────────────────────────────
 
   Future<void> _loadPokemonList() async {
-    final jsonFile = await rootBundle.loadString('assets/pokemonList.json');
-    final decoded = jsonDecode(jsonFile);
-    final items = (decoded['pokemonList'] as List)
-        .map((item) => PokemonListItem(name: item['name'], url: item['url']))
-        .toList();
+    final items = await PokemonRepository.instance.getAll();
     if (!mounted) return;
     setState(() => _allPokemon = items);
   }
@@ -75,9 +70,14 @@ class _QuizPageState extends State<QuizPage> {
       _selectedOption = null;
     });
     final index = _currentIndex;
-    final pokemon = await PokemonApi.getPokemonDetails(
-      _questions[index].subject.name,
-    );
+    Pokemon? pokemon;
+    try {
+      pokemon = await PokemonApi.instance.getPokemonDetails(
+        _questions[index].subject.name,
+      );
+    } on PokemonApiException {
+      pokemon = null; // the question shows a Retry button
+    }
     if (!mounted) return;
     setState(() {
       _currentPokemon = pokemon;
@@ -274,6 +274,11 @@ class _QuizPageState extends State<QuizPage> {
                           ? Colors.black
                           : null,
                       colorBlendMode: BlendMode.srcATop,
+                      errorBuilder: (_, _, _) => Icon(
+                        Icons.catching_pokemon,
+                        size: 96.r,
+                        color: Colors.white38,
+                      ),
                     ),
                   ),
           ),

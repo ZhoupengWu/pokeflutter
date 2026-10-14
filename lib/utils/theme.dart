@@ -1,84 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'palette.dart';
 
+/// Roboto is bundled with the app (assets/fonts), so text renders correctly
+/// offline and without a first-run download.
+const _fontFamily = 'Roboto';
+
+TextStyle _roboto({
+  required double fontSize,
+  required FontWeight fontWeight,
+  Color? color,
+  double? letterSpacing,
+}) => TextStyle(
+  fontFamily: _fontFamily,
+  fontSize: fontSize,
+  fontWeight: fontWeight,
+  color: color,
+  letterSpacing: letterSpacing,
+);
+
 final pokeFlutterTheme = ThemeData(
-  primarySwatch: gray,
-  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+  useMaterial3: true,
+  fontFamily: _fontFamily,
+  colorScheme: ColorScheme.fromSeed(seedColor: gray),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     selectedItemColor: gray[500],
     unselectedItemColor: gray[300],
     backgroundColor: Colors.white,
   ),
   textTheme: TextTheme(
-    displaySmall: GoogleFonts.roboto(
+    displaySmall: _roboto(
       fontSize: 36,
       fontWeight: FontWeight.w400,
       color: gray[500],
     ),
-    titleLarge: GoogleFonts.roboto(
-      fontSize: 22,
-      fontWeight: FontWeight.w400,
-      color: gray,
-    ),
-    titleMedium: GoogleFonts.roboto(
+    titleLarge: _roboto(fontSize: 22, fontWeight: FontWeight.w400, color: gray),
+    titleMedium: _roboto(
       fontSize: 16,
       fontWeight: FontWeight.w500,
       color: gray,
       letterSpacing: 0.15,
     ),
-    titleSmall: GoogleFonts.roboto(
+    titleSmall: _roboto(
       fontSize: 14,
       fontWeight: FontWeight.w500,
       color: gray[500],
       letterSpacing: 0.1,
     ),
-    headlineLarge: GoogleFonts.roboto(
+    headlineLarge: _roboto(
       fontSize: 32,
       fontWeight: FontWeight.w400,
       color: gray,
     ),
-    headlineMedium: GoogleFonts.roboto(
+    headlineMedium: _roboto(
       fontSize: 28,
       fontWeight: FontWeight.w400,
       color: gray,
     ),
-    headlineSmall: GoogleFonts.roboto(
+    headlineSmall: _roboto(
       fontSize: 24,
       fontWeight: FontWeight.w400,
       color: gray,
     ),
-    labelLarge: GoogleFonts.roboto(
+    labelLarge: _roboto(
       fontSize: 14,
       fontWeight: FontWeight.w500,
       color: gray,
       letterSpacing: 0.1,
     ),
-    labelMedium: GoogleFonts.roboto(
+    labelMedium: _roboto(
       fontSize: 12,
       fontWeight: FontWeight.w500,
       color: gray,
       letterSpacing: 0.5,
     ),
-    labelSmall: GoogleFonts.roboto(
+    labelSmall: _roboto(
       fontSize: 11,
       fontWeight: FontWeight.w400,
       color: gray,
       letterSpacing: 0.5,
     ),
-    bodyLarge: GoogleFonts.roboto(
+    bodyLarge: _roboto(
       fontSize: 16,
       fontWeight: FontWeight.w400,
       color: gray,
       letterSpacing: 0.15,
     ),
-    bodyMedium: GoogleFonts.roboto(
+    bodyMedium: _roboto(
       fontSize: 14,
       fontWeight: FontWeight.w400,
       color: gray,
       letterSpacing: 0.25,
     ),
-    bodySmall: GoogleFonts.roboto(
+    bodySmall: _roboto(
       fontSize: 12,
       fontWeight: FontWeight.w400,
       color: gray,

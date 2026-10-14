@@ -1,21 +1,26 @@
-# Technical Debt
+# Technical debt
 
-## Identified Issues
-- **Mixed UI and Business Logic**: API calls and data processing happen directly in widgets (`GridItem`, `HomePage`)
-- **No State Management**: Uses basic `setState` which can lead to complex state handling
-- **Incomplete Features**: Search bar, navigation, and random button are UI-only without functionality
-- **No Error Handling**: API calls lack proper error handling and loading states
-- **Hardcoded Values**: Some styling and layout values are hardcoded
-- **No Caching**: Pokemon details are fetched on every grid item creation
+Current state; the actionable list with priorities is `planning/backlog.md`.
 
-## Large Widgets
-- `GridItem` handles both UI rendering and data fetching
-- `HomePage` manages list loading and UI layout
+## Architecture
+- **Singletons everywhere** (`FavouritesManager`, `PokemonCache`, `PokemonTypeIndex`,
+  `PokemonApi`, `PokemonRepository`): fine for now, hard to swap in widget tests
+  (`GridItem` and the API already accept injected collaborators; pages do not).
+- **Large widgets** mixing loading, state and UI: `quiz_page.dart` (~560 lines),
+  `compare_page.dart` (~500), `pokemon_detail_page.dart` (~370), `homepage.dart`.
+- **No state management package** (`setState` only).
+- **`utils/` mixes concerns** (api, theme, extensions, constants).
+- **Navigation** is `Navigator.push` with no named routes / deep links; `IndexedStack`
+  keeps all four tabs alive.
 
-## Tight Coupling
-- Widgets directly depend on API services
-- No abstraction layers between UI and data
+## Data
+- **Pokémon details are cached in memory only** and sprites are not cached on disk beyond
+  Flutter's default image cache.
+- **Offline first run**: the grid works but is grey (no type index) until a connection is available.
+- Alternate forms in `pokemonList.json` (ids > 10000) may lack sprites; the UI falls back to an icon.
 
-## Unclear Module Boundaries
-- Utils folder mixes different concerns (API, theming, extensions)
-- No clear separation between presentation and domain logic
+## Quality
+- No localisation (English strings hard-coded); accessibility covers icon-only controls but
+  has not been audited with a screen reader on a device.
+- `ScreenUtil` design size 360×979 has not been verified on tablets / landscape.
+- CI runs format, analyze and tests; there is no build job for Android/iOS.

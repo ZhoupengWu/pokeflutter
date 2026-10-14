@@ -1,32 +1,15 @@
 # To-Do List
 
-## ✅ Phase 1 — Core Functionality (v1.1.0)
-- ✅ Pokemon Detail Page
-- ✅ Search Functionality
-- ✅ Navigation System (ShellPage + IndexedStack)
-- ✅ Random Pokemon Button
-- ✅ Error Handling
-
-## ✅ Phase 2 — Advanced Features (v1.2.0)
-- ✅ Filter by Type (multi-select sheet + active chip row)
-- ✅ Favourites System (in-memory ValueNotifier + heart on detail page)
-- ✅ Pokemon Comparison (stat bars side by side + picker sheet)
-
-## ✅ Phase 3 — Polish & Optimization (v1.3.0)
-- ✅ Caching System (`PokemonCache` singleton, cache-first in `PokemonApi`)
-- ✅ Persistent Favourites (`shared_preferences` via `FavouritesManager.init()`)
-- ✅ Quiz Feature (10 questions, silhouette guess, results screen with score)
-
-## ✅ Phase 4 — Critical fixes (v1.3.1)
-- ✅ Android INTERNET permission
-- ✅ Quiz "guess the type" bug
-- ✅ Type filter on the list + grid cell keys
+## ✅ Done
+- Phase 1 (v1.1.0): detail page, search, navigation, random Pokémon, error handling
+- Phase 2 (v1.2.0): type filter, favourites, comparison
+- Phase 3 (v1.3.0): details cache, persistent favourites, quiz
+- Phase 4 (v1.3.1): Android INTERNET permission, quiz type questions, type filter on the list
+- Phase 5 (v1.4.0): grid without per-cell requests, typed API errors, null-safe parsing,
+  shared repository, theme + bundled font, accessibility labels, tests, CI, docs
 
 ## 🔲 Next
-See [`backlog.md`](backlog.md) for the prioritised list of remaining fixes and features.
-
-## 🔲 Future (not planned)
-- State Management Refactor (Provider / Riverpod)
-- Evolution chain on detail page
-- Pokémon sound/cry playback
-- Dark mode support
+Everything left is in [`backlog.md`](backlog.md). Suggested first steps:
+1. Manual pass on a device/emulator (item P2-10: nobody has looked at the UI yet since phase 4).
+2. Add an Android build job to CI.
+3. State management refactor, then the larger features.

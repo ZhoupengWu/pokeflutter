@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../model/pokemon_list_item.dart';
 import '../model/pokemon.dart';
 import '../utils/pokemon_api.dart';
-import '../utils/pokemon_costants.dart';
+import '../utils/pokemon_constants.dart';
 import '../utils/capitalize.dart';
 import '../utils/palette.dart';
 import '../utils/favourites_manager.dart';
@@ -33,14 +33,15 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
 
   void _fetchDetails() async {
     try {
-      final result = await PokemonApi.getPokemonDetails(widget.pokemon.name);
+      final result = await PokemonApi.instance.getPokemonDetails(
+        widget.pokemon.name,
+      );
       if (!mounted) return;
       setState(() {
         _pokemon = result;
-        _bgColor = result != null
-            ? (listPokemonTypeColor[result.typesList[0].toLowerCase()] ??
-                  _bgColor)
-            : _bgColor;
+        _bgColor =
+            listPokemonTypeColor[result.typesList.first.toLowerCase()] ??
+            _bgColor;
         _isLoading = false;
       });
     } catch (_) {
@@ -118,6 +119,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                 child: Row(
                   children: [
                     IconButton(
+                      tooltip: 'Back',
                       icon: const Icon(
                         Icons.arrow_back_rounded,
                         color: Colors.white,
@@ -137,11 +139,14 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     // Favourite button
                     ValueListenableBuilder(
                       valueListenable: FavouritesManager.instance.notifier,
-                      builder: (_, __, ___) {
+                      builder: (_, _, _) {
                         final isFav = FavouritesManager.instance.isFavourite(
                           widget.pokemon.name,
                         );
                         return IconButton(
+                          tooltip: isFav
+                              ? 'Remove from favourites'
+                              : 'Add to favourites',
                           icon: Icon(
                             isFav
                                 ? Icons.favorite_rounded
@@ -178,7 +183,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                   height: 180.r,
                   width: 180.r,
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => Icon(
+                  errorBuilder: (_, _, _) => Icon(
                     Icons.image_not_supported_rounded,
                     size: 120.r,
                     color: Colors.white38,

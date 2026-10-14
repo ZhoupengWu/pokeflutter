@@ -50,46 +50,54 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   Widget _filterButton() {
     final hasActive = widget.activeFilterCount > 0;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: hasActive
+          ? 'Filter by type, ${widget.activeFilterCount} selected'
+          : 'Filter by type',
+      excludeSemantics: true,
       onTap: widget.onFilterTap,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            height: 48.r,
-            width: 48.r,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.r),
-              color: hasActive ? gray[500] : gray[200],
+      child: GestureDetector(
+        onTap: widget.onFilterTap,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              height: 48.r,
+              width: 48.r,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.r),
+                color: hasActive ? gray[500] : gray[200],
+              ),
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.filter_alt_rounded,
+                size: 24.r,
+                color: hasActive ? Colors.white : gray[400],
+              ),
             ),
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.filter_alt_rounded,
-              size: 24.r,
-              color: hasActive ? Colors.white : gray[400],
-            ),
-          ),
-          if (hasActive)
-            Positioned(
-              top: -4,
-              right: -4,
-              child: Container(
-                padding: EdgeInsets.all(4.r),
-                decoration: const BoxDecoration(
-                  color: Colors.redAccent,
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  '${widget.activeFilterCount}',
-                  style: TextStyle(
-                    fontSize: 9.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+            if (hasActive)
+              Positioned(
+                top: -4,
+                right: -4,
+                child: Container(
+                  padding: EdgeInsets.all(4.r),
+                  decoration: const BoxDecoration(
+                    color: Colors.redAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    '${widget.activeFilterCount}',
+                    style: TextStyle(
+                      fontSize: 9.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -125,11 +133,17 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         ),
         ValueListenableBuilder<TextEditingValue>(
           valueListenable: _controller,
-          builder: (_, value, __) {
+          builder: (_, value, _) {
             if (value.text.isEmpty) return const SizedBox.shrink();
-            return GestureDetector(
+            return Semantics(
+              button: true,
+              label: 'Clear search',
+              excludeSemantics: true,
               onTap: _clearSearch,
-              child: Icon(Icons.close_rounded, size: 20.r, color: gray[300]),
+              child: GestureDetector(
+                onTap: _clearSearch,
+                child: Icon(Icons.close_rounded, size: 20.r, color: gray[300]),
+              ),
             );
           },
         ),

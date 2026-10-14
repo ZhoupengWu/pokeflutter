@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/palette.dart';
 import '../utils/capitalize.dart';
-import '../utils/pokemon_costants.dart';
+import '../utils/pokemon_constants.dart';
+import '../utils/pokemon_repository.dart';
 import '../utils/pokemon_type_index.dart';
 import 'widgets/random_floating_button.dart';
 import 'widgets/pokemon_list.dart';
@@ -28,22 +27,25 @@ class _HomePageState extends State<HomePage> {
   Set<String> _activeTypeFilters = {};
   bool _isFilterLoading = false;
   bool _filterFailed = false;
+  bool _typesUnavailable = false; // type index could not be loaded
   int _filterRequest = 0; // discards results of superseded filter runs
 
   @override
   void initState() {
     super.initState();
     _readJSONFile();
+    _loadTypes();
   }
 
-  void _readJSONFile() async {
-    final jsonFile = await rootBundle.loadString('assets/pokemonList.json');
-    final decoded = jsonDecode(jsonFile);
+  /// Types colour the cards; without them the grid still works, in grey.
+  Future<void> _loadTypes() async {
+    final loaded = await PokemonTypeIndex.instance.ensureLoaded();
+    if (!mounted) return;
+    setState(() => _typesUnavailable = !loaded);
+  }
 
-    final items = (decoded['pokemonList'] as List)
-        .map((item) => PokemonListItem(name: item['name'], url: item['url']))
-        .toList();
-
+  Future<void> _readJSONFile() async {
+    final items = await PokemonRepository.instance.getAll();
     if (!mounted) return;
 
     setState(() {
@@ -178,6 +180,7 @@ class _HomePageState extends State<HomePage> {
             activeFilterCount: _activeTypeFilters.length,
             onFilterTap: _openFilterSheet,
           ),
+          if (_typesUnavailable) _TypesUnavailableBanner(onRetry: _loadTypes),
           if (_activeTypeFilters.isNotEmpty) ...[
             SizedBox(height: 8.h),
             _ActiveFilterChips(
@@ -231,6 +234,35 @@ class _Message extends StatelessWidget {
   }
 }
 
+// ── "Types could not be loaded" banner ────────────────────────────────────────
+class _TypesUnavailableBanner extends StatelessWidget {
+  final VoidCallback onRetry;
+
+  const _TypesUnavailableBanner({required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(24.w, 8.h, 24.w, 0),
+      child: Row(
+        children: [
+          Icon(Icons.wifi_off_rounded, size: 16.r, color: gray[300]),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: Text(
+              'Types unavailable offline.',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: gray[300]),
+            ),
+          ),
+          TextButton(onPressed: onRetry, child: const Text('Retry')),
+        ],
+      ),
+    );
+  }
+}
+
 // ── Active filter chips row ───────────────────────────────────────────────────
 class _ActiveFilterChips extends StatelessWidget {
   final Set<String> filters;
@@ -270,12 +302,18 @@ class _ActiveFilterChips extends StatelessWidget {
                     ).textTheme.labelSmall?.copyWith(color: Colors.white),
                   ),
                   SizedBox(width: 4.w),
-                  GestureDetector(
+                  Semantics(
+                    button: true,
+                    label: 'Remove ${type.capitalize()} filter',
+                    excludeSemantics: true,
                     onTap: () => onRemove(type),
-                    child: Icon(
-                      Icons.close_rounded,
-                      size: 14.r,
-                      color: Colors.white,
+                    child: GestureDetector(
+                      onTap: () => onRemove(type),
+                      child: Icon(
+                        Icons.close_rounded,
+                        size: 14.r,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],

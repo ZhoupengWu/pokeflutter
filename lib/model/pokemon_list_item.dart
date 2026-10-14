@@ -3,4 +3,15 @@ class PokemonListItem {
   final String url;
 
   PokemonListItem({required this.name, required this.url});
+
+  /// Pokédex id, taken from the item URL (`.../pokemon/{id}/`).
+  /// Alternate forms have ids above 10000.
+  late final int id = int.parse(
+    Uri.parse(url).pathSegments.lastWhere((s) => s.isNotEmpty),
+  );
+
+  /// Small sprite served by the PokéAPI sprites repository. Known from the
+  /// list alone, so the grid needs no per-Pokémon API call.
+  String get spriteUrl =>
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
 }

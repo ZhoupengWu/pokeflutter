@@ -5,8 +5,8 @@ import '../model/pokemon.dart';
 /// To persist across restarts, replace the map with a shared_preferences
 /// or Hive implementation in [get] and [set].
 class PokemonCache {
-  PokemonCache._();
-  static final PokemonCache instance = PokemonCache._();
+  PokemonCache();
+  static final PokemonCache instance = PokemonCache();
 
   final Map<String, Pokemon> _cache = {};
 

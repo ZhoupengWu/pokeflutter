@@ -1,24 +1,23 @@
-import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'model/pokemon_list_item.dart';
 import 'utils/favourites_manager.dart';
+import 'utils/pokemon_repository.dart';
+import 'utils/pokemon_type_index.dart';
 import 'utils/theme.dart';
 import 'views/shell_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load the full Pokémon list so FavouritesManager can re-hydrate
-  // saved names into proper PokemonListItem objects.
-  final jsonFile = await rootBundle.loadString('assets/pokemonList.json');
-  final decoded = jsonDecode(jsonFile);
-  final allPokemon = (decoded['pokemonList'] as List)
-      .map((item) => PokemonListItem(name: item['name'], url: item['url']))
-      .toList();
+  // FavouritesManager re-hydrates saved names into PokemonListItem objects.
+  final allPokemon = await PokemonRepository.instance.getAll();
 
   await FavouritesManager.instance.init(allPokemon);
+
+  // Types of every Pokémon (grid colours and badges). Not awaited: the grid
+  // repaints when the index arrives. Failures are retried on next use.
+  unawaited(PokemonTypeIndex.instance.ensureLoaded());
 
   runApp(const MyApp());
 }

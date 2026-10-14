@@ -2,26 +2,26 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:pokeflutter/utils/pokemon_costants.dart';
+import 'package:pokeflutter/utils/pokemon_constants.dart';
 import 'package:pokeflutter/utils/pokemon_type_index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Fake PokéAPI: fire = charmander + charizard, flying = charizard,
-/// every other type is empty.
+/// Fake PokéAPI: fire = charmander + charizard (primary), flying = charizard
+/// (secondary) + pidgey (primary), every other type is empty.
 http.Response _typeResponse(http.Request request) {
   final type = request.url.pathSegments.last;
-  final names = switch (type) {
-    'fire' => ['charmander', 'charizard'],
-    'flying' => ['charizard', 'pidgey'],
-    _ => <String>[],
+  final entries = switch (type) {
+    'fire' => [('charmander', 1), ('charizard', 1)],
+    'flying' => [('charizard', 2), ('pidgey', 1)],
+    _ => <(String, int)>[],
   };
   return http.Response(
     jsonEncode({
       'pokemon': [
-        for (final n in names)
+        for (final (name, slot) in entries)
           {
-            'pokemon': {'name': n},
-            'slot': 1,
+            'pokemon': {'name': name},
+            'slot': slot,
           },
       ],
     }),
@@ -60,6 +60,23 @@ void main() {
     },
   );
 
+  test('lists the primary type first and notifies when loaded', () async {
+    final index = PokemonTypeIndex(
+      client: MockClient((r) async => _typeResponse(r)),
+    );
+    var notifications = 0;
+    index.addListener(() => notifications++);
+
+    expect(index.typesOf('charizard'), isNull);
+    await index.ensureLoaded();
+
+    // "flying" is queried before "fire", so only the slot gives this order.
+    expect(index.typesOf('charizard'), ['fire', 'flying']);
+    expect(index.typesOf('pidgey'), ['flying']);
+    expect(index.typesOf('unknown-mon'), isNull);
+    expect(notifications, 1);
+  });
+
   test('is persisted: a new instance loads without network', () async {
     await PokemonTypeIndex(
       client: MockClient((r) async => _typeResponse(r)),
@@ -70,7 +87,7 @@ void main() {
     );
 
     expect(await offline.ensureLoaded(), isTrue);
-    expect(offline.matchesAny('charizard', {'fire'}), isTrue);
+    expect(offline.typesOf('charizard'), ['fire', 'flying']);
   });
 
   test(
