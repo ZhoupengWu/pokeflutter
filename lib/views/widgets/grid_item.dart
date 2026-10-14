@@ -12,13 +12,8 @@ import '../../views/pokemon_detail_page.dart';
 
 class GridItem extends StatefulWidget {
   final PokemonListItem pokemon;
-  final Set<String> activeTypeFilters;
 
-  const GridItem({
-    super.key,
-    required this.pokemon,
-    this.activeTypeFilters = const {},
-  });
+  const GridItem({super.key, required this.pokemon});
 
   @override
   State<GridItem> createState() => _GridItemState();
@@ -51,14 +46,6 @@ class _GridItemState extends State<GridItem> {
     }
   }
 
-  bool get _isVisible {
-    if (widget.activeTypeFilters.isEmpty) return true;
-    if (_pokemon == null) return true; // show while loading
-    return _pokemon!.typesList.any(
-      (t) => widget.activeTypeFilters.contains(t.toLowerCase()),
-    );
-  }
-
   void _navigateToDetail() {
     Navigator.push(
       context,
@@ -70,8 +57,6 @@ class _GridItemState extends State<GridItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isVisible) return const SizedBox.shrink();
-
     if (_isLoading) {
       return Container(
         decoration: BoxDecoration(

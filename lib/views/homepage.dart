@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/palette.dart';
 import '../utils/capitalize.dart';
 import '../utils/pokemon_costants.dart';
+import '../utils/pokemon_type_index.dart';
 import 'widgets/random_floating_button.dart';
 import 'widgets/pokemon_list.dart';
 import 'widgets/search_bar.dart';
@@ -25,6 +26,9 @@ class _HomePageState extends State<HomePage> {
   List<PokemonListItem> _filteredPokemon = [];
   String _searchQuery = '';
   Set<String> _activeTypeFilters = {};
+  bool _isFilterLoading = false;
+  bool _filterFailed = false;
+  int _filterRequest = 0; // discards results of superseded filter runs
 
   @override
   void initState() {
@@ -48,12 +52,39 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _applyFilters() {
+  /// Applies search text and type filters to the full list.
+  /// Type filtering needs the [PokemonTypeIndex]; it is downloaded on first
+  /// use and the list shows a spinner (or a retry prompt) in the meantime.
+  Future<void> _applyFilters() async {
+    final request = ++_filterRequest;
+    final typeFilters = _activeTypeFilters;
+
+    if (typeFilters.isNotEmpty && !PokemonTypeIndex.instance.isLoaded) {
+      setState(() {
+        _isFilterLoading = true;
+        _filterFailed = false;
+      });
+      final loaded = await PokemonTypeIndex.instance.ensureLoaded();
+      if (!mounted || request != _filterRequest) return;
+      if (!loaded) {
+        setState(() {
+          _isFilterLoading = false;
+          _filterFailed = true;
+        });
+        return;
+      }
+    }
+
     setState(() {
+      _isFilterLoading = false;
+      _filterFailed = false;
       _filteredPokemon = _allPokemon.where((p) {
         final matchesSearch =
             _searchQuery.isEmpty || p.name.toLowerCase().contains(_searchQuery);
-        return matchesSearch;
+        final matchesType =
+            typeFilters.isEmpty ||
+            PokemonTypeIndex.instance.matchesAny(p.name, typeFilters);
+        return matchesSearch && matchesType;
       }).toList();
     });
   }
@@ -92,6 +123,29 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(builder: (_) => PokemonDetailPage(pokemon: random)),
     );
+  }
+
+  Widget _buildResults() {
+    if (_isFilterLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_filterFailed) {
+      return _Message(
+        icon: Icons.wifi_off_rounded,
+        text: "Couldn't load the type data. Check your connection.",
+        action: TextButton(
+          onPressed: _applyFilters,
+          child: const Text('Retry'),
+        ),
+      );
+    }
+    if (_filteredPokemon.isEmpty && _allPokemon.isNotEmpty) {
+      return const _Message(
+        icon: Icons.search_off_rounded,
+        text: 'No Pokémon found.',
+      );
+    }
+    return PokemonList(pokemonList: _filteredPokemon);
   }
 
   @override
@@ -137,12 +191,40 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
           SizedBox(height: 16.h),
-          Expanded(
-            child: PokemonList(
-              pokemonList: _filteredPokemon,
-              activeTypeFilters: _activeTypeFilters,
+          Expanded(child: _buildResults()),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Empty / error message ─────────────────────────────────────────────────────
+class _Message extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Widget? action;
+
+  const _Message({required this.icon, required this.text, this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 64.r, color: gray[200]),
+          SizedBox(height: 8.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Text(
+              text,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: gray[300]),
+              textAlign: TextAlign.center,
             ),
           ),
+          ?action,
         ],
       ),
     );

@@ -59,6 +59,8 @@ class _QuizPageState extends State<QuizPage> {
       _currentIndex = 0;
       _result.correct = 0;
       _result.answered = 0;
+      _currentPokemon = null;
+      _loadingPokemon = true;
       _screen = _Screen.quiz;
     });
     await _loadCurrentPokemon();
@@ -72,21 +74,33 @@ class _QuizPageState extends State<QuizPage> {
       _answered = false;
       _selectedOption = null;
     });
+    final index = _currentIndex;
     final pokemon = await PokemonApi.getPokemonDetails(
-      _questions[_currentIndex].subject.name,
+      _questions[index].subject.name,
     );
     if (!mounted) return;
     setState(() {
       _currentPokemon = pokemon;
       _loadingPokemon = false;
+      // Type questions get their options from the Pokémon's real types.
+      final question = _questions[index];
+      if (pokemon != null &&
+          question.mode == QuizMode.guessType &&
+          !question.isResolved) {
+        _questions[index] = QuizLogic.resolveTypeQuestion(
+          question,
+          pokemon.typesList,
+        );
+      }
     });
   }
 
   // ── Interaction ───────────────────────────────────────────────────────────
 
   void _onOptionTap(int index) {
-    if (_answered) return;
     final question = _questions[_currentIndex];
+    // Ignore taps until the question is fully loaded (sprite + options).
+    if (_answered || _currentPokemon == null || !question.isResolved) return;
     final isCorrect = index == question.correctIndex;
 
     setState(() {
@@ -133,7 +147,7 @@ class _QuizPageState extends State<QuizPage> {
           Text('Quiz', style: textTheme.displaySmall),
           SizedBox(height: 8.h),
           Text(
-            'Test your Pokémon knowledge!\n10 questions — guess the name from the sprite.',
+            'Test your Pokémon knowledge!\n10 questions — guess the name from the silhouette or the type from the name.',
             style: textTheme.bodyLarge?.copyWith(color: gray[400], height: 1.5),
           ),
           const Spacer(),
@@ -222,9 +236,30 @@ class _QuizPageState extends State<QuizPage> {
               color: bgColor,
               borderRadius: BorderRadius.circular(24.r),
             ),
-            child: _loadingPokemon || _currentPokemon == null
+            child: _loadingPokemon
                 ? const Center(
                     child: CircularProgressIndicator(color: Colors.white),
+                  )
+                : _currentPokemon == null
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.wifi_off_rounded,
+                          size: 40.r,
+                          color: Colors.white,
+                        ),
+                        SizedBox(height: 8.h),
+                        TextButton(
+                          onPressed: _loadCurrentPokemon,
+                          child: const Text(
+                            'Retry',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 : Center(
                     child: Image.network(
