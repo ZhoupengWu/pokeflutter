@@ -1,30 +1,42 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:pokeflutter/main.dart';
+import 'package:pokeflutter/utils/pokemon_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('shows the Pokédex and navigates between the tabs', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    // A phone-sized screen; the app is designed for 360 dp wide.
+    tester.view.physicalSize = const Size(1080, 2340);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    // Assets are read through the real event loop, not the fake test clock.
+    await tester.runAsync(PokemonRepository.instance.getAll);
+
     await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Let the pages receive the list, then rebuild with it.
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Pokédex'), findsOneWidget);
+    expect(find.text('Bulbasaur'), findsOneWidget);
+
+    await tester.tap(find.text('Compare'));
+    await tester.pump();
+    expect(find.text('Select two Pokémon to start comparing'), findsOneWidget);
+
+    await tester.tap(find.text('Quiz'));
+    await tester.pump();
+    expect(find.text('Start Quiz'), findsOneWidget);
+
+    await tester.tap(find.text('Favourite'));
+    await tester.pump();
+    expect(
+      find.text('Tap the ♥ on any Pokémon to save it here.'),
+      findsOneWidget,
+    );
   });
 }
