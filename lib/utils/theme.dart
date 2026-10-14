@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'palette.dart';
 
 /// Roboto is bundled with the app (assets/fonts), so text renders correctly
@@ -18,9 +19,35 @@ TextStyle _roboto({
   letterSpacing: letterSpacing,
 );
 
+/// Background of every regular page. The status bar is drawn over it
+/// (edge-to-edge), so [pageOverlayStyle] keeps the two in sync.
+const pageBackground = Colors.white;
+
+/// System bars for pages on [pageBackground]: transparent bars (so the page
+/// colour shows through) with dark icons, and a navigation bar that matches
+/// the bottom navigation bar.
+const pageOverlayStyle = SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  statusBarIconBrightness: Brightness.dark,
+  statusBarBrightness: Brightness.light, // iOS
+  systemNavigationBarColor: Colors.white,
+  systemNavigationBarIconBrightness: Brightness.dark,
+  systemNavigationBarDividerColor: Colors.transparent,
+  systemNavigationBarContrastEnforced: false,
+  systemStatusBarContrastEnforced: false,
+);
+
+/// System bars for pages with a coloured background and white content
+/// (the Pokémon detail page).
+final coloredPageOverlayStyle = pageOverlayStyle.copyWith(
+  statusBarIconBrightness: Brightness.light,
+  statusBarBrightness: Brightness.dark,
+);
+
 final pokeFlutterTheme = ThemeData(
   useMaterial3: true,
   fontFamily: _fontFamily,
+  scaffoldBackgroundColor: pageBackground,
   colorScheme: ColorScheme.fromSeed(seedColor: gray),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     selectedItemColor: gray[500],

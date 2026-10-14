@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../model/pokemon_list_item.dart';
@@ -7,6 +8,7 @@ import '../utils/pokemon_api.dart';
 import '../utils/pokemon_constants.dart';
 import '../utils/capitalize.dart';
 import '../utils/palette.dart';
+import '../utils/theme.dart';
 import '../utils/favourites_manager.dart';
 import 'widgets/styled_text.dart';
 
@@ -55,13 +57,18 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _bgColor,
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Colors.white))
-          : _hasError
-          ? _errorView()
-          : _detailView(),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: coloredPageOverlayStyle,
+      child: Scaffold(
+        backgroundColor: _bgColor,
+        body: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              )
+            : _hasError
+            ? _errorView()
+            : _detailView(),
+      ),
     );
   }
 

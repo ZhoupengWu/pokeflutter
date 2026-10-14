@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'utils/favourites_manager.dart';
 import 'utils/pokemon_repository.dart';
@@ -9,6 +10,9 @@ import 'views/shell_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Draw behind the system bars; their colours come from the page overlay style.
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // FavouritesManager re-hydrates saved names into PokemonListItem objects.
   final allPokemon = await PokemonRepository.instance.getAll();
@@ -35,7 +39,10 @@ class MyApp extends StatelessWidget {
           title: 'PokéFlutter',
           debugShowCheckedModeBanner: false,
           theme: pokeFlutterTheme,
-          home: const ShellPage(),
+          home: const AnnotatedRegion<SystemUiOverlayStyle>(
+            value: pageOverlayStyle,
+            child: ShellPage(),
+          ),
         );
       },
     );
