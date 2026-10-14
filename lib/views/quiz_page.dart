@@ -274,6 +274,11 @@ class _QuizPageState extends State<QuizPage> {
                           ? Colors.black
                           : null,
                       colorBlendMode: BlendMode.srcATop,
+                      errorBuilder: (_, _, _) => Icon(
+                        Icons.catching_pokemon,
+                        size: 96.r,
+                        color: Colors.white38,
+                      ),
                     ),
                   ),
           ),
