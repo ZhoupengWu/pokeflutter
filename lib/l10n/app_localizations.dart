@@ -415,6 +415,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fairy'**
   String get typeFairy;
+
+  /// No description provided for @quizTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz'**
+  String get quizTitle;
+
+  /// No description provided for @quizIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Test your Pokémon knowledge! Guess the name from the silhouette or the type from the name.'**
+  String get quizIntro;
+
+  /// No description provided for @quizDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty'**
+  String get quizDifficulty;
+
+  /// No description provided for @difficultyEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get difficultyEasy;
+
+  /// No description provided for @difficultyNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get difficultyNormal;
+
+  /// No description provided for @difficultyHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get difficultyHard;
+
+  /// No description provided for @difficultyEasyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'First generation only (151 Pokémon), no timer.'**
+  String get difficultyEasyHint;
+
+  /// No description provided for @difficultyTimedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'All Pokémon, {seconds} seconds per question.'**
+  String difficultyTimedHint(int seconds);
+
+  /// No description provided for @quizBestScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Best score: {score}'**
+  String quizBestScore(int score);
+
+  /// No description provided for @quizNoBestScore.
+  ///
+  /// In en, this message translates to:
+  /// **'No score yet'**
+  String get quizNoBestScore;
+
+  /// No description provided for @quizStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Quiz'**
+  String get quizStart;
+
+  /// No description provided for @quizLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get quizLoading;
+
+  /// No description provided for @quizQuestionCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {current} / {total}'**
+  String quizQuestionCounter(int current, int total);
+
+  /// No description provided for @quizPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'{score} pts'**
+  String quizPoints(int score);
+
+  /// No description provided for @quizStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak {count}'**
+  String quizStreak(int count);
+
+  /// No description provided for @quizWhoIsThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Who is this Pokémon?'**
+  String get quizWhoIsThis;
+
+  /// No description provided for @quizWhatType.
+  ///
+  /// In en, this message translates to:
+  /// **'What type is {name}?'**
+  String quizWhatType(String name);
+
+  /// No description provided for @quizSilhouette.
+  ///
+  /// In en, this message translates to:
+  /// **'Silhouette of a Pokémon'**
+  String get quizSilhouette;
+
+  /// No description provided for @quizLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this Pokémon.'**
+  String get quizLoadFailed;
+
+  /// No description provided for @quizTimeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds} seconds left'**
+  String quizTimeLeft(int seconds);
+
+  /// No description provided for @quizTimeUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Time\'s up!'**
+  String get quizTimeUp;
+
+  /// No description provided for @quizCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct! +{points}'**
+  String quizCorrect(int points);
+
+  /// No description provided for @quizWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get quizWrong;
+
+  /// No description provided for @quizAnswerName.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s {name}!'**
+  String quizAnswerName(String name);
+
+  /// No description provided for @quizAnswerTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is {types} type'**
+  String quizAnswerTypes(String name, String types);
+
+  /// No description provided for @quizNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Question'**
+  String get quizNext;
+
+  /// No description provided for @quizSeeResults.
+  ///
+  /// In en, this message translates to:
+  /// **'See Results'**
+  String get quizSeeResults;
+
+  /// No description provided for @quizResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get quizResults;
+
+  /// No description provided for @quizVerdictMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokémon Master! 🏆'**
+  String get quizVerdictMaster;
+
+  /// No description provided for @quizVerdictOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Not bad, keep training!'**
+  String get quizVerdictOk;
+
+  /// No description provided for @quizVerdictLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep studying the Pokédex!'**
+  String get quizVerdictLow;
+
+  /// No description provided for @quizCorrectLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get quizCorrectLabel;
+
+  /// No description provided for @quizWrongLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get quizWrongLabel;
+
+  /// No description provided for @quizScoreLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Score'**
+  String get quizScoreLabel;
+
+  /// No description provided for @quizBestStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Best streak'**
+  String get quizBestStreakLabel;
+
+  /// No description provided for @quizNewRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'New record! 🎉'**
+  String get quizNewRecord;
+
+  /// No description provided for @quizPlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get quizPlayAgain;
+
+  /// No description provided for @quizChangeDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Change difficulty'**
+  String get quizChangeDifficulty;
+
+  /// No description provided for @quizOptionCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'{answer}, correct answer'**
+  String quizOptionCorrect(String answer);
+
+  /// No description provided for @quizOptionWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'{answer}, wrong answer'**
+  String quizOptionWrong(String answer);
 }
 
 class _AppLocalizationsDelegate

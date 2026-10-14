@@ -181,4 +181,150 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get typeFairy => 'Folletto';
+
+  @override
+  String get quizTitle => 'Quiz';
+
+  @override
+  String get quizIntro =>
+      'Metti alla prova la tua conoscenza dei Pokémon! Indovina il nome dalla silhouette o il tipo dal nome.';
+
+  @override
+  String get quizDifficulty => 'Difficoltà';
+
+  @override
+  String get difficultyEasy => 'Facile';
+
+  @override
+  String get difficultyNormal => 'Normale';
+
+  @override
+  String get difficultyHard => 'Difficile';
+
+  @override
+  String get difficultyEasyHint =>
+      'Solo la prima generazione (151 Pokémon), senza timer.';
+
+  @override
+  String difficultyTimedHint(int seconds) {
+    return 'Tutti i Pokémon, $seconds secondi per domanda.';
+  }
+
+  @override
+  String quizBestScore(int score) {
+    return 'Record: $score';
+  }
+
+  @override
+  String get quizNoBestScore => 'Ancora nessun punteggio';
+
+  @override
+  String get quizStart => 'Inizia il quiz';
+
+  @override
+  String get quizLoading => 'Caricamento…';
+
+  @override
+  String quizQuestionCounter(int current, int total) {
+    return 'Domanda $current / $total';
+  }
+
+  @override
+  String quizPoints(int score) {
+    return '$score pt';
+  }
+
+  @override
+  String quizStreak(int count) {
+    return 'Serie $count';
+  }
+
+  @override
+  String get quizWhoIsThis => 'Chi è questo Pokémon?';
+
+  @override
+  String quizWhatType(String name) {
+    return 'Di che tipo è $name?';
+  }
+
+  @override
+  String get quizSilhouette => 'Silhouette di un Pokémon';
+
+  @override
+  String get quizLoadFailed => 'Impossibile caricare questo Pokémon.';
+
+  @override
+  String quizTimeLeft(int seconds) {
+    return '$seconds secondi rimasti';
+  }
+
+  @override
+  String get quizTimeUp => 'Tempo scaduto!';
+
+  @override
+  String quizCorrect(int points) {
+    return 'Corretto! +$points';
+  }
+
+  @override
+  String get quizWrong => 'Sbagliato';
+
+  @override
+  String quizAnswerName(String name) {
+    return 'È $name!';
+  }
+
+  @override
+  String quizAnswerTypes(String name, String types) {
+    return '$name è di tipo $types';
+  }
+
+  @override
+  String get quizNext => 'Prossima domanda';
+
+  @override
+  String get quizSeeResults => 'Vedi i risultati';
+
+  @override
+  String get quizResults => 'Risultati';
+
+  @override
+  String get quizVerdictMaster => 'Maestro Pokémon! 🏆';
+
+  @override
+  String get quizVerdictOk => 'Non male, continua ad allenarti!';
+
+  @override
+  String get quizVerdictLow => 'Continua a studiare il Pokédex!';
+
+  @override
+  String get quizCorrectLabel => 'Corrette';
+
+  @override
+  String get quizWrongLabel => 'Sbagliate';
+
+  @override
+  String get quizScoreLabel => 'Punti';
+
+  @override
+  String get quizBestStreakLabel => 'Serie migliore';
+
+  @override
+  String get quizNewRecord => 'Nuovo record! 🎉';
+
+  @override
+  String get quizPlayAgain => 'Gioca ancora';
+
+  @override
+  String get quizChangeDifficulty => 'Cambia difficoltà';
+
+  @override
+  String quizOptionCorrect(String answer) {
+    return '$answer, risposta corretta';
+  }
+
+  @override
+  String quizOptionWrong(String answer) {
+    return '$answer, risposta sbagliata';
+  }
 }

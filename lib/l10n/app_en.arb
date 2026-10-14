@@ -106,5 +106,135 @@
   "typeDragon": "Dragon",
   "typeDark": "Dark",
   "typeSteel": "Steel",
-  "typeFairy": "Fairy"
+  "typeFairy": "Fairy",
+  "quizTitle": "Quiz",
+  "quizIntro": "Test your Pokémon knowledge! Guess the name from the silhouette or the type from the name.",
+  "quizDifficulty": "Difficulty",
+  "difficultyEasy": "Easy",
+  "difficultyNormal": "Normal",
+  "difficultyHard": "Hard",
+  "difficultyEasyHint": "First generation only (151 Pokémon), no timer.",
+  "difficultyTimedHint": "All Pokémon, {seconds} seconds per question.",
+  "@difficultyTimedHint": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "quizBestScore": "Best score: {score}",
+  "@quizBestScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "quizNoBestScore": "No score yet",
+  "quizStart": "Start Quiz",
+  "quizLoading": "Loading…",
+  "quizQuestionCounter": "Question {current} / {total}",
+  "@quizQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizPoints": "{score} pts",
+  "@quizPoints": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "quizStreak": "Streak {count}",
+  "@quizStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizWhoIsThis": "Who is this Pokémon?",
+  "quizWhatType": "What type is {name}?",
+  "@quizWhatType": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizSilhouette": "Silhouette of a Pokémon",
+  "quizLoadFailed": "Couldn't load this Pokémon.",
+  "quizTimeLeft": "{seconds} seconds left",
+  "@quizTimeLeft": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "quizTimeUp": "Time's up!",
+  "quizCorrect": "Correct! +{points}",
+  "@quizCorrect": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "quizWrong": "Wrong",
+  "quizAnswerName": "It's {name}!",
+  "@quizAnswerName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizAnswerTypes": "{name} is {types} type",
+  "@quizAnswerTypes": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "types": {
+        "type": "String"
+      }
+    }
+  },
+  "quizNext": "Next Question",
+  "quizSeeResults": "See Results",
+  "quizResults": "Results",
+  "quizVerdictMaster": "Pokémon Master! 🏆",
+  "quizVerdictOk": "Not bad, keep training!",
+  "quizVerdictLow": "Keep studying the Pokédex!",
+  "quizCorrectLabel": "Correct",
+  "quizWrongLabel": "Wrong",
+  "quizScoreLabel": "Score",
+  "quizBestStreakLabel": "Best streak",
+  "quizNewRecord": "New record! 🎉",
+  "quizPlayAgain": "Play Again",
+  "quizChangeDifficulty": "Change difficulty",
+  "quizOptionCorrect": "{answer}, correct answer",
+  "@quizOptionCorrect": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "quizOptionWrong": "{answer}, wrong answer",
+  "@quizOptionWrong": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  }
 }

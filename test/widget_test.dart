@@ -35,9 +35,17 @@ void main() {
     await tester.pump();
     expect(find.text('Select two Pokémon to start comparing'), findsOneWidget);
 
+    // Hidden tabs have their tickers off, so a quiz countdown cannot run
+    // while another tab is showing.
+    bool tickersOn(String text) => TickerMode.valuesOf(
+      tester.element(find.text(text, skipOffstage: false)),
+    ).enabled;
+    expect(tickersOn('Start Quiz'), isFalse);
+
     await tester.tap(find.text('Quiz'));
     await tester.pump();
     expect(find.text('Start Quiz'), findsOneWidget);
+    expect(tickersOn('Start Quiz'), isTrue);
 
     await tester.tap(find.text('Favourites'));
     await tester.pump();
