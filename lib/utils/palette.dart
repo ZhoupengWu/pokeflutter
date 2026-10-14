@@ -11,5 +11,5 @@ const Map<int, Color> _colorSwatch = {
   400: Color(0xFF4E5F7E),
   500: Color(_grayPrimary),
   600: Colors.black,
-  700: Colors.black
+  700: Colors.black,
 };
