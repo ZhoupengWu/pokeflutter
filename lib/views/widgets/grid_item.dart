@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../model/pokemon_list_item.dart';
@@ -54,9 +55,13 @@ class GridItem extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label:
-          '${pokemon.name.capitalize()}, number ${pokemon.id}'
-          '${types.isEmpty ? '' : ', ${types.map((t) => t.capitalize()).join(' and ')} type'}',
+      label: types.isEmpty
+          ? context.l10n.pokemonSemantics(pokemon.name.capitalize(), pokemon.id)
+          : context.l10n.pokemonSemanticsTyped(
+              pokemon.name.capitalize(),
+              pokemon.id,
+              context.l10n.typeList(types),
+            ),
       excludeSemantics: true,
       onTap: () => _navigateToDetail(context),
       child: InkWell(
@@ -157,7 +162,7 @@ class GridItem extends StatelessWidget {
                   context,
                 ).textTheme.labelSmall!.copyWith(color: Colors.white),
                 textHeight: 16.h,
-                text: types[i].capitalize(),
+                text: context.l10n.typeName(types[i]),
               ),
             ],
           ),

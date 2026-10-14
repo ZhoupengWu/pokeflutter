@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../l10n/l10n_extensions.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_settings.dart';
 
@@ -32,9 +33,9 @@ class SettingsSheet extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-            Text('Settings', style: textTheme.headlineSmall),
+            Text(context.l10n.settings, style: textTheme.headlineSmall),
             SizedBox(height: 16.h),
-            Text('Theme', style: textTheme.titleSmall),
+            Text(context.l10n.settingsTheme, style: textTheme.titleSmall),
             SizedBox(height: 8.h),
             ListenableBuilder(
               listenable: settings,
@@ -42,26 +43,50 @@ class SettingsSheet extends StatelessWidget {
                 width: double.infinity,
                 child: SegmentedButton<ThemeMode>(
                   showSelectedIcon: false,
-                  segments: const [
+                  segments: [
                     ButtonSegment(
                       value: ThemeMode.system,
-                      icon: Icon(Icons.brightness_auto_rounded),
-                      label: Text('System'),
+                      icon: const Icon(Icons.brightness_auto_rounded),
+                      label: Text(context.l10n.themeSystem),
                     ),
                     ButtonSegment(
                       value: ThemeMode.light,
-                      icon: Icon(Icons.light_mode_rounded),
-                      label: Text('Light'),
+                      icon: const Icon(Icons.light_mode_rounded),
+                      label: Text(context.l10n.themeLight),
                     ),
                     ButtonSegment(
                       value: ThemeMode.dark,
-                      icon: Icon(Icons.dark_mode_rounded),
-                      label: Text('Dark'),
+                      icon: const Icon(Icons.dark_mode_rounded),
+                      label: Text(context.l10n.themeDark),
                     ),
                   ],
                   selected: {settings.themeMode},
                   onSelectionChanged: (modes) =>
                       settings.setThemeMode(modes.first),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            Text(context.l10n.settingsLanguage, style: textTheme.titleSmall),
+            SizedBox(height: 8.h),
+            ListenableBuilder(
+              listenable: settings,
+              builder: (context, _) => SizedBox(
+                width: double.infinity,
+                child: SegmentedButton<String>(
+                  showSelectedIcon: false,
+                  segments: [
+                    ButtonSegment(
+                      value: _systemLanguage,
+                      label: Text(context.l10n.languageSystem),
+                    ),
+                    const ButtonSegment(value: 'en', label: Text('English')),
+                    const ButtonSegment(value: 'it', label: Text('Italiano')),
+                  ],
+                  selected: {settings.locale?.languageCode ?? _systemLanguage},
+                  onSelectionChanged: (codes) => settings.setLocale(
+                    codes.first == _systemLanguage ? null : Locale(codes.first),
+                  ),
                 ),
               ),
             ),
@@ -71,3 +96,6 @@ class SettingsSheet extends StatelessWidget {
     );
   }
 }
+
+/// Segment value meaning "follow the system language".
+const _systemLanguage = 'system';

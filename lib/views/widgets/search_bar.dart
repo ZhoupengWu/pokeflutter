@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../utils/app_colors.dart';
 
@@ -53,8 +54,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     return Semantics(
       button: true,
       label: hasActive
-          ? 'Filter by type, ${widget.activeFilterCount} selected'
-          : 'Filter by type',
+          ? context.l10n.filterByTypeSelected(widget.activeFilterCount)
+          : context.l10n.filterByType,
       excludeSemantics: true,
       onTap: widget.onFilterTap,
       child: GestureDetector(
@@ -125,7 +126,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               context,
             ).textTheme.bodyLarge?.copyWith(color: context.colors.strong),
             decoration: InputDecoration(
-              hintText: 'Search a Pokémon',
+              hintText: context.l10n.searchHint,
               hintStyle: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(color: context.colors.subtle),
@@ -141,7 +142,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             if (value.text.isEmpty) return const SizedBox.shrink();
             return Semantics(
               button: true,
-              label: 'Clear search',
+              label: context.l10n.clearSearch,
               excludeSemantics: true,
               onTap: _clearSearch,
               child: GestureDetector(

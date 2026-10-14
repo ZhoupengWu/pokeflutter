@@ -27,6 +27,30 @@ void main() {
       expect(restored.themeMode, ThemeMode.dark);
     });
 
+    test('persists the language and can go back to the system one', () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = AppSettings.test();
+      await settings.init();
+      expect(settings.locale, isNull);
+
+      await settings.setLocale(const Locale('it'));
+      final restored = AppSettings.test();
+      await restored.init();
+      expect(restored.locale, const Locale('it'));
+
+      await restored.setLocale(null);
+      final cleared = AppSettings.test();
+      await cleared.init();
+      expect(cleared.locale, isNull);
+    });
+
+    test('ignores a language the app is not translated into', () async {
+      SharedPreferences.setMockInitialValues({'settings_locale': 'xx'});
+      final settings = AppSettings.test();
+      await settings.init();
+      expect(settings.locale, isNull);
+    });
+
     test('ignores an unknown stored value', () async {
       SharedPreferences.setMockInitialValues({'settings_theme_mode': 'neon'});
       final settings = AppSettings.test();

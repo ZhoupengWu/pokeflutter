@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'l10n/l10n_extensions.dart';
 import 'utils/app_settings.dart';
 import 'utils/favourites_manager.dart';
 import 'utils/pokemon_repository.dart';
@@ -43,8 +44,11 @@ class MyApp extends StatelessWidget {
         return ListenableBuilder(
           listenable: settings,
           builder: (context, _) => MaterialApp(
-            title: 'PokéFlutter',
+            onGenerateTitle: (context) => context.l10n.appTitle,
             debugShowCheckedModeBanner: false,
+            locale: settings.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: settings.themeMode,

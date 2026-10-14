@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/views/widgets/search_bar.dart';
+import 'support/test_app.dart';
 
 Widget _app({
   required ValueChanged<String> onSearch,
   VoidCallback? onFilterTap,
   int activeFilterCount = 0,
-}) => ScreenUtilInit(
-  designSize: const Size(360, 979),
-  builder: (_, _) => MaterialApp(
-    home: Scaffold(
-      body: SearchBarWidget(
-        onSearch: onSearch,
-        onFilterTap: onFilterTap,
-        activeFilterCount: activeFilterCount,
-      ),
-    ),
+}) => testApp(
+  SearchBarWidget(
+    onSearch: onSearch,
+    onFilterTap: onFilterTap,
+    activeFilterCount: activeFilterCount,
   ),
 );
 

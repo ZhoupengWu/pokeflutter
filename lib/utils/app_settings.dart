@@ -11,10 +11,19 @@ class AppSettings extends ChangeNotifier {
   AppSettings.test();
 
   static const _themeKey = 'settings_theme_mode';
+  static const _localeKey = 'settings_locale';
+
+  /// Languages the app is translated into.
+  static const supportedLanguageCodes = ['en', 'it'];
 
   ThemeMode _themeMode = ThemeMode.system;
 
+  Locale? _locale; // null follows the system language
+
   ThemeMode get themeMode => _themeMode;
+
+  /// The chosen language, or null to follow the system.
+  Locale? get locale => _locale;
 
   /// Reads the saved preferences. Safe to call more than once.
   Future<void> init() async {
@@ -24,6 +33,8 @@ class AppSettings extends ChangeNotifier {
       (m) => m.name == saved,
       orElse: () => ThemeMode.system,
     );
+    final code = prefs.getString(_localeKey);
+    _locale = supportedLanguageCodes.contains(code) ? Locale(code!) : null;
     notifyListeners();
   }
 
@@ -33,5 +44,18 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_themeKey, mode.name);
+  }
+
+  /// Pass null to follow the system language.
+  Future<void> setLocale(Locale? locale) async {
+    if (locale?.languageCode == _locale?.languageCode) return;
+    _locale = locale;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    if (locale == null) {
+      await prefs.remove(_localeKey);
+    } else {
+      await prefs.setString(_localeKey, locale.languageCode);
+    }
   }
 }

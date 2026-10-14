@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../utils/capitalize.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/pokemon_constants.dart';
 
@@ -69,7 +69,7 @@ class _TypeFilterSheetState extends State<TypeFilterSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Filter by Type',
+                context.l10n.filterSheetTitle,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: context.colors.strong,
                   fontWeight: FontWeight.w700,
@@ -79,7 +79,7 @@ class _TypeFilterSheetState extends State<TypeFilterSheet> {
                 GestureDetector(
                   onTap: () => setState(() => _selected.clear()),
                   child: Text(
-                    'Clear all',
+                    context.l10n.clearAll,
                     style: Theme.of(
                       context,
                     ).textTheme.bodySmall?.copyWith(color: Colors.redAccent),
@@ -119,7 +119,7 @@ class _TypeFilterSheetState extends State<TypeFilterSheet> {
                       ),
                     ),
                     child: Text(
-                      type.capitalize(),
+                      context.l10n.typeName(type),
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: isSelected ? Colors.white : color,
                         fontWeight: FontWeight.w600,
@@ -151,7 +151,9 @@ class _TypeFilterSheetState extends State<TypeFilterSheet> {
                 elevation: 0,
               ),
               child: Text(
-                _selected.isEmpty ? 'Show all' : 'Apply (${_selected.length})',
+                _selected.isEmpty
+                    ? context.l10n.showAll
+                    : context.l10n.applyCount(_selected.length),
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: context.colors.onStrong,
                 ),

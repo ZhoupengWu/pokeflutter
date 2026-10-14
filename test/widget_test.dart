@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/main.dart';
+import 'package:pokeflutter/utils/app_settings.dart';
 import 'package:pokeflutter/utils/pokemon_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,11 +39,38 @@ void main() {
     await tester.pump();
     expect(find.text('Start Quiz'), findsOneWidget);
 
-    await tester.tap(find.text('Favourite'));
+    await tester.tap(find.text('Favourites'));
     await tester.pump();
     expect(
       find.text('Tap the ♥ on any Pokémon to save it here.'),
       findsOneWidget,
     );
+  });
+
+  testWidgets('follows the language chosen in the settings', (tester) async {
+    SharedPreferences.setMockInitialValues({
+      'pokemon_type_index_v2': '{"bulbasaur": ["grass", "poison"]}',
+      'settings_locale': 'it',
+    });
+    tester.view.physicalSize = const Size(1080, 2340);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    await tester.runAsync(PokemonRepository.instance.getAll);
+    final settings = AppSettings.test();
+    await tester.runAsync(settings.init);
+
+    await tester.pumpWidget(MyApp(settings: settings));
+    await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+    await tester.pump();
+
+    expect(find.text('Preferiti'), findsOneWidget); // bottom navigation
+    expect(find.text('Confronta'), findsOneWidget);
+    expect(find.text('Erba'), findsOneWidget); // Grass
+    expect(find.text('Veleno'), findsOneWidget); // Poison
+
+    await settings.setLocale(const Locale('en'));
+    await tester.pump();
+    expect(find.text('Favourites'), findsOneWidget);
+    expect(find.text('Grass'), findsOneWidget);
   });
 }

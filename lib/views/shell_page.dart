@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
 import 'homepage.dart';
@@ -40,19 +41,19 @@ class _ShellPageState extends State<ShellPage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_rounded, size: 24.r),
-            label: 'Home',
+            label: context.l10n.navHome,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.compare_arrows_rounded, size: 24.r),
-            label: 'Compare',
+            label: context.l10n.navCompare,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.quiz_rounded, size: 24.r),
-            label: 'Quiz',
+            label: context.l10n.navQuiz,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_rounded, size: 24.r),
-            label: 'Favourite',
+            label: context.l10n.navFavourites,
           ),
         ],
       ),

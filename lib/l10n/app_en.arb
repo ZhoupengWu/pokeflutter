@@ -1,0 +1,110 @@
+{
+  "@@locale": "en",
+  "appTitle": "PokéFlutter",
+  "navHome": "Home",
+  "navCompare": "Compare",
+  "navQuiz": "Quiz",
+  "navFavourites": "Favourites",
+  "retry": "Retry",
+  "settings": "Settings",
+  "settingsTheme": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "settingsLanguage": "Language",
+  "languageSystem": "System",
+  "homeTitle": "Pokédex",
+  "homeSubtitle": "Search by name or filter by type to find any Pokémon.",
+  "typesLoadFailed": "Couldn't load the type data. Check your connection.",
+  "noPokemonFound": "No Pokémon found.",
+  "typesUnavailableOffline": "Types unavailable offline.",
+  "removeFilter": "Remove {type} filter",
+  "@removeFilter": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "clearAll": "Clear all",
+  "random": "Random",
+  "searchHint": "Search a Pokémon",
+  "clearSearch": "Clear search",
+  "filterByType": "Filter by type",
+  "filterByTypeSelected": "Filter by type, {count} selected",
+  "@filterByTypeSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filterSheetTitle": "Filter by Type",
+  "showAll": "Show all",
+  "applyCount": "Apply ({count})",
+  "@applyCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pokemonSemantics": "{name}, number {id}",
+  "@pokemonSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "pokemonSemanticsTyped": "{name}, number {id}, {types} type",
+  "@pokemonSemanticsTyped": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "id": {
+        "type": "int"
+      },
+      "types": {
+        "type": "String"
+      }
+    }
+  },
+  "typesAnd": "{first} and {second}",
+  "@typesAnd": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "favouritesTitle": "Favourites",
+  "favouritesSubtitle": "Pokémon you've saved for quick access.",
+  "favouritesEmptyTitle": "No favourites yet",
+  "favouritesEmptyHint": "Tap the ♥ on any Pokémon to save it here.",
+  "typeNormal": "Normal",
+  "typeFire": "Fire",
+  "typeWater": "Water",
+  "typeElectric": "Electric",
+  "typeGrass": "Grass",
+  "typeIce": "Ice",
+  "typeFighting": "Fighting",
+  "typePoison": "Poison",
+  "typeGround": "Ground",
+  "typeFlying": "Flying",
+  "typePsychic": "Psychic",
+  "typeBug": "Bug",
+  "typeRock": "Rock",
+  "typeGhost": "Ghost",
+  "typeDragon": "Dragon",
+  "typeDark": "Dark",
+  "typeSteel": "Steel",
+  "typeFairy": "Fairy"
+}

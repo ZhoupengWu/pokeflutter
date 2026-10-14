@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/l10n_extensions.dart';
 import 'styled_text.dart';
 
 // The button is yellow in both themes, so its content stays dark.
@@ -17,7 +18,7 @@ class RandomFloatingButton extends StatelessWidget {
       elevation: 0,
       icon: Icon(Icons.auto_awesome_rounded, color: _onYellow),
       label: StyledText(
-        text: 'Random',
+        text: context.l10n.random,
         style: Theme.of(
           context,
         ).textTheme.labelLarge!.copyWith(color: _onYellow),

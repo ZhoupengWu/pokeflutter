@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/app_colors.dart';
-import '../utils/capitalize.dart';
 import '../utils/pokemon_constants.dart';
 import '../utils/pokemon_repository.dart';
 import '../utils/pokemon_type_index.dart';
@@ -142,17 +142,17 @@ class _HomePageState extends State<HomePage> {
     if (_filterFailed) {
       return _Message(
         icon: Icons.wifi_off_rounded,
-        text: "Couldn't load the type data. Check your connection.",
+        text: context.l10n.typesLoadFailed,
         action: TextButton(
           onPressed: _applyFilters,
-          child: const Text('Retry'),
+          child: Text(context.l10n.retry),
         ),
       );
     }
     if (_filteredPokemon.isEmpty && _allPokemon.isNotEmpty) {
-      return const _Message(
+      return _Message(
         icon: Icons.search_off_rounded,
-        text: 'No Pokémon found.',
+        text: context.l10n.noPokemonFound,
       );
     }
     return PokemonList(pokemonList: _filteredPokemon);
@@ -172,9 +172,14 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(left: 24.w, right: 12.w, bottom: 4.h),
             child: Row(
               children: [
-                Expanded(child: Text('Pokédex', style: textTheme.displaySmall)),
+                Expanded(
+                  child: Text(
+                    context.l10n.homeTitle,
+                    style: textTheme.displaySmall,
+                  ),
+                ),
                 IconButton(
-                  tooltip: 'Settings',
+                  tooltip: context.l10n.settings,
                   icon: Icon(
                     Icons.settings_rounded,
                     color: context.colors.muted,
@@ -187,7 +192,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Text(
-              'Use the advanced search to find Pokémon by type, weakness, ability and more!',
+              context.l10n.homeSubtitle,
               style: textTheme.bodyLarge?.copyWith(
                 color: context.colors.muted,
                 height: 1.5,
@@ -274,13 +279,13 @@ class _TypesUnavailableBanner extends StatelessWidget {
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
-              'Types unavailable offline.',
+              context.l10n.typesUnavailableOffline,
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: context.colors.subtle),
             ),
           ),
-          TextButton(onPressed: onRetry, child: const Text('Retry')),
+          TextButton(onPressed: onRetry, child: Text(context.l10n.retry)),
         ],
       ),
     );
@@ -320,7 +325,7 @@ class _ActiveFilterChips extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    type.capitalize(),
+                    context.l10n.typeName(type),
                     style: Theme.of(
                       context,
                     ).textTheme.labelSmall?.copyWith(color: Colors.white),
@@ -328,7 +333,9 @@ class _ActiveFilterChips extends StatelessWidget {
                   SizedBox(width: 4.w),
                   Semantics(
                     button: true,
-                    label: 'Remove ${type.capitalize()} filter',
+                    label: context.l10n.removeFilter(
+                      context.l10n.typeName(type),
+                    ),
                     excludeSemantics: true,
                     onTap: () => onRemove(type),
                     child: GestureDetector(
@@ -353,7 +360,7 @@ class _ActiveFilterChips extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(
-                'Clear all',
+                context.l10n.clearAll,
                 style: Theme.of(
                   context,
                 ).textTheme.labelSmall?.copyWith(color: context.colors.muted),
