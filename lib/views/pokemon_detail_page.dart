@@ -137,7 +137,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     // Favourite button
                     ValueListenableBuilder(
                       valueListenable: FavouritesManager.instance.notifier,
-                      builder: (_, __, ___) {
+                      builder: (_, _, _) {
                         final isFav = FavouritesManager.instance.isFavourite(
                           widget.pokemon.name,
                         );
@@ -178,7 +178,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                   height: 180.r,
                   width: 180.r,
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => Icon(
+                  errorBuilder: (_, _, _) => Icon(
                     Icons.image_not_supported_rounded,
                     size: 120.r,
                     color: Colors.white38,

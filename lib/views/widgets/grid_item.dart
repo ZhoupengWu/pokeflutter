@@ -124,7 +124,7 @@ class _GridItemState extends State<GridItem> {
                           child: Image.network(
                             _pokemon!.urlSprite,
                             fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) => Icon(
+                            errorBuilder: (_, _, _) => Icon(
                               Icons.catching_pokemon,
                               size: 32.r,
                               color: Colors.white38,

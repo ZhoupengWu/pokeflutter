@@ -248,7 +248,7 @@ class _PokemonSlot extends StatelessWidget {
           height: 72.r,
           width: 72.r,
           fit: BoxFit.contain,
-          errorBuilder: (_, __, ___) =>
+          errorBuilder: (_, _, _) =>
               Icon(Icons.catching_pokemon, size: 48.r, color: Colors.white38),
         ),
       ],
