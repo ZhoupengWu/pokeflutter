@@ -12,7 +12,7 @@ import 'widgets/search_bar.dart';
 import 'widgets/settings_sheet.dart';
 import 'widgets/type_filter_sheet.dart';
 import '../model/pokemon_list_item.dart';
-import 'pokemon_detail_page.dart';
+import 'detail/pokemon_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
         text: context.l10n.noPokemonFound,
       );
     }
-    return PokemonList(pokemonList: _filteredPokemon);
+    return PokemonList(pokemonList: _filteredPokemon, heroScope: 'home');
   }
 
   @override

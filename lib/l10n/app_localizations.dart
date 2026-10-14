@@ -655,6 +655,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{answer}, wrong answer'**
   String quizOptionWrong(String answer);
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @addToFavourites.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favourites'**
+  String get addToFavourites;
+
+  /// No description provided for @removeFromFavourites.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favourites'**
+  String get removeFromFavourites;
+
+  /// No description provided for @detailLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load Pokémon'**
+  String get detailLoadFailed;
+
+  /// No description provided for @detailAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get detailAbout;
+
+  /// No description provided for @detailWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get detailWeight;
+
+  /// No description provided for @detailHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get detailHeight;
+
+  /// No description provided for @weightValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} kg'**
+  String weightValue(String value);
+
+  /// No description provided for @heightValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} cm'**
+  String heightValue(String value);
+
+  /// No description provided for @detailAbilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Abilities'**
+  String get detailAbilities;
+
+  /// No description provided for @detailBaseStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Base Stats'**
+  String get detailBaseStats;
+
+  /// No description provided for @statHp.
+  ///
+  /// In en, this message translates to:
+  /// **'HP'**
+  String get statHp;
+
+  /// No description provided for @statAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'ATK'**
+  String get statAttack;
+
+  /// No description provided for @statDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'DEF'**
+  String get statDefense;
+
+  /// No description provided for @statSpecialAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'SpA'**
+  String get statSpecialAttack;
+
+  /// No description provided for @statSpecialDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'SpD'**
+  String get statSpecialDefense;
+
+  /// No description provided for @statSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'SPD'**
+  String get statSpeed;
+
+  /// No description provided for @matchupsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Type matchups'**
+  String get matchupsTitle;
+
+  /// No description provided for @matchupsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Damage taken from each type of move.'**
+  String get matchupsHint;
+
+  /// No description provided for @matchupsWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak to'**
+  String get matchupsWeak;
+
+  /// No description provided for @matchupsResists.
+  ///
+  /// In en, this message translates to:
+  /// **'Resists'**
+  String get matchupsResists;
+
+  /// No description provided for @matchupsImmune.
+  ///
+  /// In en, this message translates to:
+  /// **'Immune to'**
+  String get matchupsImmune;
+
+  /// No description provided for @matchupSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{type}: {damage} damage'**
+  String matchupSemantics(String type, String damage);
+
+  /// No description provided for @evolutionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution'**
+  String get evolutionTitle;
+
+  /// No description provided for @evolutionNone.
+  ///
+  /// In en, this message translates to:
+  /// **'This Pokémon doesn\'t evolve.'**
+  String get evolutionNone;
+
+  /// No description provided for @evolutionLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the evolutions.'**
+  String get evolutionLoadFailed;
+
+  /// No description provided for @evolutionLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lv. {level}'**
+  String evolutionLevel(int level);
+
+  /// No description provided for @evolutionLevelUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Level up'**
+  String get evolutionLevelUp;
+
+  /// No description provided for @evolutionTrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade'**
+  String get evolutionTrade;
+
+  /// No description provided for @evolutionFriendship.
+  ///
+  /// In en, this message translates to:
+  /// **'Friendship'**
+  String get evolutionFriendship;
+
+  /// No description provided for @evolutionDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get evolutionDay;
+
+  /// No description provided for @evolutionNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get evolutionNight;
+
+  /// No description provided for @evolutionHolding.
+  ///
+  /// In en, this message translates to:
+  /// **'Holding {item}'**
+  String evolutionHolding(String item);
+
+  /// No description provided for @evolutionKnowing.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowing {move}'**
+  String evolutionKnowing(String move);
+
+  /// No description provided for @evolutionSpecial.
+  ///
+  /// In en, this message translates to:
+  /// **'Special'**
+  String get evolutionSpecial;
+
+  /// No description provided for @evolutionStageSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, number {id}'**
+  String evolutionStageSemantics(String name, int id);
+
+  /// No description provided for @evolutionStageSemanticsWith.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, number {id}, {requirement}'**
+  String evolutionStageSemanticsWith(String name, int id, String requirement);
+
+  /// No description provided for @evolutionCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'current'**
+  String get evolutionCurrent;
 }
 
 class _AppLocalizationsDelegate

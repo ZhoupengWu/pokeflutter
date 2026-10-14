@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'app_localizations.dart';
 
 export 'app_localizations.dart';
+export 'pokemon_labels.dart';
 
 extension AppLocalizationsContext on BuildContext {
   /// The translated strings of the current locale.

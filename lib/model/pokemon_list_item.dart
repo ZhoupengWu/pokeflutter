@@ -12,6 +12,9 @@ class PokemonListItem {
 
   /// Small sprite served by the PokéAPI sprites repository. Known from the
   /// list alone, so the grid needs no per-Pokémon API call.
-  String get spriteUrl =>
+  String get spriteUrl => spriteUrlFor(id);
+
+  /// Sprite of the Pokémon with Pokédex number [id].
+  static String spriteUrlFor(int id) =>
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
 }

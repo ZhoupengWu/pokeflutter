@@ -32,6 +32,8 @@ class FakePokemonApi extends PokemonApi {
     if (failing.contains(name)) {
       throw const PokemonApiException(PokemonApiErrorType.network, 'offline');
     }
-    return Pokemon.fromJson(pokemonJson(name: name, types: types));
+    return Pokemon.fromJson(
+      pokemonJson(name: name, speciesName: name, types: types),
+    );
   }
 }

@@ -236,5 +236,111 @@
         "type": "String"
       }
     }
-  }
+  },
+  "back": "Back",
+  "addToFavourites": "Add to favourites",
+  "removeFromFavourites": "Remove from favourites",
+  "detailLoadFailed": "Failed to load Pokémon",
+  "detailAbout": "About",
+  "detailWeight": "Weight",
+  "detailHeight": "Height",
+  "weightValue": "{value} kg",
+  "@weightValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "heightValue": "{value} cm",
+  "@heightValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "detailAbilities": "Abilities",
+  "detailBaseStats": "Base Stats",
+  "statHp": "HP",
+  "statAttack": "ATK",
+  "statDefense": "DEF",
+  "statSpecialAttack": "SpA",
+  "statSpecialDefense": "SpD",
+  "statSpeed": "SPD",
+  "matchupsTitle": "Type matchups",
+  "matchupsHint": "Damage taken from each type of move.",
+  "matchupsWeak": "Weak to",
+  "matchupsResists": "Resists",
+  "matchupsImmune": "Immune to",
+  "matchupSemantics": "{type}: {damage} damage",
+  "@matchupSemantics": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "evolutionTitle": "Evolution",
+  "evolutionNone": "This Pokémon doesn't evolve.",
+  "evolutionLoadFailed": "Couldn't load the evolutions.",
+  "evolutionLevel": "Lv. {level}",
+  "@evolutionLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "evolutionLevelUp": "Level up",
+  "evolutionTrade": "Trade",
+  "evolutionFriendship": "Friendship",
+  "evolutionDay": "Day",
+  "evolutionNight": "Night",
+  "evolutionHolding": "Holding {item}",
+  "@evolutionHolding": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "evolutionKnowing": "Knowing {move}",
+  "@evolutionKnowing": {
+    "placeholders": {
+      "move": {
+        "type": "String"
+      }
+    }
+  },
+  "evolutionSpecial": "Special",
+  "evolutionStageSemantics": "{name}, number {id}",
+  "@evolutionStageSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "evolutionStageSemanticsWith": "{name}, number {id}, {requirement}",
+  "@evolutionStageSemanticsWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "id": {
+        "type": "int"
+      },
+      "requirement": {
+        "type": "String"
+      }
+    }
+  },
+  "evolutionCurrent": "current"
 }

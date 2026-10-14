@@ -84,6 +84,7 @@ class FavouritePage extends StatelessWidget {
                       itemBuilder: (_, index) => GridItem(
                         key: ValueKey(favourites[index].name),
                         pokemon: favourites[index],
+                        heroScope: 'favourites',
                       ),
                     ),
                   );

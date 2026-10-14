@@ -326,4 +326,134 @@ class AppLocalizationsEn extends AppLocalizations {
   String quizOptionWrong(String answer) {
     return '$answer, wrong answer';
   }
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get addToFavourites => 'Add to favourites';
+
+  @override
+  String get removeFromFavourites => 'Remove from favourites';
+
+  @override
+  String get detailLoadFailed => 'Failed to load Pokémon';
+
+  @override
+  String get detailAbout => 'About';
+
+  @override
+  String get detailWeight => 'Weight';
+
+  @override
+  String get detailHeight => 'Height';
+
+  @override
+  String weightValue(String value) {
+    return '$value kg';
+  }
+
+  @override
+  String heightValue(String value) {
+    return '$value cm';
+  }
+
+  @override
+  String get detailAbilities => 'Abilities';
+
+  @override
+  String get detailBaseStats => 'Base Stats';
+
+  @override
+  String get statHp => 'HP';
+
+  @override
+  String get statAttack => 'ATK';
+
+  @override
+  String get statDefense => 'DEF';
+
+  @override
+  String get statSpecialAttack => 'SpA';
+
+  @override
+  String get statSpecialDefense => 'SpD';
+
+  @override
+  String get statSpeed => 'SPD';
+
+  @override
+  String get matchupsTitle => 'Type matchups';
+
+  @override
+  String get matchupsHint => 'Damage taken from each type of move.';
+
+  @override
+  String get matchupsWeak => 'Weak to';
+
+  @override
+  String get matchupsResists => 'Resists';
+
+  @override
+  String get matchupsImmune => 'Immune to';
+
+  @override
+  String matchupSemantics(String type, String damage) {
+    return '$type: $damage damage';
+  }
+
+  @override
+  String get evolutionTitle => 'Evolution';
+
+  @override
+  String get evolutionNone => 'This Pokémon doesn\'t evolve.';
+
+  @override
+  String get evolutionLoadFailed => 'Couldn\'t load the evolutions.';
+
+  @override
+  String evolutionLevel(int level) {
+    return 'Lv. $level';
+  }
+
+  @override
+  String get evolutionLevelUp => 'Level up';
+
+  @override
+  String get evolutionTrade => 'Trade';
+
+  @override
+  String get evolutionFriendship => 'Friendship';
+
+  @override
+  String get evolutionDay => 'Day';
+
+  @override
+  String get evolutionNight => 'Night';
+
+  @override
+  String evolutionHolding(String item) {
+    return 'Holding $item';
+  }
+
+  @override
+  String evolutionKnowing(String move) {
+    return 'Knowing $move';
+  }
+
+  @override
+  String get evolutionSpecial => 'Special';
+
+  @override
+  String evolutionStageSemantics(String name, int id) {
+    return '$name, number $id';
+  }
+
+  @override
+  String evolutionStageSemanticsWith(String name, int id, String requirement) {
+    return '$name, number $id, $requirement';
+  }
+
+  @override
+  String get evolutionCurrent => 'current';
 }
