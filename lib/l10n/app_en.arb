@@ -1,0 +1,398 @@
+{
+  "@@locale": "en",
+  "appTitle": "PokéFlutter",
+  "navHome": "Home",
+  "navCompare": "Compare",
+  "navQuiz": "Quiz",
+  "navFavourites": "Favourites",
+  "retry": "Retry",
+  "settings": "Settings",
+  "settingsTheme": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "settingsLanguage": "Language",
+  "languageSystem": "System",
+  "homeTitle": "Pokédex",
+  "homeSubtitle": "Search by name or filter by type to find any Pokémon.",
+  "typesLoadFailed": "Couldn't load the type data. Check your connection.",
+  "noPokemonFound": "No Pokémon found.",
+  "typesUnavailableOffline": "Types unavailable offline.",
+  "removeFilter": "Remove {type} filter",
+  "@removeFilter": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "clearAll": "Clear all",
+  "random": "Random",
+  "searchHint": "Search a Pokémon",
+  "clearSearch": "Clear search",
+  "filterByType": "Filter by type",
+  "filterByTypeSelected": "Filter by type, {count} selected",
+  "@filterByTypeSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filterSheetTitle": "Filter by Type",
+  "showAll": "Show all",
+  "applyCount": "Apply ({count})",
+  "@applyCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pokemonSemantics": "{name}, number {id}",
+  "@pokemonSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "pokemonSemanticsTyped": "{name}, number {id}, {types} type",
+  "@pokemonSemanticsTyped": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "id": {
+        "type": "int"
+      },
+      "types": {
+        "type": "String"
+      }
+    }
+  },
+  "typesAnd": "{first} and {second}",
+  "@typesAnd": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "second": {
+        "type": "String"
+      }
+    }
+  },
+  "favouritesTitle": "Favourites",
+  "favouritesSubtitle": "Pokémon you've saved for quick access.",
+  "favouritesEmptyTitle": "No favourites yet",
+  "favouritesEmptyHint": "Tap the ♥ on any Pokémon to save it here.",
+  "typeNormal": "Normal",
+  "typeFire": "Fire",
+  "typeWater": "Water",
+  "typeElectric": "Electric",
+  "typeGrass": "Grass",
+  "typeIce": "Ice",
+  "typeFighting": "Fighting",
+  "typePoison": "Poison",
+  "typeGround": "Ground",
+  "typeFlying": "Flying",
+  "typePsychic": "Psychic",
+  "typeBug": "Bug",
+  "typeRock": "Rock",
+  "typeGhost": "Ghost",
+  "typeDragon": "Dragon",
+  "typeDark": "Dark",
+  "typeSteel": "Steel",
+  "typeFairy": "Fairy",
+  "quizTitle": "Quiz",
+  "quizIntro": "Test your Pokémon knowledge! Guess the name from the silhouette or the type from the name.",
+  "quizDifficulty": "Difficulty",
+  "difficultyEasy": "Easy",
+  "difficultyNormal": "Normal",
+  "difficultyHard": "Hard",
+  "difficultyEasyHint": "First generation only (151 Pokémon), no timer.",
+  "difficultyTimedHint": "All Pokémon, {seconds} seconds per question.",
+  "@difficultyTimedHint": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "quizBestScore": "Best score: {score}",
+  "@quizBestScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "quizNoBestScore": "No score yet",
+  "quizStart": "Start Quiz",
+  "quizLoading": "Loading…",
+  "quizQuestionCounter": "Question {current} / {total}",
+  "@quizQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "quizPoints": "{score} pts",
+  "@quizPoints": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "quizStreak": "Streak {count}",
+  "@quizStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizWhoIsThis": "Who is this Pokémon?",
+  "quizWhatType": "What type is {name}?",
+  "@quizWhatType": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizSilhouette": "Silhouette of a Pokémon",
+  "quizLoadFailed": "Couldn't load this Pokémon.",
+  "quizTimeLeft": "{seconds} seconds left",
+  "@quizTimeLeft": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "quizTimeUp": "Time's up!",
+  "quizCorrect": "Correct! +{points}",
+  "@quizCorrect": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "quizWrong": "Wrong",
+  "quizAnswerName": "It's {name}!",
+  "@quizAnswerName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizAnswerTypes": "{name} is {types} type",
+  "@quizAnswerTypes": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "types": {
+        "type": "String"
+      }
+    }
+  },
+  "quizNext": "Next Question",
+  "quizSeeResults": "See Results",
+  "quizResults": "Results",
+  "quizVerdictMaster": "Pokémon Master! 🏆",
+  "quizVerdictOk": "Not bad, keep training!",
+  "quizVerdictLow": "Keep studying the Pokédex!",
+  "quizCorrectLabel": "Correct",
+  "quizWrongLabel": "Wrong",
+  "quizScoreLabel": "Score",
+  "quizBestStreakLabel": "Best streak",
+  "quizNewRecord": "New record! 🎉",
+  "quizPlayAgain": "Play Again",
+  "quizChangeDifficulty": "Change difficulty",
+  "quizOptionCorrect": "{answer}, correct answer",
+  "@quizOptionCorrect": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "quizOptionWrong": "{answer}, wrong answer",
+  "@quizOptionWrong": {
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "back": "Back",
+  "addToFavourites": "Add to favourites",
+  "removeFromFavourites": "Remove from favourites",
+  "detailLoadFailed": "Failed to load Pokémon",
+  "detailAbout": "About",
+  "detailWeight": "Weight",
+  "detailHeight": "Height",
+  "weightValue": "{value} kg",
+  "@weightValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "heightValue": "{value} cm",
+  "@heightValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "detailAbilities": "Abilities",
+  "detailBaseStats": "Base Stats",
+  "statHp": "HP",
+  "statAttack": "ATK",
+  "statDefense": "DEF",
+  "statSpecialAttack": "SpA",
+  "statSpecialDefense": "SpD",
+  "statSpeed": "SPD",
+  "matchupsTitle": "Type matchups",
+  "matchupsHint": "Damage taken from each type of move.",
+  "matchupsWeak": "Weak to",
+  "matchupsResists": "Resists",
+  "matchupsImmune": "Immune to",
+  "matchupSemantics": "{type}: {damage} damage",
+  "@matchupSemantics": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      },
+      "damage": {
+        "type": "String"
+      }
+    }
+  },
+  "evolutionTitle": "Evolution",
+  "evolutionNone": "This Pokémon doesn't evolve.",
+  "evolutionLoadFailed": "Couldn't load the evolutions.",
+  "evolutionLevel": "Lv. {level}",
+  "@evolutionLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "evolutionLevelUp": "Level up",
+  "evolutionTrade": "Trade",
+  "evolutionFriendship": "Friendship",
+  "evolutionDay": "Day",
+  "evolutionNight": "Night",
+  "evolutionHolding": "Holding {item}",
+  "@evolutionHolding": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "evolutionKnowing": "Knowing {move}",
+  "@evolutionKnowing": {
+    "placeholders": {
+      "move": {
+        "type": "String"
+      }
+    }
+  },
+  "evolutionSpecial": "Special",
+  "evolutionStageSemantics": "{name}, number {id}",
+  "@evolutionStageSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "evolutionStageSemanticsWith": "{name}, number {id}, {requirement}",
+  "@evolutionStageSemanticsWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "id": {
+        "type": "int"
+      },
+      "requirement": {
+        "type": "String"
+      }
+    }
+  },
+  "evolutionCurrent": "current",
+  "compareTitle": "Compare",
+  "compareSubtitle": "Select two Pokémon to compare their stats.",
+  "compareSlotA": "Pokémon A",
+  "compareSlotB": "Pokémon B",
+  "compareVersus": "VS",
+  "compareEmpty": "Select two Pokémon to start comparing",
+  "compareSelectSecond": "Select the second Pokémon to compare",
+  "compareFailed": "Couldn't load a Pokémon. Tap its card to retry.",
+  "compareTapToRetry": "Tap to retry",
+  "compareSlotFailedSemantics": "{slot}: failed to load, tap to retry",
+  "@compareSlotFailedSemantics": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "compareSlotLoadedSemantics": "{slot}: {name}, tap to change",
+  "@compareSlotLoadedSemantics": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "compareSlotSelectSemantics": "Select {slot}",
+  "@compareSlotSelectSemantics": {
+    "placeholders": {
+      "slot": {
+        "type": "String"
+      }
+    }
+  },
+  "comparePickerHint": "Search Pokémon...",
+  "compareTotal": "Total",
+  "compareStatSemantics": "{stat}: {first} against {second}",
+  "@compareStatSemantics": {
+    "placeholders": {
+      "stat": {
+        "type": "String"
+      },
+      "first": {
+        "type": "int"
+      },
+      "second": {
+        "type": "int"
+      }
+    }
+  }
+}

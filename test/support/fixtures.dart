@@ -50,3 +50,78 @@ Map<String, dynamic> pokemonJson({
 };
 
 String pokemonBody(Map<String, dynamic> json) => jsonEncode(json);
+
+/// A PokéAPI `/pokemon-species/{name}` body pointing at chain [chainId].
+String speciesBody({int chainId = 1}) => jsonEncode({
+  'evolution_chain': {
+    'url': 'https://pokeapi.co/api/v2/evolution-chain/$chainId/',
+  },
+});
+
+Map<String, dynamic> _stage(
+  String name,
+  int id, {
+  Map<String, dynamic>? details,
+  List<Map<String, dynamic>> next = const [],
+}) => {
+  'species': {
+    'name': name,
+    'url': 'https://pokeapi.co/api/v2/pokemon-species/$id/',
+  },
+  'evolution_details': [?details],
+  'evolves_to': next,
+};
+
+Map<String, dynamic> _details({
+  int? level,
+  String trigger = 'level-up',
+  String? item,
+  int? happiness,
+}) => {
+  'min_level': level,
+  'trigger': {'name': trigger},
+  'item': item == null ? null : {'name': item},
+  'held_item': null,
+  'min_happiness': happiness,
+  'time_of_day': '',
+  'known_move': null,
+};
+
+/// Bulbasaur → Ivysaur (level 16) → Venusaur (level 32).
+String bulbasaurChainBody() => jsonEncode({
+  'id': 1,
+  'chain': _stage(
+    'bulbasaur',
+    1,
+    next: [
+      _stage(
+        'ivysaur',
+        2,
+        details: _details(level: 16),
+        next: [_stage('venusaur', 3, details: _details(level: 32))],
+      ),
+    ],
+  ),
+});
+
+/// Eevee with three branches: a stone, friendship and a level.
+String eeveeChainBody() => jsonEncode({
+  'id': 67,
+  'chain': _stage(
+    'eevee',
+    133,
+    next: [
+      _stage(
+        'vaporeon',
+        134,
+        details: _details(trigger: 'use-item', item: 'water-stone'),
+      ),
+      _stage('espeon', 196, details: _details(happiness: 160)),
+      _stage('leafeon', 470, details: _details(level: 20)),
+    ],
+  ),
+});
+
+/// A Pokémon that does not evolve.
+String singleStageChainBody() =>
+    jsonEncode({'id': 99, 'chain': _stage('tauros', 128)});

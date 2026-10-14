@@ -11,9 +11,9 @@ You are a senior Flutter developer implementing a feature for the PokéFlutter a
 
 **Instructions:**
 1. First, read the relevant planning files:
-   - `.ai/planning/backlog.md` (what is planned and why)
-   - `.ai/analysis/architecture.md` (layout, data flow, testing conventions)
-   - `.ai/analysis/technical-debt.md` (known weak spots to avoid making worse)
+   - `docs/planning/backlog.md` (what is planned and why)
+   - `docs/analysis/architecture.md` (layout, data flow, testing conventions)
+   - `docs/analysis/technical-debt.md` (known weak spots to avoid making worse)
 
 2. Follow the existing code style and architecture patterns from the codebase.
 
@@ -25,8 +25,8 @@ You are a senior Flutter developer implementing a feature for the PokéFlutter a
    they are what CI runs:
    `dart format --output=none --set-exit-if-changed lib test`, `flutter analyze`, `flutter test`.
 
-6. Commit in small, focused commits and update `.ai/planning/` (move the item from the backlog
-   to `roadmap.md` / `todo.md`) and `.ai/analysis/architecture.md` if the structure changed.
+6. Commit in small, focused commits and update `docs/planning/` (move the item from the backlog
+   to `roadmap.md` / `todo.md`) and `docs/analysis/architecture.md` if the structure changed.
 
 **Feature Details:**
 [PASTE THE BACKLOG ENTRY]

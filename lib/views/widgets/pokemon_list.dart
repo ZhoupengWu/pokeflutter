@@ -6,7 +6,10 @@ import '../../views/widgets/grid_item.dart';
 class PokemonList extends StatelessWidget {
   final List<PokemonListItem> pokemonList;
 
-  const PokemonList({super.key, required this.pokemonList});
+  /// Passed to every [GridItem]; see [GridItem.heroScope].
+  final String? heroScope;
+
+  const PokemonList({super.key, required this.pokemonList, this.heroScope});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,11 @@ class PokemonList extends StatelessWidget {
           final pokemon = pokemonList[index];
           // The key ties each cell's loaded data to its Pokémon, so the cells
           // are not mixed up when search/filters change the list.
-          return GridItem(key: ValueKey(pokemon.name), pokemon: pokemon);
+          return GridItem(
+            key: ValueKey(pokemon.name),
+            pokemon: pokemon,
+            heroScope: heroScope,
+          );
         },
       ),
     );

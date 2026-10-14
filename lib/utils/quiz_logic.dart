@@ -10,19 +10,24 @@ class QuizLogic {
   /// Generates [count] questions from [allPokemon].
   /// Alternates between [QuizMode.guessName] and [QuizMode.guessType].
   /// Type questions come back unresolved — see [resolveTypeQuestion].
+  ///
+  /// Only the Pokémon allowed by [difficulty] are asked about or offered as
+  /// wrong answers.
   static List<QuizQuestion> generateQuestions(
     List<PokemonListItem> allPokemon, {
     int count = 10,
+    QuizDifficulty difficulty = QuizDifficulty.normal,
   }) {
-    if (allPokemon.length < 4) return [];
+    final pool = allPokemon.where(difficulty.includes).toList();
+    if (pool.length < 4) return [];
 
-    final shuffled = List<PokemonListItem>.from(allPokemon)..shuffle(_random);
+    final shuffled = List<PokemonListItem>.from(pool)..shuffle(_random);
     final subjects = shuffled.take(count).toList();
 
     return subjects.asMap().entries.map((entry) {
       final mode = entry.key.isEven ? QuizMode.guessName : QuizMode.guessType;
       return mode == QuizMode.guessName
-          ? _nameQuestion(entry.value, allPokemon)
+          ? _nameQuestion(entry.value, pool)
           : _typeQuestion(entry.value);
     }).toList();
   }

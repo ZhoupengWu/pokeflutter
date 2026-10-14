@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../utils/palette.dart';
+import '../../utils/app_colors.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final ValueChanged<String> onSearch;
@@ -53,8 +54,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     return Semantics(
       button: true,
       label: hasActive
-          ? 'Filter by type, ${widget.activeFilterCount} selected'
-          : 'Filter by type',
+          ? context.l10n.filterByTypeSelected(widget.activeFilterCount)
+          : context.l10n.filterByType,
       excludeSemantics: true,
       onTap: widget.onFilterTap,
       child: GestureDetector(
@@ -67,13 +68,17 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               width: 48.r,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.r),
-                color: hasActive ? gray[500] : gray[200],
+                color: hasActive
+                    ? context.colors.strong
+                    : context.colors.border,
               ),
               alignment: Alignment.center,
               child: Icon(
                 Icons.filter_alt_rounded,
                 size: 24.r,
-                color: hasActive ? Colors.white : gray[400],
+                color: hasActive
+                    ? context.colors.onStrong
+                    : context.colors.muted,
               ),
             ),
             if (hasActive)
@@ -104,14 +109,14 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
 
   Widget _searchBar(BuildContext context) => Container(
     decoration: BoxDecoration(
-      border: Border.all(width: 1.w, color: gray[200]!),
+      border: Border.all(width: 1.w, color: context.colors.border),
       borderRadius: BorderRadius.circular(16.r),
     ),
     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(Icons.search_rounded, size: 24.r, color: gray[300]),
+        Icon(Icons.search_rounded, size: 24.r, color: context.colors.subtle),
         SizedBox(width: 8.w),
         Expanded(
           child: TextField(
@@ -119,12 +124,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             onChanged: widget.onSearch,
             style: Theme.of(
               context,
-            ).textTheme.bodyLarge?.copyWith(color: gray[500]),
+            ).textTheme.bodyLarge?.copyWith(color: context.colors.strong),
             decoration: InputDecoration(
-              hintText: 'Search a Pokémon',
+              hintText: context.l10n.searchHint,
               hintStyle: Theme.of(
                 context,
-              ).textTheme.bodyLarge?.copyWith(color: gray[300]),
+              ).textTheme.bodyLarge?.copyWith(color: context.colors.subtle),
               border: InputBorder.none,
               isDense: true,
               contentPadding: EdgeInsets.symmetric(vertical: 8.h),
@@ -137,12 +142,16 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             if (value.text.isEmpty) return const SizedBox.shrink();
             return Semantics(
               button: true,
-              label: 'Clear search',
+              label: context.l10n.clearSearch,
               excludeSemantics: true,
               onTap: _clearSearch,
               child: GestureDetector(
                 onTap: _clearSearch,
-                child: Icon(Icons.close_rounded, size: 20.r, color: gray[300]),
+                child: Icon(
+                  Icons.close_rounded,
+                  size: 20.r,
+                  color: context.colors.subtle,
+                ),
               ),
             );
           },

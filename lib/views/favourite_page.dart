@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/palette.dart';
+import '../utils/app_colors.dart';
 import '../utils/favourites_manager.dart';
 import 'widgets/grid_item.dart';
 
@@ -19,14 +20,17 @@ class FavouritePage extends StatelessWidget {
             SizedBox(height: 16.h),
             Padding(
               padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 4.h),
-              child: Text('Favourites', style: textTheme.displaySmall),
+              child: Text(
+                context.l10n.favouritesTitle,
+                style: textTheme.displaySmall,
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Text(
-                "Pokémon you've saved for quick access.",
+                context.l10n.favouritesSubtitle,
                 style: textTheme.bodyLarge?.copyWith(
-                  color: gray[400],
+                  color: context.colors.muted,
                   height: 1.5,
                 ),
               ),
@@ -44,20 +48,20 @@ class FavouritePage extends StatelessWidget {
                           Icon(
                             Icons.favorite_border_rounded,
                             size: 64.r,
-                            color: gray[200],
+                            color: context.colors.border,
                           ),
                           SizedBox(height: 16.h),
                           Text(
-                            'No favourites yet',
+                            context.l10n.favouritesEmptyTitle,
                             style: textTheme.titleMedium?.copyWith(
-                              color: gray[300],
+                              color: context.colors.subtle,
                             ),
                           ),
                           SizedBox(height: 8.h),
                           Text(
-                            'Tap the ♥ on any Pokémon to save it here.',
+                            context.l10n.favouritesEmptyHint,
                             style: textTheme.bodySmall?.copyWith(
-                              color: gray[300],
+                              color: context.colors.subtle,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -80,6 +84,7 @@ class FavouritePage extends StatelessWidget {
                       itemBuilder: (_, index) => GridItem(
                         key: ValueKey(favourites[index].name),
                         pokemon: favourites[index],
+                        heroScope: 'favourites',
                       ),
                     ),
                   );

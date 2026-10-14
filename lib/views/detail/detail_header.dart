@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../l10n/l10n_extensions.dart';
+import '../../model/pokemon.dart';
+import '../../model/pokemon_list_item.dart';
+import '../../utils/capitalize.dart';
+import '../../utils/favourites_manager.dart';
+
+/// Top of the detail page, on the type-coloured background: back button,
+/// name, favourite toggle, Pokédex number, type chips and the artwork.
+class DetailHeader extends StatelessWidget {
+  const DetailHeader({
+    super.key,
+    required this.pokemon,
+    required this.favouriteItem,
+    this.heroTag,
+  });
+
+  final Pokemon pokemon;
+
+  /// The list entry that is added to / removed from the favourites.
+  final PokemonListItem favouriteItem;
+  final Object? heroTag;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final textTheme = Theme.of(context).textTheme;
+
+    Widget artwork = Image.network(
+      pokemon.urlImage,
+      height: 180.r,
+      width: 180.r,
+      fit: BoxFit.contain,
+      semanticLabel: pokemon.name.capitalize(),
+      errorBuilder: (_, _, _) => Icon(
+        Icons.image_not_supported_rounded,
+        size: 120.r,
+        color: Colors.white38,
+      ),
+    );
+    if (heroTag != null) artwork = Hero(tag: heroTag!, child: artwork);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+          child: Row(
+            children: [
+              IconButton(
+                tooltip: l10n.back,
+                icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+              Expanded(
+                child: Text(
+                  pokemon.name.capitalize(),
+                  style: textTheme.headlineSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              ValueListenableBuilder(
+                valueListenable: FavouritesManager.instance.notifier,
+                builder: (_, _, _) {
+                  final isFav = FavouritesManager.instance.isFavourite(
+                    favouriteItem.name,
+                  );
+                  return IconButton(
+                    tooltip: isFav
+                        ? l10n.removeFromFavourites
+                        : l10n.addToFavourites,
+                    icon: Icon(
+                      isFav
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_border_rounded,
+                      color: isFav ? Colors.redAccent : Colors.white,
+                    ),
+                    onPressed: () =>
+                        FavouritesManager.instance.toggle(favouriteItem),
+                  );
+                },
+              ),
+              Text(
+                '#${pokemon.id.toString().padLeft(3, '0')}',
+                style: textTheme.titleMedium?.copyWith(color: Colors.white70),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 32.w, bottom: 8.h),
+          child: Row(
+            children: [
+              for (final type in pokemon.typesList) _TypeChip(type: type),
+            ],
+          ),
+        ),
+        Center(child: artwork),
+      ],
+    );
+  }
+}
+
+class _TypeChip extends StatelessWidget {
+  const _TypeChip({required this.type});
+
+  final String type;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 8.w),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: Colors.white24,
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Text(
+        context.l10n.typeName(type),
+        style: Theme.of(
+          context,
+        ).textTheme.labelMedium?.copyWith(color: Colors.white),
+      ),
+    );
+  }
+}

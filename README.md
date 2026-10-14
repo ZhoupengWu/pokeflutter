@@ -10,10 +10,14 @@ with a quiz.
 
 - **Pokédex** – grid of every Pokémon (name, number, sprite, type badges, colour by
   primary type), live search, multi-type filter and a *Random* button.
-- **Detail page** – artwork, types, base stats, abilities, height and weight.
+- **Detail page** – artwork, types, base stats, abilities, height and weight, **type matchups**
+  (weaknesses, resistances, immunities) and the **evolution chain** (tap a stage to open it).
 - **Compare** – pick two Pokémon and compare their stats side by side.
-- **Quiz** – 10 questions, alternating "who's that silhouette?" and "what type is it?".
+- **Quiz** – 10 questions ("who's that silhouette?" / "what type is it?") with three difficulty
+  levels (the harder ones are timed), streak bonuses and saved best scores.
 - **Favourites** – saved on the device.
+- **Dark theme** and **English / Italian** – both follow the system by default and can be set from
+  the settings (gear icon on the Pokédex tab).
 
 Data comes from [PokéAPI](https://pokeapi.co/); sprites from the
 [PokéAPI sprites repository](https://github.com/PokeAPI/sprites).
@@ -24,13 +28,14 @@ Requirements: a recent stable [Flutter SDK](https://docs.flutter.dev/get-started
 (Dart `^3.11.1`) and an internet connection (details and images are loaded from the web).
 
 ```bash
-flutter pub get
+flutter pub get   # also generates the localisation code
 flutter run
 ```
 
 ### Checks
 
-The same three checks run in CI on every push and pull request to `main` and `dev`:
+The same checks run in CI on every push and pull request to `main` and `dev` (CI also builds a
+release APK):
 
 ```bash
 dart format --output=none --set-exit-if-changed lib test   # use `dart format lib test` to fix
@@ -38,22 +43,26 @@ flutter analyze
 flutter test
 ```
 
-Tests never touch the network: HTTP clients are injected and replaced with fakes.
+Tests never touch the network: HTTP clients and API classes are injected and replaced with fakes.
+
+Strings live in `lib/l10n/app_en.arb` and `app_it.arb`; add new ones to both.
 
 ## Project layout
 
 ```
 lib/
-├── main.dart              # entry point: loads the list and favourites, warms up the type index
-├── model/                 # Pokemon, PokemonListItem, quiz models
-├── utils/                 # API client, cache, repository, type index, favourites, theme…
-└── views/                 # pages (home, detail, compare, quiz, favourites) and widgets/
+├── main.dart              # entry point: loads the list, favourites and settings, warms up the type index
+├── l10n/                  # translations (app_en.arb, app_it.arb) and generated code
+├── model/                 # Pokemon, PokemonListItem, evolution, quiz models
+├── controllers/           # state and rules of Home, Detail, Compare and Quiz (ChangeNotifier)
+├── utils/                 # API clients, cache, repository, type index/chart, stores, theme…
+└── views/                 # pages by feature (home, detail, compare, quiz) and widgets/
 assets/                    # pokemonList.json, pokeball.svg, type icons, Roboto font
 test/                      # unit and widget tests
 ```
 
-How the pieces fit together is described in [`.ai/analysis/architecture.md`](.ai/analysis/architecture.md);
-what is planned next is in [`.ai/planning/backlog.md`](.ai/planning/backlog.md).
+How the pieces fit together is described in [`docs/analysis/architecture.md`](docs/analysis/architecture.md);
+what is planned next is in [`docs/planning/backlog.md`](docs/planning/backlog.md).
 
 ## Releasing
 

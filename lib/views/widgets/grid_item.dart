@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../model/pokemon_list_item.dart';
 import '../../utils/capitalize.dart';
-import '../../utils/palette.dart';
+import '../../utils/app_colors.dart';
 import '../../utils/pokemon_constants.dart';
 import '../../utils/pokemon_type_index.dart';
-import '../../views/pokemon_detail_page.dart';
+import '../detail/pokemon_detail_page.dart';
 import '../../views/widgets/styled_text.dart';
 
 /// Card shown in the Pokédex and favourites grids.
@@ -19,19 +20,30 @@ class GridItem extends StatelessWidget {
   final PokemonListItem pokemon;
   final PokemonTypeIndex? _typeIndex;
 
+  /// Names the screen the cell is on (`home`, `favourites`). When set, the
+  /// sprite flies into the detail page; the scope keeps the tags unique
+  /// because every tab stays alive and may show the same Pokémon.
+  final String? heroScope;
+
   /// [typeIndex] defaults to [PokemonTypeIndex.instance]; tests inject their own.
   const GridItem({
     super.key,
     required this.pokemon,
+    this.heroScope,
     PokemonTypeIndex? typeIndex,
   }) : _typeIndex = typeIndex;
+
+  Object? get _heroTag =>
+      heroScope == null ? null : '$heroScope-${pokemon.name}';
 
   PokemonTypeIndex get _index => _typeIndex ?? PokemonTypeIndex.instance;
 
   void _navigateToDetail(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => PokemonDetailPage(pokemon: pokemon)),
+      MaterialPageRoute(
+        builder: (_) => PokemonDetailPage(pokemon: pokemon, heroTag: _heroTag),
+      ),
     );
   }
 
@@ -43,7 +55,7 @@ class GridItem extends StatelessWidget {
         final types = _index.typesOf(pokemon.name) ?? [];
         final color =
             listPokemonTypeColor[types.firstOrNull?.toLowerCase()] ??
-            gray[300]!;
+            context.colors.subtle;
         return _card(context, types, color);
       },
     );
@@ -54,9 +66,13 @@ class GridItem extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label:
-          '${pokemon.name.capitalize()}, number ${pokemon.id}'
-          '${types.isEmpty ? '' : ', ${types.map((t) => t.capitalize()).join(' and ')} type'}',
+      label: types.isEmpty
+          ? context.l10n.pokemonSemantics(pokemon.name.capitalize(), pokemon.id)
+          : context.l10n.pokemonSemanticsTyped(
+              pokemon.name.capitalize(),
+              pokemon.id,
+              context.l10n.typeList(types),
+            ),
       excludeSemantics: true,
       onTap: () => _navigateToDetail(context),
       child: InkWell(
@@ -100,19 +116,7 @@ class GridItem extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: _typeList(context, types),
                           ),
-                          SizedBox(
-                            height: 48.r,
-                            width: 48.r,
-                            child: Image.network(
-                              pokemon.spriteUrl,
-                              fit: BoxFit.contain,
-                              errorBuilder: (_, _, _) => Icon(
-                                Icons.catching_pokemon,
-                                size: 32.r,
-                                color: Colors.white38,
-                              ),
-                            ),
-                          ),
+                          SizedBox(height: 48.r, width: 48.r, child: _sprite()),
                         ],
                       ),
                     ],
@@ -126,6 +130,18 @@ class GridItem extends StatelessWidget {
     );
   }
 
+  Widget _sprite() {
+    final image = Image.network(
+      pokemon.spriteUrl,
+      fit: BoxFit.contain,
+      excludeFromSemantics: true,
+      errorBuilder: (_, _, _) =>
+          Icon(Icons.catching_pokemon, size: 32.r, color: Colors.white38),
+    );
+    final tag = _heroTag;
+    return tag == null ? image : Hero(tag: tag, child: image);
+  }
+
   List<Widget> _typeList(BuildContext context, List<String> types) {
     final widgets = <Widget>[];
     for (var i = 0; i < types.length; i++) {
@@ -133,7 +149,7 @@ class GridItem extends StatelessWidget {
       widgets.add(
         Container(
           decoration: BoxDecoration(
-            color: gray[500]?.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(24.r),
           ),
           padding: EdgeInsets.only(
@@ -157,7 +173,7 @@ class GridItem extends StatelessWidget {
                   context,
                 ).textTheme.labelSmall!.copyWith(color: Colors.white),
                 textHeight: 16.h,
-                text: types[i].capitalize(),
+                text: context.l10n.typeName(types[i]),
               ),
             ],
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -7,6 +6,7 @@ import 'package:pokeflutter/model/pokemon_list_item.dart';
 import 'package:pokeflutter/utils/pokemon_type_index.dart';
 import 'package:pokeflutter/views/widgets/grid_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'support/test_app.dart';
 
 /// Fake PokéAPI where only charizard (fire/flying) has types.
 http.Response _typeResponse(http.Request request) {
@@ -24,12 +24,8 @@ http.Response _typeResponse(http.Request request) {
   );
 }
 
-Widget _app(Widget child) => ScreenUtilInit(
-  designSize: const Size(360, 979),
-  builder: (_, _) => MaterialApp(
-    home: Scaffold(body: SizedBox(width: 160, height: 100, child: child)),
-  ),
-);
+Widget _app(Widget child) =>
+    testApp(SizedBox(width: 160, height: 100, child: child));
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
