@@ -22,6 +22,20 @@ extension PokemonLabels on AppLocalizations {
       stat.length < 3 ? stat.toUpperCase() : stat.substring(0, 3).toUpperCase(),
   };
 
+  /// Name of a PokéAPI habitat id (`waters-edge` → "Water's edge").
+  String habitatName(String habitat) => switch (habitat) {
+    'cave' => habitatCave,
+    'forest' => habitatForest,
+    'grassland' => habitatGrassland,
+    'mountain' => habitatMountain,
+    'rare' => habitatRare,
+    'rough-terrain' => habitatRoughTerrain,
+    'sea' => habitatSea,
+    'urban' => habitatUrban,
+    'waters-edge' => habitatWatersEdge,
+    _ => titleCaseId(habitat),
+  };
+
   /// A number with at most one decimal, in the current language
   /// (`90.5` → "90.5" / "90,5", `170.0` → "170").
   String decimal(double value) => NumberFormat('0.#', localeName).format(value);

@@ -25,6 +25,7 @@ Future<PokemonDetailController> _pump(
   WidgetTester tester, {
   FakePokemonApi? api,
   FakeEvolutionApi? evolution,
+  FakeSpeciesApi? species,
   Locale locale = const Locale('en'),
   ThemeData? theme,
 }) async {
@@ -36,6 +37,7 @@ Future<PokemonDetailController> _pump(
     item: _item,
     api: api ?? FakePokemonApi(types: ['fire', 'flying']),
     evolutionApi: evolution ?? FakeEvolutionApi(chainBody: eeveeChainBody()),
+    speciesApi: species ?? FakeSpeciesApi(),
     repository: fakeRepository(count: 500),
   );
   addTearDown(controller.dispose);
@@ -77,6 +79,39 @@ void main() {
     expect(find.text('Base Stats'), findsOneWidget);
     expect(find.text('HP'), findsOneWidget);
     expect(find.text('78'), findsOneWidget);
+  });
+
+  testWidgets('shows the Pokédex entry in English', (tester) async {
+    await _pump(tester);
+
+    expect(find.text('Pokédex entry'), findsOneWidget);
+    expect(find.text('Mouse Pokémon'), findsOneWidget);
+    expect(
+      find.text('It stores electricity in its cheeks. Really.'),
+      findsOneWidget,
+    );
+    expect(find.text('Mythical'), findsOneWidget);
+    expect(find.text("Habitat: Water's edge"), findsOneWidget);
+    expect(find.text('Legendary'), findsNothing);
+  });
+
+  testWidgets('shows the Pokédex entry in Italian', (tester) async {
+    await _pump(tester, locale: const Locale('it'));
+
+    expect(find.text('Scheda Pokédex'), findsOneWidget);
+    expect(find.text('Pokémon Topo'), findsOneWidget);
+    expect(find.text('Accumula elettricità nelle guance.'), findsOneWidget);
+    expect(find.text('Misterioso'), findsOneWidget);
+    expect(find.text('Habitat: Riva'), findsOneWidget);
+  });
+
+  testWidgets('without species information the entry is left out', (
+    tester,
+  ) async {
+    await _pump(tester, species: FakeSpeciesApi(fail: true));
+
+    expect(find.text('Pokédex entry'), findsNothing);
+    expect(find.text('About'), findsOneWidget); // the rest is still there
   });
 
   testWidgets('type matchups follow the dual type (fire / flying)', (
@@ -188,6 +223,7 @@ void main() {
         item: item,
         api: FakePokemonApi(types: ['fire']),
         evolutionApi: FakeEvolutionApi(),
+        speciesApi: FakeSpeciesApi(),
         repository: fakeRepository(count: 500),
       ),
     );

@@ -13,10 +13,12 @@ PokemonListItem _item(String name, int id) =>
 PokemonDetailController _controller({
   FakePokemonApi? api,
   FakeEvolutionApi? evolution,
+  FakeSpeciesApi? species,
 }) => PokemonDetailController(
   item: _item('mon2', 2),
   api: api ?? FakePokemonApi(),
   evolutionApi: evolution ?? FakeEvolutionApi(),
+  speciesApi: species ?? FakeSpeciesApi(),
   repository: fakeRepository(),
 );
 
@@ -72,17 +74,40 @@ void main() {
 
   test('uses the species name of an alternate form', () async {
     final evolution = FakeEvolutionApi();
+    final species = FakeSpeciesApi();
     final api = _SpeciesApi();
     final c = PokemonDetailController(
       item: _item('charizard-mega-x', 10034),
       api: api,
       evolutionApi: evolution,
+      speciesApi: species,
       repository: fakeRepository(),
     );
 
     await c.load();
 
     expect(evolution.requested, ['charizard']);
+    expect(species.requested, ['charizard']);
+  });
+
+  test('loads the species information along with the chain', () async {
+    final species = FakeSpeciesApi();
+    final c = _controller(species: species);
+
+    await c.load();
+
+    expect(species.requested, ['mon2']);
+    expect(c.species?.categories['en'], 'Mouse Pokémon');
+  });
+
+  test('species information failing leaves the rest intact', () async {
+    final c = _controller(species: FakeSpeciesApi(fail: true));
+
+    await c.load();
+
+    expect(c.status, LoadStatus.loaded);
+    expect(c.evolutionStatus, LoadStatus.loaded);
+    expect(c.species, isNull);
   });
 
   test('does nothing after being disposed', () async {

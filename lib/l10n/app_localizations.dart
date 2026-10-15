@@ -1063,6 +1063,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear offline data'**
   String get storageClearSemantics;
+
+  /// No description provided for @detailEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokédex entry'**
+  String get detailEntry;
+
+  /// No description provided for @speciesLegendary.
+  ///
+  /// In en, this message translates to:
+  /// **'Legendary'**
+  String get speciesLegendary;
+
+  /// No description provided for @speciesMythical.
+  ///
+  /// In en, this message translates to:
+  /// **'Mythical'**
+  String get speciesMythical;
+
+  /// No description provided for @habitatValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Habitat: {name}'**
+  String habitatValue(String name);
+
+  /// No description provided for @habitatCave.
+  ///
+  /// In en, this message translates to:
+  /// **'Cave'**
+  String get habitatCave;
+
+  /// No description provided for @habitatForest.
+  ///
+  /// In en, this message translates to:
+  /// **'Forest'**
+  String get habitatForest;
+
+  /// No description provided for @habitatGrassland.
+  ///
+  /// In en, this message translates to:
+  /// **'Grassland'**
+  String get habitatGrassland;
+
+  /// No description provided for @habitatMountain.
+  ///
+  /// In en, this message translates to:
+  /// **'Mountain'**
+  String get habitatMountain;
+
+  /// No description provided for @habitatRare.
+  ///
+  /// In en, this message translates to:
+  /// **'Rare'**
+  String get habitatRare;
+
+  /// No description provided for @habitatRoughTerrain.
+  ///
+  /// In en, this message translates to:
+  /// **'Rough terrain'**
+  String get habitatRoughTerrain;
+
+  /// No description provided for @habitatSea.
+  ///
+  /// In en, this message translates to:
+  /// **'Sea'**
+  String get habitatSea;
+
+  /// No description provided for @habitatUrban.
+  ///
+  /// In en, this message translates to:
+  /// **'Urban'**
+  String get habitatUrban;
+
+  /// No description provided for @habitatWatersEdge.
+  ///
+  /// In en, this message translates to:
+  /// **'Water\'s edge'**
+  String get habitatWatersEdge;
 }
 
 class _AppLocalizationsDelegate

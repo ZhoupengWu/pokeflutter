@@ -2,23 +2,27 @@ import 'package:flutter/foundation.dart';
 import '../model/evolution.dart';
 import '../model/pokemon.dart';
 import '../model/pokemon_list_item.dart';
+import '../model/pokemon_species.dart';
 import '../data/evolution_api.dart';
 import '../data/pokemon_api.dart';
 import '../data/pokemon_repository.dart';
+import '../data/species_api.dart';
 
 enum LoadStatus { loading, loaded, failed }
 
 /// Loads everything the detail page shows for one Pokémon: its stats first,
-/// then the evolution chain (which can fail on its own without hiding the
-/// stats).
+/// then the species information and the evolution chain (which can fail on
+/// their own without hiding the stats).
 class PokemonDetailController extends ChangeNotifier {
   PokemonDetailController({
     required this.item,
     required PokemonApi api,
     required EvolutionApi evolutionApi,
+    required SpeciesApi speciesApi,
     required PokemonRepository repository,
   }) : _api = api,
        _evolutionApi = evolutionApi,
+       _speciesApi = speciesApi,
        _repository = repository;
 
   /// The entry that was opened (from the list, favourites, an evolution…).
@@ -26,10 +30,15 @@ class PokemonDetailController extends ChangeNotifier {
 
   final PokemonApi _api;
   final EvolutionApi _evolutionApi;
+  final SpeciesApi _speciesApi;
   final PokemonRepository _repository;
 
   LoadStatus status = LoadStatus.loading;
   Pokemon? pokemon;
+
+  /// Pokédex entry, category and habitat. Null until loaded, and when they
+  /// could not be (the page then simply leaves the section out).
+  PokemonSpecies? species;
 
   LoadStatus evolutionStatus = LoadStatus.loading;
   EvolutionChain? evolution;
@@ -53,7 +62,23 @@ class PokemonDetailController extends ChangeNotifier {
       status = LoadStatus.failed;
     }
     notifyListeners();
-    if (status == LoadStatus.loaded) await loadEvolution();
+    if (status == LoadStatus.loaded) {
+      await Future.wait([loadSpecies(), loadEvolution()]);
+    }
+  }
+
+  /// Loads the species information; a failure just leaves [species] null.
+  Future<void> loadSpecies() async {
+    final current = pokemon;
+    if (current == null) return;
+    try {
+      final result = await _speciesApi.getSpecies(current.speciesName);
+      if (_disposed) return;
+      species = result;
+      notifyListeners();
+    } on PokemonApiException {
+      // Optional information: nothing to show.
+    }
   }
 
   /// Loads (or retries) the evolution chain of the current Pokémon.
