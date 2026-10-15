@@ -13,6 +13,8 @@
   number search + generation filter + sorting, back-navigation and search-focus fixes
 - Phase 8 (v1.7.0): filter/picker sheets above the navigation bar, offline data size + clear in Settings,
   README rewrite, release signing with a real key, CLAUDE.md, Pokédex entry on the detail page
+- Phase 9 (v1.8.0): favourite heart fix, lazy tabs, ability names, offline favourites, large-font
+  fixes, landscape layouts
 
 ## 🔲 Next
 Everything left is in [`backlog.md`](backlog.md). Suggested first steps:

@@ -49,11 +49,13 @@ CI also builds a release APK (job "Build release APK") and checks the INTERNET p
   `pubspec.lock`. Keep the committed lock and change only the lines for packages you added
   (`git checkout pubspec.lock`, then edit by hand or merge only the new packages).
 - `pokeapi.co` and `github.com` are unreachable from the sandbox; use fakes.
+- `rsync` is not installed; copy with `cp -r`.
 - Don't `pkill -f` a pattern that matches your own command line (it kills the shell); start
   background servers with `(nohup … &)` and stop them by PID.
 - `tester.pageBack()` taps any "Back" tooltip; use `tester.binding.handlePopRoute()` for system back.
   `IndexedStack` does not pause tickers (the shell wraps tabs in `TickerMode`). The Ahem test font
-  makes `Row`s overflow: use `Expanded`.
+  makes `Row`s overflow: use `Expanded`. Tests that judge layout against real text widths call
+  `loadRoboto()` (`test/support/fonts.dart`) in `setUpAll`.
 - Seeing the UI: see "Notes for new sessions" in `docs/planning/backlog.md` (web build + Playwright).
 
 ## Release signing

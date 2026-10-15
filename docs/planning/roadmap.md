@@ -64,4 +64,13 @@ Type Filter, Favourites System, Pokémon Comparison.
   project conventions, version bumped in every PR.
 - **Pokédex entry** on the detail page (EN/IT description, category, habitat, legendary/mythical).
 
+## ✅ Phase 9 — P2 backlog (v1.8.0)
+- **Favourite heart** on a white disc: visible on red Pokémon.
+- **Tabs** other than Home are built on first visit (IndexedStack kept afterwards).
+- **Ability names** in English / Italian (`AbilityApi`); `CachedResource` shares the
+  memory → disk → network → stale-copy logic of the species, evolution and ability services.
+- **Offline**: Settings can download the favourites (details, species, chain, abilities, images).
+- **Large fonts**: grid cells grow, quiz screens scroll; a test renders every screen at 200 %.
+- **Landscape**: detail page, quiz start and quiz question use two columns.
+
 See [`backlog.md`](backlog.md) for what is next.

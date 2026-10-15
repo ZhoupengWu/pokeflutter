@@ -4,24 +4,18 @@ Everything left to do, by priority. Items come from project reviews (Oct 2026).
 When an item is done, move it to `roadmap.md` / `todo.md` and delete it here.
 
 ## P2 — Quality and architecture
-1. **Manual device pass**: the UI has only been verified in a headless web build with a faked
-   PokéAPI. Check on a phone/emulator: grid colours and badges, long form names
-   (`charizard-mega-x`), offline first run (grey grid + banner), airplane-mode behaviour with
-   previously opened Pokémon (disk cache, cached images), status/navigation bar colours in both
-   themes (edge-to-edge), hero animation, quiz timer feel, evolution layout for Eevee-like branches,
-   landscape and a tablet.
-2. **Navigation**: named routes or `go_router`; `IndexedStack` keeps all 4 tabs alive (memory).
-3. **Localisation follow-ups**: localised Pokémon/ability/move names (PokéAPI provides many
-   languages), more languages.
-4. **Accessibility audit** with TalkBack/VoiceOver on a device (labels exist, quiz options and
-   evolution stages are buttons; not verified on hardware). Check text scaling at 200 %.
-5. **Release hygiene**: confirm/replace `applicationId` (`com.wux.pokeflutter`) before publishing;
-   add an iOS build job if a macOS runner is acceptable. The release key itself is created by the
-   owner and stored in the CI secrets (README, "Release signing").
-6. **Cache management follow-ups**: optional prefetch of favourites for offline use (Settings
-   already shows the space used and can clear it).
-7. **Landscape polish**: the quiz and detail pages are cramped in landscape (they work, but little
-   fits); consider two-column layouts there.
+1. **Device pass, rest of it**: the release APK has been tried on a phone (all fine except the
+   favourite heart, fixed). Still to look at on hardware: a tablet, landscape (new two-column
+   layouts), 200 % font size, TalkBack/VoiceOver (labels exist, quiz options and evolution stages
+   are buttons; nothing audited on a device).
+2. **Localisation follow-ups**: ability names are translated (EN/IT). Not done: Pokémon names (PokéAPI
+   has no bulk endpoint, the list would need a request per Pokémon or an embedded table), move and
+   item names, and more languages (needs the languages to be chosen and translated).
+3. **Release hygiene**: the owner still has to create the release keystore and add the four CI
+   secrets (README, "Release signing"). Confirm/replace `applicationId` (`com.wux.pokeflutter`)
+   before publishing; add an iOS build job if a macOS runner is acceptable.
+4. **Navigation (decision, not work)**: the app keeps `Navigator.push`. Named routes / `go_router`
+   only pay off with deep links or web URLs, which the app does not have; revisit then.
 
 ## P3 — New features
 **High value**

@@ -37,7 +37,8 @@ The app has four tabs: **Pokédex**, **Compare**, **Quiz** and **Favourites**.
 
 ### Pokémon detail
 
-- Official artwork, types, base stats with bars, abilities, height and weight.
+- Official artwork, types, base stats with bars, abilities (named in English or Italian),
+  height and weight.
 - **Pokédex entry**: category ("Mouse Pokémon"), description in English or Italian, habitat and
   legendary / mythical tags.
 - **Type matchups**: what the Pokémon is weak to, resists and is immune to, with the damage
@@ -67,14 +68,16 @@ Saved on the device and shown in the same grid as the Pokédex.
 ### Works offline
 
 Anything you have already opened — details, Pokédex entries, evolution chains, the type index, artwork — is cached
-on the device, so it is still there without a connection. If the network is down the app says so
+on the device, so it is still there without a connection. Settings can also download all your
+favourites in one go, show how much space the offline data uses and clear it. If the network is down the app says so
 with a banner instead of showing errors.
 
 ### Looks right everywhere
 
 Edge-to-edge system bars that follow the page colour, light and dark themes with contrast-checked
 type colours, and a layout that adapts to small phones, large phones and
-tablets (content is capped to a comfortable width).
+tablets (content is capped to a comfortable width). Held sideways, the detail page and the quiz
+use two columns, and every screen is tested at the largest system font size.
 
 ## Getting started
 
