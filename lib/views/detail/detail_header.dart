@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../shared/pokemon_image.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
@@ -29,7 +30,7 @@ class DetailHeader extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final favourites = context.read<FavouritesManager>();
 
-    Widget artwork = Image.network(
+    Widget artwork = PokemonImage(
       pokemon.urlImage,
       height: 180.r,
       width: 180.r,

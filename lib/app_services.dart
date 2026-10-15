@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'data/app_settings.dart';
@@ -7,7 +8,10 @@ import 'data/favourites_manager.dart';
 import 'data/pokemon_api.dart';
 import 'data/pokemon_repository.dart';
 import 'data/pokemon_type_index.dart';
+import 'data/disk_cache.dart';
+import 'data/network_status.dart';
 import 'data/quiz_stats_store.dart';
+import 'views/shared/pokemon_image.dart';
 
 /// The app's long-lived collaborators, created once and handed to the widget
 /// tree by [AppProviders]. Pages and controllers receive what they need from
@@ -22,13 +26,32 @@ class AppServices {
     FavouritesManager? favourites,
     AppSettings? settings,
     QuizStatsStore? quizStats,
-  }) : repository = repository ?? PokemonRepository(),
+    NetworkStatus? networkStatus,
+    ImageProviderFactory? imageProvider,
+  }) : networkStatus = networkStatus ?? NetworkStatus(),
+       imageProvider = imageProvider ?? NetworkImage.new,
+       repository = repository ?? PokemonRepository(),
        pokemonApi = pokemonApi ?? PokemonApi(),
        evolutionApi = evolutionApi ?? EvolutionApi(),
        typeIndex = typeIndex ?? PokemonTypeIndex(),
        favourites = favourites ?? FavouritesManager(),
        settings = settings ?? AppSettings(),
        quizStats = quizStats ?? QuizStatsStore();
+
+  /// The services the app runs with: details and evolutions kept on disk,
+  /// images cached by `cached_network_image`, every request reporting to one
+  /// [NetworkStatus]. Tests build [AppServices] directly, with fakes.
+  factory AppServices.production() {
+    final status = NetworkStatus();
+    final disk = DiskCache();
+    return AppServices(
+      networkStatus: status,
+      pokemonApi: PokemonApi(disk: disk, status: status),
+      evolutionApi: EvolutionApi(disk: disk, status: status),
+      typeIndex: PokemonTypeIndex(status: status),
+      imageProvider: CachedNetworkImageProvider.new,
+    );
+  }
 
   final PokemonRepository repository;
   final PokemonApi pokemonApi;
@@ -37,6 +60,8 @@ class AppServices {
   final FavouritesManager favourites;
   final AppSettings settings;
   final QuizStatsStore quizStats;
+  final NetworkStatus networkStatus;
+  final ImageProviderFactory imageProvider;
 
   /// Loads what the first screen needs: the bundled list (favourites are
   /// re-hydrated from it) and the saved settings. The type index is started
@@ -71,6 +96,8 @@ class AppProviders extends StatelessWidget {
         Provider<FavouritesManager>.value(value: services.favourites),
         InheritedProvider<AppSettings>.value(value: services.settings),
         Provider<QuizStatsStore>.value(value: services.quizStats),
+        InheritedProvider<NetworkStatus>.value(value: services.networkStatus),
+        Provider<ImageProviderFactory>.value(value: services.imageProvider),
       ],
       child: child,
     );

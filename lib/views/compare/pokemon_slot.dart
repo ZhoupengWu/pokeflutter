@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../shared/pokemon_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/compare_controller.dart';
 import '../../l10n/l10n_extensions.dart';
@@ -114,7 +115,7 @@ class _Loaded extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          Image.network(
+          PokemonImage(
             pokemon.urlImage,
             height: 72.r,
             width: 72.r,

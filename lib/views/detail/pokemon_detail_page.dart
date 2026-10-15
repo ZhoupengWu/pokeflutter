@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../shared/pokemon_image.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -113,7 +114,7 @@ class _LoadingView extends StatelessWidget {
           if (tag != null) ...[
             Hero(
               tag: tag,
-              child: Image.network(
+              child: PokemonImage(
                 item.spriteUrl,
                 width: 96.r,
                 height: 96.r,

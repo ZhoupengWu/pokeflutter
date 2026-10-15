@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../shared/pokemon_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
@@ -262,7 +263,7 @@ class _SpriteCard extends StatelessWidget {
     double size,
   ) {
     return Center(
-      child: Image.network(
+      child: PokemonImage(
         // The small sprite blacked out is the "silhouette".
         hidden ? pokemon.urlSprite : pokemon.urlImage,
         height: size,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/home_controller.dart';
+import '../../data/network_status.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../theme/app_colors.dart';
 import '../detail/pokemon_detail_page.dart';
@@ -25,6 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final HomeController _controller;
+  late final NetworkStatus _network;
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     _controller =
         widget.controller ??
         HomeController(repository: context.read(), typeIndex: context.read());
+    _network = context.read<NetworkStatus>();
     _controller.init();
   }
 
@@ -108,7 +111,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: RandomFloatingButton(onPressed: _goToRandomPokemon),
       body: ListenableBuilder(
-        listenable: _controller,
+        listenable: Listenable.merge([_controller, _network]),
         builder: (context, _) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -148,7 +151,12 @@ class _HomePageState extends State<HomePage> {
               onFilterTap: _openFilterSheet,
             ),
             if (_controller.typesUnavailable)
-              TypesUnavailableBanner(onRetry: _controller.loadTypes),
+              ConnectionBanner(
+                message: l10n.typesUnavailableOffline,
+                onRetry: _controller.loadTypes,
+              )
+            else if (_network.isOffline)
+              ConnectionBanner(message: l10n.offlineBanner),
             if (_controller.activeTypes.isNotEmpty) ...[
               SizedBox(height: 8.h),
               ActiveFilterChips(

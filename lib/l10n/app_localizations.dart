@@ -973,6 +973,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{stat}: {first} against {second}'**
   String compareStatSemantics(String stat, int first, int second);
+
+  /// No description provided for @offlineBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline. Pokémon you\'ve already opened are still available.'**
+  String get offlineBanner;
 }
 
 class _AppLocalizationsDelegate

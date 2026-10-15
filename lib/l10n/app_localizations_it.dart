@@ -512,4 +512,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String compareStatSemantics(String stat, int first, int second) {
     return '$stat: $first contro $second';
   }
+
+  @override
+  String get offlineBanner =>
+      'Sei offline. I Pokémon già aperti restano disponibili.';
 }

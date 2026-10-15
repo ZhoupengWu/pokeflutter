@@ -43,10 +43,15 @@ class HomeMessage extends StatelessWidget {
 }
 
 // ── "Types could not be loaded" banner ────────────────────────────────────────
-class TypesUnavailableBanner extends StatelessWidget {
-  final VoidCallback onRetry;
+/// A thin notice under the search bar: either the types could not be loaded
+/// (with a Retry), or PokéAPI is unreachable but saved data still works.
+class ConnectionBanner extends StatelessWidget {
+  final String message;
 
-  const TypesUnavailableBanner({super.key, required this.onRetry});
+  /// Shows a Retry button when set.
+  final VoidCallback? onRetry;
+
+  const ConnectionBanner({super.key, required this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +67,14 @@ class TypesUnavailableBanner extends StatelessWidget {
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
-              context.l10n.typesUnavailableOffline,
+              message,
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: context.colors.subtle),
             ),
           ),
-          TextButton(onPressed: onRetry, child: Text(context.l10n.retry)),
+          if (onRetry != null)
+            TextButton(onPressed: onRetry, child: Text(context.l10n.retry)),
         ],
       ),
     );

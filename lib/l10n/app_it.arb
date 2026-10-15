@@ -145,5 +145,6 @@
   "compareSlotSelectSemantics": "Scegli {slot}",
   "comparePickerHint": "Cerca un Pokémon...",
   "compareTotal": "Totale",
-  "compareStatSemantics": "{stat}: {first} contro {second}"
+  "compareStatSemantics": "{stat}: {first} contro {second}",
+  "offlineBanner": "Sei offline. I Pokémon già aperti restano disponibili."
 }

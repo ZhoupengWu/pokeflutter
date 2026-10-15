@@ -12,7 +12,7 @@ Future<void> main() async {
   // Draw behind the system bars; their colours come from the page overlay style.
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  final services = AppServices();
+  final services = AppServices.production();
   await services.init();
 
   runApp(MyApp(services: services));

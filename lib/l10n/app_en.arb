@@ -394,5 +394,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "offlineBanner": "You're offline. Pokémon you've already opened are still available."
 }

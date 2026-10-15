@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pokemon_image.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -124,7 +125,7 @@ class GridItem extends StatelessWidget {
   }
 
   Widget _sprite() {
-    final image = Image.network(
+    final image = PokemonImage(
       pokemon.spriteUrl,
       fit: BoxFit.contain,
       excludeFromSemantics: true,
