@@ -173,5 +173,10 @@
   "habitatRoughTerrain": "Terreno accidentato",
   "habitatSea": "Mare",
   "habitatUrban": "Urbano",
-  "habitatWatersEdge": "Riva"
+  "habitatWatersEdge": "Riva",
+  "storageSaveFavourites": "Salva i preferiti per l'uso offline",
+  "storageNoFavourites": "Aggiungi dei preferiti per salvarli offline",
+  "storageSaving": "Salvataggio {done} di {total}…",
+  "storageSaved": "Preferiti salvati",
+  "storageSaveFailed": "{count, plural, =1{Impossibile salvare 1 Pokémon} other{Impossibile salvare {count} Pokémon}}. Controlla la connessione."
 }

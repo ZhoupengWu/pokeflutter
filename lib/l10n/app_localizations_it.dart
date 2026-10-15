@@ -604,4 +604,30 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get habitatWatersEdge => 'Riva';
+
+  @override
+  String get storageSaveFavourites => 'Salva i preferiti per l\'uso offline';
+
+  @override
+  String get storageNoFavourites =>
+      'Aggiungi dei preferiti per salvarli offline';
+
+  @override
+  String storageSaving(int done, int total) {
+    return 'Salvataggio $done di $total…';
+  }
+
+  @override
+  String get storageSaved => 'Preferiti salvati';
+
+  @override
+  String storageSaveFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Impossibile salvare $count Pokémon',
+      one: 'Impossibile salvare 1 Pokémon',
+    );
+    return '$_temp0. Controlla la connessione.';
+  }
 }

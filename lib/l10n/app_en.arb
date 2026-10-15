@@ -439,5 +439,21 @@
   "habitatRoughTerrain": "Rough terrain",
   "habitatSea": "Sea",
   "habitatUrban": "Urban",
-  "habitatWatersEdge": "Water's edge"
+  "habitatWatersEdge": "Water's edge",
+  "storageSaveFavourites": "Save favourites for offline use",
+  "storageNoFavourites": "Add favourites to save them for offline use",
+  "storageSaving": "Saving {done} of {total}…",
+  "@storageSaving": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "storageSaved": "Favourites saved",
+  "storageSaveFailed": "{count, plural, =1{1 Pokémon could not be saved} other{{count} Pokémon could not be saved}}. Check your connection.",
+  "@storageSaveFailed": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  }
 }

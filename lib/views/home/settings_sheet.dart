@@ -5,6 +5,8 @@ import '../../l10n/l10n_extensions.dart';
 import '../../theme/app_colors.dart';
 import '../../core/format_bytes.dart';
 import '../../data/app_settings.dart';
+import '../../data/favourites_manager.dart';
+import '../../data/offline_prefetcher.dart';
 import '../../data/offline_storage.dart';
 
 /// Bottom sheet with the app preferences (theme and language).
@@ -118,8 +120,14 @@ class _StorageRow extends StatefulWidget {
 
 class _StorageRowState extends State<_StorageRow> {
   late final OfflineStorage _storage = context.read<OfflineStorage>();
+  late final OfflinePrefetcher _prefetcher = context.read<OfflinePrefetcher>();
+  late final FavouritesManager _favourites = context.read<FavouritesManager>();
   int? _bytes;
   bool _clearing = false;
+
+  /// Progress of a running download, and how the last one ended.
+  ({int done, int total})? _saving;
+  PrefetchResult? _saved;
 
   @override
   void initState() {
@@ -140,13 +148,40 @@ class _StorageRowState extends State<_StorageRow> {
     await _refresh();
   }
 
+  Future<void> _saveFavourites() async {
+    final items = _favourites.favourites;
+    setState(() {
+      _saved = null;
+      _saving = (done: 0, total: items.length);
+    });
+    final result = await _prefetcher.prefetch(
+      items,
+      onProgress: (done, total) {
+        if (mounted) setState(() => _saving = (done: done, total: total));
+      },
+    );
+    if (!mounted) return;
+    setState(() {
+      _saving = null;
+      _saved = result;
+    });
+    await _refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.colors;
     final bytes = _bytes;
     final empty = bytes != null && bytes == 0;
-    return Row(
+    final hasFavourites = _favourites.favourites.isNotEmpty;
+    final saving = _saving;
+    final saved = _saved;
+    final style = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: colors.muted);
+
+    final storageRow = Row(
       children: [
         Expanded(
           child: Text(
@@ -170,6 +205,35 @@ class _StorageRowState extends State<_StorageRow> {
             onPressed: empty || _clearing || bytes == null ? null : _clear,
             child: Text(l10n.storageClear),
           ),
+        ),
+      ],
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        storageRow,
+        SizedBox(height: 4.h),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: hasFavourites && saving == null ? _saveFavourites : null,
+            icon: const Icon(Icons.download_rounded),
+            label: Text(l10n.storageSaveFavourites),
+          ),
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          saving != null
+              ? l10n.storageSaving(saving.done, saving.total)
+              : saved != null
+              ? (saved.isComplete
+                    ? l10n.storageSaved
+                    : l10n.storageSaveFailed(saved.failed))
+              : hasFavourites
+              ? ''
+              : l10n.storageNoFavourites,
+          style: style,
         ),
       ],
     );
