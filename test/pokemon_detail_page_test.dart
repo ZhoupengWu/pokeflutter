@@ -170,4 +170,63 @@ void main() {
     await _scrollTo(tester, find.text('Efficacia dei tipi'));
     expect(find.text('Debole a'), findsOneWidget);
   });
+
+  group('going back', () {
+    final other = PokemonListItem(
+      name: 'mon7',
+      url: 'https://pokeapi.co/api/v2/pokemon/7/',
+    );
+
+    PokemonDetailPage page(PokemonListItem item) => PokemonDetailPage(
+      pokemon: item,
+      controller: PokemonDetailController(
+        item: item,
+        api: FakePokemonApi(types: ['fire']),
+        evolutionApi: FakeEvolutionApi(),
+        repository: fakeRepository(count: 500),
+      ),
+    );
+
+    /// Home → Mon6 → Mon7, as after following an evolution.
+    Future<void> openTwoPages(WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1080, 2340);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(testApp(const Text('home')));
+      final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+      navigator.push(MaterialPageRoute<void>(builder: (_) => page(_item)));
+      await tester.pumpAndSettle();
+      navigator.push(MaterialPageRoute<void>(builder: (_) => page(other)));
+      await tester.pumpAndSettle();
+      expect(find.text('Mon7'), findsOneWidget);
+    }
+
+    testWidgets('the arrow in the page goes straight to the first screen', (
+      tester,
+    ) async {
+      await openTwoPages(tester);
+
+      await tester.tap(find.byTooltip('Back'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('home'), findsOneWidget);
+      expect(find.text('Mon6'), findsNothing);
+    });
+
+    testWidgets('the system back button steps back one Pokémon', (
+      tester,
+    ) async {
+      await openTwoPages(tester);
+
+      await tester.binding.handlePopRoute(); // the Android back button
+      await tester.pumpAndSettle();
+
+      expect(find.text('Mon6'), findsOneWidget);
+      expect(find.text('home'), findsNothing);
+
+      await tester.binding.handlePopRoute(); // the Android back button
+      await tester.pumpAndSettle();
+      expect(find.text('home'), findsOneWidget);
+    });
+  });
 }

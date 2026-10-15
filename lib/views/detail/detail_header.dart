@@ -51,7 +51,11 @@ class DetailHeader extends StatelessWidget {
               IconButton(
                 tooltip: l10n.back,
                 icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
+                // After following evolutions the stack can be deep: this arrow
+                // goes straight back to the tabs, while the system back button
+                // still steps back one Pokémon at a time.
+                onPressed: () =>
+                    Navigator.of(context).popUntil((route) => route.isFirst),
               ),
               Expanded(
                 child: Text(

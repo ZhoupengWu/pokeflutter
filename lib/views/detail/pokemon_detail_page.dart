@@ -139,7 +139,8 @@ class _ErrorView extends StatelessWidget {
             child: IconButton(
               tooltip: context.l10n.back,
               icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () =>
+                  Navigator.of(context).popUntil((route) => route.isFirst),
             ),
           ),
         ),
