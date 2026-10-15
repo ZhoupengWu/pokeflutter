@@ -65,6 +65,9 @@ class _PokemonPickerSheetState extends State<PokemonPickerSheet> {
           Expanded(
             child: ListView.builder(
               controller: controller,
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.viewPaddingOf(context).bottom,
+              ),
               itemCount: filtered.length,
               itemBuilder: (_, i) {
                 final p = filtered[i];

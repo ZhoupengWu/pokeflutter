@@ -98,7 +98,13 @@ class _FilterSheetState extends State<FilterSheet> {
         color: colors.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
-      padding: EdgeInsets.fromLTRB(24.w, 16.h, 24.w, 24.h),
+      // Keep the Apply button above the system navigation bar.
+      padding: EdgeInsets.fromLTRB(
+        24.w,
+        16.h,
+        24.w,
+        24.h + MediaQuery.viewPaddingOf(context).bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -10,6 +10,7 @@ import 'data/pokemon_repository.dart';
 import 'data/pokemon_type_index.dart';
 import 'data/disk_cache.dart';
 import 'data/network_status.dart';
+import 'data/offline_storage.dart';
 import 'data/quiz_stats_store.dart';
 import 'views/shared/pokemon_image.dart';
 
@@ -28,8 +29,10 @@ class AppServices {
     QuizStatsStore? quizStats,
     NetworkStatus? networkStatus,
     ImageProviderFactory? imageProvider,
+    OfflineStorage? storage,
   }) : networkStatus = networkStatus ?? NetworkStatus(),
        imageProvider = imageProvider ?? NetworkImage.new,
+       storage = storage ?? OfflineStorage(),
        repository = repository ?? PokemonRepository(),
        pokemonApi = pokemonApi ?? PokemonApi(),
        evolutionApi = evolutionApi ?? EvolutionApi(),
@@ -50,6 +53,7 @@ class AppServices {
       evolutionApi: EvolutionApi(disk: disk, status: status),
       typeIndex: PokemonTypeIndex(status: status),
       imageProvider: CachedNetworkImageProvider.new,
+      storage: OfflineStorage.production(disk),
     );
   }
 
@@ -62,6 +66,7 @@ class AppServices {
   final QuizStatsStore quizStats;
   final NetworkStatus networkStatus;
   final ImageProviderFactory imageProvider;
+  final OfflineStorage storage;
 
   /// Loads what the first screen needs: the bundled list (favourites are
   /// re-hydrated from it) and the saved settings. The type index is started
@@ -98,6 +103,7 @@ class AppProviders extends StatelessWidget {
         Provider<QuizStatsStore>.value(value: services.quizStats),
         InheritedProvider<NetworkStatus>.value(value: services.networkStatus),
         Provider<ImageProviderFactory>.value(value: services.imageProvider),
+        Provider<OfflineStorage>.value(value: services.storage),
       ],
       child: child,
     );

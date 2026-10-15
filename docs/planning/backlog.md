@@ -17,8 +17,8 @@ When an item is done, move it to `roadmap.md` / `todo.md` and delete it here.
    evolution stages are buttons; not verified on hardware). Check text scaling at 200 %.
 5. **Release hygiene**: confirm/replace `applicationId` (`com.wux.pokeflutter`) before publishing;
    add an iOS build job if a macOS runner is acceptable; real release signing config.
-6. **Cache management**: a "clear cache" action in Settings, optional prefetch of favourites for
-   offline use, show how much space the image cache uses.
+6. **Cache management follow-ups**: optional prefetch of favourites for offline use (Settings
+   already shows the space used and can clear it).
 7. **Landscape polish**: the quiz and detail pages are cramped in landscape (they work, but little
    fits); consider two-column layouts there.
 

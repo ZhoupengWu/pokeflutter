@@ -11,6 +11,8 @@
   quiz difficulty/timer/records, controllers + split pages, APK build in CI
 - Phase 7 (v1.6.0): Provider services, new folder layout, offline cache, responsive layout,
   number search + generation filter + sorting, back-navigation and search-focus fixes
+- Phase 8: filter/picker sheets above the navigation bar, offline data size + clear in Settings,
+  README rewrite
 
 ## 🔲 Next
 Everything left is in [`backlog.md`](backlog.md). Suggested first steps:

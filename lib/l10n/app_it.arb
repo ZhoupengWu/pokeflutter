@@ -155,5 +155,10 @@
   "sortNumberAsc": "Numero (crescente)",
   "sortNumberDesc": "Numero (decrescente)",
   "sortNameAsc": "Nome (A–Z)",
-  "sortNameDesc": "Nome (Z–A)"
+  "sortNameDesc": "Nome (Z–A)",
+  "settingsStorage": "Dati offline",
+  "storageUsed": "{size} di dati e immagini dei Pokémon salvati su questo dispositivo",
+  "storageEmpty": "Niente di salvato su questo dispositivo",
+  "storageClear": "Svuota",
+  "storageClearSemantics": "Svuota i dati offline"
 }
