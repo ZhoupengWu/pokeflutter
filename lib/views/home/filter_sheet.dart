@@ -4,6 +4,7 @@ import '../../core/pokedex.dart';
 import '../../core/pokemon_constants.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/contrast.dart';
 
 /// What the user picked in the [FilterSheet].
 class FilterSelection {
@@ -275,7 +276,9 @@ class _TypeChip extends StatelessWidget {
           child: Text(
             context.l10n.typeName(type),
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: selected ? Colors.white : color,
+              color: selected
+                  ? Colors.white
+                  : ensureContrast(color, context.colors.surface),
               fontWeight: FontWeight.w600,
             ),
           ),
