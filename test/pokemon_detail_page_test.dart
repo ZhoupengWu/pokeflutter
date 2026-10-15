@@ -27,6 +27,7 @@ Future<PokemonDetailController> _pump(
   FakePokemonApi? api,
   FakeEvolutionApi? evolution,
   FakeSpeciesApi? species,
+  FakeAbilityApi? ability,
   Locale locale = const Locale('en'),
   ThemeData? theme,
 }) async {
@@ -39,6 +40,7 @@ Future<PokemonDetailController> _pump(
     api: api ?? FakePokemonApi(types: ['fire', 'flying']),
     evolutionApi: evolution ?? FakeEvolutionApi(chainBody: eeveeChainBody()),
     speciesApi: species ?? FakeSpeciesApi(),
+    abilityApi: ability ?? FakeAbilityApi(),
     repository: fakeRepository(count: 500),
   );
   addTearDown(controller.dispose);
@@ -80,6 +82,21 @@ void main() {
     expect(find.text('Base Stats'), findsOneWidget);
     expect(find.text('HP'), findsOneWidget);
     expect(find.text('78'), findsOneWidget);
+  });
+
+  testWidgets('abilities are shown with their translated name', (tester) async {
+    await _pump(tester, locale: const Locale('it'));
+
+    expect(find.text('Fuocardore'), findsOneWidget);
+    expect(find.text('Blaze'), findsNothing);
+  });
+
+  testWidgets('an ability without a translation shows its English id', (
+    tester,
+  ) async {
+    await _pump(tester, ability: FakeAbilityApi(fail: true));
+
+    expect(find.text('Blaze'), findsOneWidget);
   });
 
   testWidgets('shows the Pokédex entry in English', (tester) async {
@@ -247,6 +264,7 @@ void main() {
         api: FakePokemonApi(types: ['fire']),
         evolutionApi: FakeEvolutionApi(),
         speciesApi: FakeSpeciesApi(),
+        abilityApi: FakeAbilityApi(),
         repository: fakeRepository(count: 500),
       ),
     );

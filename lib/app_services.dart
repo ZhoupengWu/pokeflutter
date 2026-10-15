@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'data/ability_api.dart';
 import 'data/app_settings.dart';
 import 'data/evolution_api.dart';
 import 'data/favourites_manager.dart';
@@ -25,6 +26,7 @@ class AppServices {
     PokemonApi? pokemonApi,
     EvolutionApi? evolutionApi,
     SpeciesApi? speciesApi,
+    AbilityApi? abilityApi,
     PokemonTypeIndex? typeIndex,
     FavouritesManager? favourites,
     AppSettings? settings,
@@ -39,6 +41,7 @@ class AppServices {
        pokemonApi = pokemonApi ?? PokemonApi(),
        evolutionApi = evolutionApi ?? EvolutionApi(),
        speciesApi = speciesApi ?? SpeciesApi(),
+       abilityApi = abilityApi ?? AbilityApi(),
        typeIndex = typeIndex ?? PokemonTypeIndex(),
        favourites = favourites ?? FavouritesManager(),
        settings = settings ?? AppSettings(),
@@ -56,6 +59,7 @@ class AppServices {
       pokemonApi: PokemonApi(disk: disk, status: status),
       evolutionApi: EvolutionApi(disk: disk, status: status, species: species),
       speciesApi: species,
+      abilityApi: AbilityApi(disk: disk, status: status),
       typeIndex: PokemonTypeIndex(status: status),
       imageProvider: CachedNetworkImageProvider.new,
       storage: OfflineStorage.production(disk),
@@ -66,6 +70,7 @@ class AppServices {
   final PokemonApi pokemonApi;
   final EvolutionApi evolutionApi;
   final SpeciesApi speciesApi;
+  final AbilityApi abilityApi;
   final PokemonTypeIndex typeIndex;
   final FavouritesManager favourites;
   final AppSettings settings;
@@ -102,6 +107,7 @@ class AppProviders extends StatelessWidget {
         Provider<PokemonApi>.value(value: services.pokemonApi),
         Provider<EvolutionApi>.value(value: services.evolutionApi),
         Provider<SpeciesApi>.value(value: services.speciesApi),
+        Provider<AbilityApi>.value(value: services.abilityApi),
         // Listenables are only looked up (widgets listen to them explicitly),
         // so they use InheritedProvider, which Provider's lint does not flag.
         InheritedProvider<PokemonTypeIndex>.value(value: services.typeIndex),

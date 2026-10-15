@@ -23,6 +23,7 @@ AppServices _fakeServices() => AppServices(
   pokemonApi: FakePokemonApi(),
   evolutionApi: FakeEvolutionApi(),
   speciesApi: FakeSpeciesApi(),
+  abilityApi: FakeAbilityApi(),
   // Seeded in setUp: the index loads from storage and never hits the network.
   typeIndex: PokemonTypeIndex(),
 );

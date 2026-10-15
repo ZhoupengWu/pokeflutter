@@ -111,13 +111,26 @@ class AbilitiesSection extends StatelessWidget {
     super.key,
     required this.pokemon,
     required this.accent,
+    this.translations = const {},
   });
 
   final Pokemon pokemon;
   final Color accent;
 
+  /// Ability names by ability id and language code; an ability without an
+  /// entry is shown with its English id.
+  final Map<String, Map<String, String>> translations;
+
+  String _nameOf(String ability, String language) {
+    final names = translations[ability];
+    return names?[language] ??
+        names?['en'] ??
+        ability.replaceAll('-', ' ').capitalize();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final language = Localizations.localeOf(context).languageCode;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -136,7 +149,7 @@ class AbilitiesSection extends StatelessWidget {
                   border: Border.all(color: accent.withValues(alpha: 0.3)),
                 ),
                 child: Text(
-                  ability.replaceAll('-', ' ').capitalize(),
+                  _nameOf(ability, language),
                   style: Theme.of(
                     context,
                   ).textTheme.bodySmall?.copyWith(color: accent),

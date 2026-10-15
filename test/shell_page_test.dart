@@ -31,6 +31,7 @@ void main() {
       pokemonApi: FakePokemonApi(),
       evolutionApi: FakeEvolutionApi(),
       speciesApi: FakeSpeciesApi(),
+      abilityApi: FakeAbilityApi(),
       typeIndex: PokemonTypeIndex(),
     );
 

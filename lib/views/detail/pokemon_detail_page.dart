@@ -53,6 +53,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
           api: context.read(),
           evolutionApi: context.read(),
           speciesApi: context.read(),
+          abilityApi: context.read(),
           repository: context.read(),
         );
     _controller.load();
@@ -264,6 +265,7 @@ class _DetailView extends StatelessWidget {
                             AbilitiesSection(
                               pokemon: pokemon,
                               accent: readableAccent,
+                              translations: controller.abilityNames,
                             ),
                             SizedBox(height: 24.h),
                             StatsSection(
