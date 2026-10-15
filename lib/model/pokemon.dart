@@ -64,6 +64,42 @@ class Pokemon {
     );
   }
 
+  /// Compact form kept in the on-disk cache (the API response is far larger
+  /// than what the app uses). Read back with [Pokemon.fromCacheJson].
+  Map<String, dynamic> toCacheJson() => {
+    'id': id,
+    'name': name,
+    'species': speciesName,
+    'sprite': urlSprite,
+    'image': urlImage,
+    'weight': weight,
+    'height': height,
+    'types': typesList,
+    'stats': [
+      for (final s in stats) {'name': s.name, 'value': s.value},
+    ],
+    'abilities': abilities,
+  };
+
+  factory Pokemon.fromCacheJson(Map<String, dynamic> json) => Pokemon(
+    id: json['id'] as int,
+    name: json['name'] as String,
+    speciesName: json['species'] as String?,
+    urlSprite: json['sprite'] as String,
+    urlImage: json['image'] as String,
+    weight: (json['weight'] as num).toDouble(),
+    height: (json['height'] as num).toDouble(),
+    typesList: (json['types'] as List<dynamic>).cast<String>(),
+    stats: [
+      for (final s in json['stats'] as List<dynamic>)
+        PokemonStat(
+          name: (s as Map<String, dynamic>)['name'] as String,
+          value: s['value'] as int,
+        ),
+    ],
+    abilities: (json['abilities'] as List<dynamic>).cast<String>(),
+  );
+
   static String? _nested(Map<String, dynamic> map, String key) {
     final entry = map[key] as Map<String, dynamic>?;
     return entry?['front_default'] as String?;
