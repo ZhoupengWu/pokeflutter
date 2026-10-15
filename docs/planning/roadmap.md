@@ -44,4 +44,16 @@ Type Filter, Favourites System, Pokémon Comparison.
 - **CI**: release APK build job that also checks the merged manifest for `INTERNET`.
 - Documentation moved from `.ai/` to `docs/`.
 
+## ✅ Phase 7 — Services, offline and layout (v1.6.0)
+- **Detail page**: the in-page back arrow returns straight to the tabs after following evolutions;
+  the system back button still steps back one Pokémon.
+- **Search field** drops its focus when tapping elsewhere or scrolling the grid.
+- **Services via Provider** (`AppServices` / `AppProviders`); singletons removed.
+- **Folders**: `utils/` split into `data/`, `theme/`, `core/`; views grouped by feature.
+- **Offline use**: details and evolution chains on disk (30-day freshness, stale copy on failure),
+  images cached by `cached_network_image`, offline hint on Home.
+- **Responsive**: design size from the short side (landscape and tablets), adaptive grid columns,
+  content width cap.
+- **Search and filters**: Pokédex number search, generation filter, four sort orders.
+
 See [`backlog.md`](backlog.md) for what is next.
