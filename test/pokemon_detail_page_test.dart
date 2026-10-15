@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/controllers/pokemon_detail_controller.dart';
 import 'package:pokeflutter/app_services.dart';
 import 'package:pokeflutter/data/favourites_manager.dart';
+import 'package:pokeflutter/theme/app_colors.dart';
 import 'package:pokeflutter/model/pokemon_list_item.dart';
 import 'package:pokeflutter/theme/theme.dart';
 import 'package:pokeflutter/views/detail/pokemon_detail_page.dart';
@@ -185,6 +186,28 @@ void main() {
     await tester.pump();
     expect(find.text('Failed to load Pokémon'), findsNothing);
     expect(find.text('About'), findsOneWidget);
+  });
+
+  testWidgets('a favourite heart is red on a white disc, readable on red', (
+    tester,
+  ) async {
+    // Charizard-like red Pokémon: the page background is the fire colour.
+    await _pump(tester, api: FakePokemonApi(types: ['fire']));
+    await tester.tap(find.byTooltip('Add to favourites'));
+    await tester.pump();
+
+    final button = tester.widget<IconButton>(
+      find.widgetWithIcon(IconButton, Icons.favorite_rounded),
+    );
+    expect(button.style?.backgroundColor?.resolve({}), Colors.white);
+    expect((button.icon as Icon).color, dangerRed);
+
+    await tester.tap(find.byTooltip('Remove from favourites'));
+    await tester.pump();
+    final outline = tester.widget<IconButton>(
+      find.widgetWithIcon(IconButton, Icons.favorite_border_rounded),
+    );
+    expect(outline.style, isNull);
   });
 
   testWidgets('the favourite button toggles the Pokémon', (tester) async {
