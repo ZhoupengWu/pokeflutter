@@ -30,6 +30,7 @@ lib/
 │   ├── pokemon_api.dart          # /pokemon/{name}: memory -> disk -> network, stale copy on failure
 │   ├── evolution_api.dart        # /pokemon-species -> /evolution-chain, same layering
 │   ├── disk_cache.dart           # one JSON file per key, LRU, failures swallowed
+│   ├── offline_storage.dart      # size of the disk cache + cached images, and a way to clear them (Settings)
 │   ├── network_status.dart       # "could PokéAPI be reached last time?" (drives the offline hint)
 │   ├── pokemon_cache.dart        # in-memory cache of Pokemon details
 │   ├── pokemon_repository.dart   # bundled list (assets/pokemonList.json), loaded once
