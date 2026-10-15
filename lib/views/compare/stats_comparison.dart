@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/capitalize.dart';
-import '../../utils/contrast.dart';
-import '../../utils/pokemon_constants.dart';
+import '../../theme/app_colors.dart';
+import '../../core/capitalize.dart';
+import '../../theme/contrast.dart';
+import '../../core/pokemon_constants.dart';
 
 /// Base stats of two Pokémon side by side: A's bar grows leftwards, B's
 /// rightwards, and the higher value of each pair is highlighted.

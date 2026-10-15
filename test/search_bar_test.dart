@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pokeflutter/views/widgets/search_bar.dart';
+import 'package:pokeflutter/views/home/search_bar.dart';
 import 'support/test_app.dart';
 
 Widget _app({

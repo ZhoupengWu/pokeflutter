@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../utils/app_colors.dart';
+import '../../theme/app_colors.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final ValueChanged<String> onSearch;

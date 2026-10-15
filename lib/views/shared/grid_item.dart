@@ -3,12 +3,12 @@ import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../utils/capitalize.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/pokemon_constants.dart';
-import '../../utils/pokemon_type_index.dart';
+import '../../core/capitalize.dart';
+import '../../theme/app_colors.dart';
+import '../../core/pokemon_constants.dart';
+import '../../data/pokemon_type_index.dart';
 import '../detail/pokemon_detail_page.dart';
-import '../../views/widgets/styled_text.dart';
+import 'styled_text.dart';
 
 /// Card shown in the Pokédex and favourites grids.
 ///

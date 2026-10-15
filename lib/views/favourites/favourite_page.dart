@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../l10n/l10n_extensions.dart';
+import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/app_colors.dart';
-import '../utils/favourites_manager.dart';
-import 'widgets/grid_item.dart';
+import '../../theme/app_colors.dart';
+import '../../data/favourites_manager.dart';
+import '../shared/grid_item.dart';
 
 class FavouritePage extends StatelessWidget {
   const FavouritePage({super.key});

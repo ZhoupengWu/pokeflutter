@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/capitalize.dart';
+import '../../theme/app_colors.dart';
+import '../../core/capitalize.dart';
 
 /// Bottom sheet with a searchable list of every Pokémon. Pops with the
 /// chosen [PokemonListItem].

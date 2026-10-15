@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/home_controller.dart';
 import '../../l10n/l10n_extensions.dart';
-import '../../utils/app_colors.dart';
+import '../../theme/app_colors.dart';
 import '../detail/pokemon_detail_page.dart';
-import '../widgets/pokemon_list.dart';
-import '../widgets/random_floating_button.dart';
-import '../widgets/search_bar.dart';
-import '../widgets/settings_sheet.dart';
-import '../widgets/type_filter_sheet.dart';
+import '../shared/pokemon_list.dart';
+import 'random_floating_button.dart';
+import 'search_bar.dart';
+import 'settings_sheet.dart';
+import 'type_filter_sheet.dart';
 import 'home_widgets.dart';
 
 /// The Pokédex tab: search, type filters and the grid of Pokémon.

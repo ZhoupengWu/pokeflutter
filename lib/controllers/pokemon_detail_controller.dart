@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import '../model/evolution.dart';
 import '../model/pokemon.dart';
 import '../model/pokemon_list_item.dart';
-import '../utils/evolution_api.dart';
-import '../utils/pokemon_api.dart';
-import '../utils/pokemon_repository.dart';
+import '../data/evolution_api.dart';
+import '../data/pokemon_api.dart';
+import '../data/pokemon_repository.dart';
 
 enum LoadStatus { loading, loaded, failed }
 

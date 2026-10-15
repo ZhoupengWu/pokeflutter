@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/app_colors.dart';
+import '../theme/app_colors.dart';
 import 'home/home_page.dart';
 import 'compare/compare_page.dart';
 import 'quiz/quiz_page.dart';
-import 'favourite_page.dart';
+import 'favourites/favourite_page.dart';
 
 class ShellPage extends StatefulWidget {
   const ShellPage({super.key});

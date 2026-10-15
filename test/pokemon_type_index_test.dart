@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:pokeflutter/utils/pokemon_constants.dart';
-import 'package:pokeflutter/utils/pokemon_type_index.dart';
+import 'package:pokeflutter/core/pokemon_constants.dart';
+import 'package:pokeflutter/data/pokemon_type_index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Fake PokéAPI: fire = charmander + charizard (primary), flying = charizard

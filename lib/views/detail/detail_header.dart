@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../utils/capitalize.dart';
-import '../../utils/favourites_manager.dart';
+import '../../core/capitalize.dart';
+import '../../data/favourites_manager.dart';
 
 /// Top of the detail page, on the type-coloured background: back button,
 /// name, favourite toggle, Pokédex number, type chips and the artwork.

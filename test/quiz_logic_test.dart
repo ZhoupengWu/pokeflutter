@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/model/pokemon_list_item.dart';
 import 'package:pokeflutter/model/quiz_model.dart';
-import 'package:pokeflutter/utils/pokemon_constants.dart';
-import 'package:pokeflutter/utils/quiz_logic.dart';
+import 'package:pokeflutter/core/pokemon_constants.dart';
+import 'package:pokeflutter/core/quiz_logic.dart';
 
 void main() {
   final pool = List.generate(

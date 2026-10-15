@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../views/widgets/grid_item.dart';
+import 'grid_item.dart';
 
 class PokemonList extends StatelessWidget {
   final List<PokemonListItem> pokemonList;

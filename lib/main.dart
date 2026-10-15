@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'l10n/l10n_extensions.dart';
-import 'utils/app_settings.dart';
-import 'utils/favourites_manager.dart';
-import 'utils/pokemon_repository.dart';
-import 'utils/pokemon_type_index.dart';
-import 'utils/theme.dart';
+import 'data/app_settings.dart';
+import 'data/favourites_manager.dart';
+import 'data/pokemon_repository.dart';
+import 'data/pokemon_type_index.dart';
+import 'theme/theme.dart';
 import 'views/shell_page.dart';
 
 Future<void> main() async {

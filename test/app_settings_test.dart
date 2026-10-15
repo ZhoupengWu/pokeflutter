@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pokeflutter/utils/app_colors.dart';
-import 'package:pokeflutter/utils/app_settings.dart';
-import 'package:pokeflutter/utils/theme.dart';
-import 'package:pokeflutter/views/widgets/settings_sheet.dart';
+import 'package:pokeflutter/theme/app_colors.dart';
+import 'package:pokeflutter/data/app_settings.dart';
+import 'package:pokeflutter/theme/theme.dart';
+import 'package:pokeflutter/views/home/settings_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'support/test_app.dart';
 

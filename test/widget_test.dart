@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/main.dart';
-import 'package:pokeflutter/utils/app_settings.dart';
-import 'package:pokeflutter/utils/pokemon_repository.dart';
+import 'package:pokeflutter/data/app_settings.dart';
+import 'package:pokeflutter/data/pokemon_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

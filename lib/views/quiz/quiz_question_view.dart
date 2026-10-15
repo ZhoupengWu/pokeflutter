@@ -4,9 +4,9 @@ import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
 import '../../model/quiz_model.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/capitalize.dart';
-import '../../utils/pokemon_constants.dart';
+import '../../theme/app_colors.dart';
+import '../../core/capitalize.dart';
+import '../../core/pokemon_constants.dart';
 import 'quiz_widgets.dart';
 
 class QuizQuestionView extends StatelessWidget {

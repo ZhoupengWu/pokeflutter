@@ -4,8 +4,8 @@ import '../../controllers/pokemon_detail_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/evolution.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/capitalize.dart';
+import '../../theme/app_colors.dart';
+import '../../core/capitalize.dart';
 import 'about_sections.dart';
 import 'pokemon_detail_page.dart';
 

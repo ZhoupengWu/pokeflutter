@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/controllers/pokemon_detail_controller.dart';
 import 'package:pokeflutter/model/pokemon_list_item.dart';
-import 'package:pokeflutter/utils/favourites_manager.dart';
-import 'package:pokeflutter/utils/theme.dart';
+import 'package:pokeflutter/data/favourites_manager.dart';
+import 'package:pokeflutter/theme/theme.dart';
 import 'package:pokeflutter/views/detail/pokemon_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

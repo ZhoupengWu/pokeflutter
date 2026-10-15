@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../model/pokemon_list_item.dart';
-import '../utils/pokemon_repository.dart';
-import '../utils/pokemon_type_index.dart';
+import '../data/pokemon_repository.dart';
+import '../data/pokemon_type_index.dart';
 
 /// State of the Home tab: the full list, the search text, the active type
 /// filters and the resulting [filtered] list.

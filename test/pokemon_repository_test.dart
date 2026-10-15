@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pokeflutter/utils/pokemon_repository.dart';
+import 'package:pokeflutter/data/pokemon_repository.dart';
 
 const _json = '''
 {"pokemonList": [

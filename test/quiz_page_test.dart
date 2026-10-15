@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/controllers/quiz_controller.dart';
 import 'package:pokeflutter/model/quiz_model.dart';
-import 'package:pokeflutter/utils/quiz_stats_store.dart';
+import 'package:pokeflutter/data/quiz_stats_store.dart';
 import 'package:pokeflutter/views/quiz/quiz_page.dart';
 import 'package:pokeflutter/views/quiz/quiz_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';

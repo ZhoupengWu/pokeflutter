@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/pokemon_constants.dart';
+import '../../theme/app_colors.dart';
+import '../../core/pokemon_constants.dart';
 
 class TypeFilterSheet extends StatefulWidget {
   final Set<String> selectedTypes;

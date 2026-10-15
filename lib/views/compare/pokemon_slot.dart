@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/compare_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/capitalize.dart';
-import '../../utils/pokemon_constants.dart';
+import '../../theme/app_colors.dart';
+import '../../core/capitalize.dart';
+import '../../core/pokemon_constants.dart';
 
 /// One of the two cards at the top of Compare: empty, loading, failed
 /// (tap to retry) or showing the chosen Pokémon (tap to change).

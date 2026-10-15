@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:pokeflutter/controllers/home_controller.dart';
-import 'package:pokeflutter/utils/pokemon_type_index.dart';
+import 'package:pokeflutter/data/pokemon_type_index.dart';
 import 'package:pokeflutter/views/home/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

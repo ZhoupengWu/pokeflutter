@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:pokeflutter/model/evolution.dart';
-import 'package:pokeflutter/utils/evolution_api.dart';
-import 'package:pokeflutter/utils/pokemon_api.dart';
+import 'package:pokeflutter/data/evolution_api.dart';
+import 'package:pokeflutter/data/pokemon_api.dart';
 
 import 'fixtures.dart';
 

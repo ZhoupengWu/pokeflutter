@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/app_settings.dart';
+import '../../theme/app_colors.dart';
+import '../../data/app_settings.dart';
 
 /// Bottom sheet with the app preferences (theme).
 class SettingsSheet extends StatelessWidget {
