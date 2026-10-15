@@ -18,7 +18,11 @@ class ShellPage extends StatefulWidget {
 class _ShellPageState extends State<ShellPage> {
   int _currentIndex = 0;
 
-  // Pages are kept alive via IndexedStack — state is preserved on tab switch.
+  // Tabs are built the first time they are shown, then kept alive by the
+  // IndexedStack so their state survives a tab switch. Quiz, Compare and
+  // Favourites cost nothing until the user opens them.
+  final Set<int> _visited = {0};
+
   final List<Widget> _pages = const [
     HomePage(),
     ComparePage(),
@@ -36,13 +40,19 @@ class _ShellPageState extends State<ShellPage> {
             // IndexedStack keeps hidden tabs running; switch their tickers off
             // so animations (and the quiz countdown) wait until they are shown.
             for (var i = 0; i < _pages.length; i++)
-              TickerMode(enabled: i == _currentIndex, child: _pages[i]),
+              if (_visited.contains(i))
+                TickerMode(enabled: i == _currentIndex, child: _pages[i])
+              else
+                const SizedBox.shrink(),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
+        onTap: (index) => setState(() {
+          _currentIndex = index;
+          _visited.add(index);
+        }),
         selectedLabelStyle: Theme.of(context).textTheme.labelMedium,
         unselectedLabelStyle: Theme.of(
           context,
