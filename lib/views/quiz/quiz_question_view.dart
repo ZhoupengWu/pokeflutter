@@ -3,11 +3,11 @@ import '../shared/pokemon_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
-import '../../model/pokemon.dart';
 import '../../model/quiz_model.dart';
 import '../../theme/app_colors.dart';
 import '../../core/capitalize.dart';
 import '../../core/pokemon_constants.dart';
+import '../../theme/responsive.dart';
 import 'quiz_widgets.dart';
 
 class QuizQuestionView extends StatelessWidget {
@@ -24,9 +24,6 @@ class QuizQuestionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    final question = controller.question;
     final pokemon = controller.pokemon;
 
     // Accent colour from the Pokémon's first type (neutral until loaded).
@@ -35,82 +32,142 @@ class QuizQuestionView extends StatelessWidget {
         : listPokemonTypeColor[pokemon.typesList.first.toLowerCase()] ??
               context.colors.border;
 
-    return Column(
-      children: [
-        _Header(controller: controller, accent: accent),
+    return LayoutBuilder(
+      builder: (context, box) =>
+          sideBySide(box) ? _wide(context, accent) : _narrow(context, accent),
+    );
+  }
 
-        // ── Sprite card (takes the space the other parts leave) ────────────
-        Expanded(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            margin: EdgeInsets.symmetric(horizontal: 24.w),
-            decoration: BoxDecoration(
-              color: accent,
-              borderRadius: BorderRadius.circular(24.r),
-            ),
-            child: _SpriteCard(controller: controller),
-          ),
-        ),
-
-        SizedBox(height: 16.h),
-
-        // ── Question label ─────────────────────────────────────────────────
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Text(
-            question.mode == QuizMode.guessName
-                ? l10n.quizWhoIsThis
-                : l10n.quizWhatType(question.subject.name.capitalize()),
-            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-            textAlign: TextAlign.center,
-          ),
-        ),
-
-        SizedBox(height: 12.h),
-
-        // ── Answer options (two per row) ───────────────────────────────────
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+  /// The sprite card takes the space the other parts leave. When they do not
+  /// fit (a small screen with a large system font) the page scrolls and the
+  /// card keeps a minimum height.
+  Widget _narrow(BuildContext context, Color accent) {
+    return CustomScrollView(
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
           child: Column(
             children: [
-              for (var row = 0; row < question.options.length; row += 2) ...[
-                if (row > 0) SizedBox(height: 8.h),
-                SizedBox(
-                  height: 60,
-                  child: Row(
-                    children: [
-                      for (var i = row; i < row + 2; i++) ...[
-                        if (i > row) SizedBox(width: 8.w),
-                        Expanded(
-                          child: i < question.options.length
-                              ? QuizOptionButton(
-                                  label: question.mode == QuizMode.guessType
-                                      ? l10n.typeName(question.options[i])
-                                      : question.options[i].capitalize(),
-                                  state: _optionState(i),
-                                  onTap: () => controller.answer(i),
-                                )
-                              : const SizedBox.shrink(),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
+              _Header(controller: controller, accent: accent),
+              Expanded(child: _card(accent)),
+              SizedBox(height: 16.h),
+              _label(context),
+              SizedBox(height: 12.h),
+              _options(context),
+              _feedbackArea(context, accent),
             ],
           ),
-        ),
-
-        // ── Feedback + Next button ─────────────────────────────────────────
-        SizedBox(
-          height: 132, // room for verdict, 2-line reveal and the button
-          child: controller.answered
-              ? _Feedback(controller: controller, accent: accent)
-              : null,
         ),
       ],
     );
   }
+
+  /// Sideways: the sprite on the left, question, options and feedback on the
+  /// right.
+  Widget _wide(BuildContext context, Color accent) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            children: [
+              _Header(controller: controller, accent: accent),
+              Expanded(child: _card(accent)),
+              SizedBox(height: 16.h),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 16.h),
+                _label(context),
+                SizedBox(height: 12.h),
+                _options(context),
+                _feedbackArea(context, accent),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _card(Color accent) => ConstrainedBox(
+    constraints: BoxConstraints(minHeight: 160.h),
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: EdgeInsets.symmetric(horizontal: 24.w),
+      decoration: BoxDecoration(
+        color: accent,
+        borderRadius: BorderRadius.circular(24.r),
+      ),
+      child: _SpriteCard(controller: controller),
+    ),
+  );
+
+  Widget _label(BuildContext context) {
+    final l10n = context.l10n;
+    final question = controller.question;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: Text(
+        question.mode == QuizMode.guessName
+            ? l10n.quizWhoIsThis
+            : l10n.quizWhatType(question.subject.name.capitalize()),
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  /// Answer options, two per row.
+  Widget _options(BuildContext context) {
+    final l10n = context.l10n;
+    final question = controller.question;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: Column(
+        children: [
+          for (var row = 0; row < question.options.length; row += 2) ...[
+            if (row > 0) SizedBox(height: 8.h),
+            SizedBox(
+              height: scaledByText(context, 60),
+              child: Row(
+                children: [
+                  for (var i = row; i < row + 2; i++) ...[
+                    if (i > row) SizedBox(width: 8.w),
+                    Expanded(
+                      child: i < question.options.length
+                          ? QuizOptionButton(
+                              label: question.mode == QuizMode.guessType
+                                  ? l10n.typeName(question.options[i])
+                                  : question.options[i].capitalize(),
+                              state: _optionState(i),
+                              onTap: () => controller.answer(i),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Verdict, reveal and Next button, once answered.
+  Widget _feedbackArea(BuildContext context, Color accent) => SizedBox(
+    // Room for the verdict, a 2-line reveal and the button.
+    height: scaledByText(context, 132, share: 0.8),
+    child: controller.answered
+        ? _Feedback(controller: controller, accent: accent)
+        : null,
+  );
 }
 
 // ── Progress, score and timer ────────────────────────────────────────────────
@@ -247,35 +304,32 @@ class _SpriteCard extends StatelessWidget {
 
     final hidden =
         controller.question.mode == QuizMode.guessName && !controller.answered;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Fill most of the card, within reason.
-        final size = (constraints.maxHeight * 0.75).clamp(96.0, 240.0);
-        return _sprite(context, pokemon, hidden, size);
-      },
-    );
-  }
-
-  Widget _sprite(
-    BuildContext context,
-    Pokemon pokemon,
-    bool hidden,
-    double size,
-  ) {
+    // A square that fills the card within reason. No LayoutBuilder here: the
+    // page measures its content when it has to scroll.
     return Center(
-      child: PokemonImage(
-        // The small sprite blacked out is the "silhouette".
-        hidden ? pokemon.urlSprite : pokemon.urlImage,
-        height: size,
-        width: size,
-        fit: BoxFit.contain,
-        color: hidden ? Colors.black : null,
-        colorBlendMode: BlendMode.srcATop,
-        semanticLabel: hidden
-            ? context.l10n.quizSilhouette
-            : pokemon.name.capitalize(),
-        errorBuilder: (_, _, _) =>
-            Icon(Icons.catching_pokemon, size: 96.r, color: Colors.white38),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 240, maxHeight: 240),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Padding(
+            padding: EdgeInsets.all(12.r),
+            child: PokemonImage(
+              // The small sprite blacked out is the "silhouette".
+              hidden ? pokemon.urlSprite : pokemon.urlImage,
+              fit: BoxFit.contain,
+              color: hidden ? Colors.black : null,
+              colorBlendMode: BlendMode.srcATop,
+              semanticLabel: hidden
+                  ? context.l10n.quizSilhouette
+                  : pokemon.name.capitalize(),
+              errorBuilder: (_, _, _) => Icon(
+                Icons.catching_pokemon,
+                size: 96.r,
+                color: Colors.white38,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

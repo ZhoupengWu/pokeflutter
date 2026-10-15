@@ -53,6 +53,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
           api: context.read(),
           evolutionApi: context.read(),
           speciesApi: context.read(),
+          abilityApi: context.read(),
           repository: context.read(),
         );
     _controller.load();
@@ -180,6 +181,9 @@ class _ErrorView extends StatelessWidget {
   }
 }
 
+/// Widest the side-by-side layout gets.
+const double _twoColumnMaxWidth = 1100;
+
 class _DetailView extends StatelessWidget {
   const _DetailView({
     required this.controller,
@@ -196,9 +200,12 @@ class _DetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pokemon = controller.pokemon!;
-    final colors = context.colors;
-    // Section titles and bars sit on the card, so they need to contrast with it.
-    final readableAccent = ensureContrast(accent, colors.surface);
+
+    final header = DetailHeader(
+      pokemon: pokemon,
+      favouriteItem: favouriteItem,
+      heroTag: heroTag,
+    );
 
     return Stack(
       children: [
@@ -219,78 +226,109 @@ class _DetailView extends StatelessWidget {
         ),
         SafeArea(
           bottom: false,
-          child: ContentWidth(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DetailHeader(
-                  pokemon: pokemon,
-                  favouriteItem: favouriteItem,
-                  heroTag: heroTag,
-                ),
-
-                // ── Card with the details ──────────────────────────────────
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: colors.surface,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(32.r),
+          child: LayoutBuilder(
+            builder: (context, box) {
+              if (sideBySide(box)) {
+                return ContentWidth(
+                  maxWidth: _twoColumnMaxWidth,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: SingleChildScrollView(child: header),
                       ),
-                    ),
-                    child: SafeArea(
-                      top: false,
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 24.w,
-                          vertical: 24.h,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (controller.species?.hasInfo ?? false) ...[
-                              SpeciesSection(
-                                species: controller.species!,
-                                accent: readableAccent,
-                              ),
-                              SizedBox(height: 24.h),
-                            ],
-                            AboutSection(
-                              pokemon: pokemon,
-                              accent: readableAccent,
-                            ),
-                            SizedBox(height: 24.h),
-                            AbilitiesSection(
-                              pokemon: pokemon,
-                              accent: readableAccent,
-                            ),
-                            SizedBox(height: 24.h),
-                            StatsSection(
-                              pokemon: pokemon,
-                              accent: readableAccent,
-                            ),
-                            SizedBox(height: 24.h),
-                            TypeMatchupsSection(
-                              pokemon: pokemon,
-                              accent: readableAccent,
-                            ),
-                            SizedBox(height: 24.h),
-                            EvolutionSection(
-                              controller: controller,
-                              accent: readableAccent,
-                            ),
-                          ],
+                      Expanded(
+                        flex: 6,
+                        child: _DetailCard(
+                          controller: controller,
+                          accent: accent,
+                          radius: BorderRadius.horizontal(
+                            left: Radius.circular(32.r),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
+                );
+              }
+              return ContentWidth(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    header,
+                    Expanded(
+                      child: _DetailCard(
+                        controller: controller,
+                        accent: accent,
+                        radius: BorderRadius.vertical(
+                          top: Radius.circular(32.r),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The white card with the details, scrolling inside its rounded [radius].
+class _DetailCard extends StatelessWidget {
+  const _DetailCard({
+    required this.controller,
+    required this.accent,
+    required this.radius,
+  });
+
+  final PokemonDetailController controller;
+  final Color accent;
+  final BorderRadius radius;
+
+  @override
+  Widget build(BuildContext context) {
+    final pokemon = controller.pokemon!;
+    final colors = context.colors;
+    // Section titles and bars sit on the card, so they need to contrast with it.
+    final readableAccent = ensureContrast(accent, colors.surface);
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(color: colors.surface, borderRadius: radius),
+      child: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (controller.species?.hasInfo ?? false) ...[
+                SpeciesSection(
+                  species: controller.species!,
+                  accent: readableAccent,
+                ),
+                SizedBox(height: 24.h),
+              ],
+              AboutSection(pokemon: pokemon, accent: readableAccent),
+              SizedBox(height: 24.h),
+              AbilitiesSection(
+                pokemon: pokemon,
+                accent: readableAccent,
+                translations: controller.abilityNames,
+              ),
+              SizedBox(height: 24.h),
+              StatsSection(pokemon: pokemon, accent: readableAccent),
+              SizedBox(height: 24.h),
+              TypeMatchupsSection(pokemon: pokemon, accent: readableAccent),
+              SizedBox(height: 24.h),
+              EvolutionSection(controller: controller, accent: readableAccent),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

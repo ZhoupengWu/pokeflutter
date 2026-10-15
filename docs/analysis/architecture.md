@@ -29,8 +29,11 @@ lib/
 ├── data/                         # everything that talks to the network or the disk
 │   ├── pokeapi_client.dart       # JSON GET: timeout, retry, typed PokemonApiException, NetworkStatus
 │   ├── pokemon_api.dart          # /pokemon/{name}: memory -> disk -> network, stale copy on failure
-│   ├── species_api.dart          # /pokemon-species (entry, category, habitat, chain url), same layering
-│   ├── evolution_api.dart        # species -> /evolution-chain, same layering
+│   ├── cached_resource.dart      # memory → disk → network → stale copy, shared by the three below
+│   ├── species_api.dart          # /pokemon-species (entry, category, habitat, chain url)
+│   ├── ability_api.dart          # /ability/{id}: translated names (en, it)
+│   ├── offline_prefetcher.dart   # downloads Pokémon (all of the above + images) for offline use
+│   ├── evolution_api.dart        # species -> /evolution-chain
 │   ├── disk_cache.dart           # one JSON file per key, LRU, failures swallowed
 │   ├── offline_storage.dart      # size of the disk cache + cached images, and a way to clear them (Settings)
 │   ├── network_status.dart       # "could PokéAPI be reached last time?" (drives the offline hint)

@@ -32,21 +32,25 @@ void main() {
     expect(find.text('Poison'), findsOneWidget);
     expect(find.text('Types unavailable offline.'), findsNothing);
 
+    await tester.tap(find.text('Quiz'));
+    // The tab is built now and loads the list in the background.
+    for (var i = 0; i < 3; i++) {
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await tester.pump();
+    }
+    expect(find.text('Start Quiz'), findsOneWidget);
+    bool tickersOn(String text) => TickerMode.valuesOf(
+      tester.element(find.text(text, skipOffstage: false)),
+    ).enabled;
+    expect(tickersOn('Start Quiz'), isTrue);
+
     await tester.tap(find.text('Compare'));
     await tester.pump();
     expect(find.text('Select two Pokémon to start comparing'), findsOneWidget);
 
     // Hidden tabs have their tickers off, so a quiz countdown cannot run
     // while another tab is showing.
-    bool tickersOn(String text) => TickerMode.valuesOf(
-      tester.element(find.text(text, skipOffstage: false)),
-    ).enabled;
     expect(tickersOn('Start Quiz'), isFalse);
-
-    await tester.tap(find.text('Quiz'));
-    await tester.pump();
-    expect(find.text('Start Quiz'), findsOneWidget);
-    expect(tickersOn('Start Quiz'), isTrue);
 
     await tester.tap(find.text('Favourites'));
     await tester.pump();

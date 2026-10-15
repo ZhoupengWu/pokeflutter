@@ -14,11 +14,13 @@ PokemonDetailController _controller({
   FakePokemonApi? api,
   FakeEvolutionApi? evolution,
   FakeSpeciesApi? species,
+  FakeAbilityApi? ability,
 }) => PokemonDetailController(
   item: _item('mon2', 2),
   api: api ?? FakePokemonApi(),
   evolutionApi: evolution ?? FakeEvolutionApi(),
   speciesApi: species ?? FakeSpeciesApi(),
+  abilityApi: ability ?? FakeAbilityApi(),
   repository: fakeRepository(),
 );
 
@@ -81,6 +83,7 @@ void main() {
       api: api,
       evolutionApi: evolution,
       speciesApi: species,
+      abilityApi: FakeAbilityApi(),
       repository: fakeRepository(),
     );
 
@@ -98,6 +101,25 @@ void main() {
 
     expect(species.requested, ['mon2']);
     expect(c.species?.categories['en'], 'Mouse Pokémon');
+  });
+
+  test('loads the translated names of the abilities', () async {
+    final ability = FakeAbilityApi();
+    final c = _controller(ability: ability);
+
+    await c.load();
+
+    expect(ability.requested, ['blaze']);
+    expect(c.abilityNames['blaze']?['it'], 'Fuocardore');
+  });
+
+  test('ability names failing keep the English id', () async {
+    final c = _controller(ability: FakeAbilityApi(fail: true));
+
+    await c.load();
+
+    expect(c.status, LoadStatus.loaded);
+    expect(c.abilityNames, isEmpty);
   });
 
   test('species information failing leaves the rest intact', () async {

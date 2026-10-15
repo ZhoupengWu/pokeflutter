@@ -1141,6 +1141,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Water\'s edge'**
   String get habitatWatersEdge;
+
+  /// No description provided for @storageSaveFavourites.
+  ///
+  /// In en, this message translates to:
+  /// **'Save favourites for offline use'**
+  String get storageSaveFavourites;
+
+  /// No description provided for @storageNoFavourites.
+  ///
+  /// In en, this message translates to:
+  /// **'Add favourites to save them for offline use'**
+  String get storageNoFavourites;
+
+  /// No description provided for @storageSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving {done} of {total}…'**
+  String storageSaving(int done, int total);
+
+  /// No description provided for @storageSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourites saved'**
+  String get storageSaved;
+
+  /// No description provided for @storageSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 Pokémon could not be saved} other{{count} Pokémon could not be saved}}. Check your connection.'**
+  String storageSaveFailed(int count);
 }
 
 class _AppLocalizationsDelegate

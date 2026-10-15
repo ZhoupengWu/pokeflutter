@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'data/ability_api.dart';
 import 'data/app_settings.dart';
 import 'data/evolution_api.dart';
 import 'data/favourites_manager.dart';
@@ -10,6 +11,7 @@ import 'data/pokemon_repository.dart';
 import 'data/pokemon_type_index.dart';
 import 'data/disk_cache.dart';
 import 'data/network_status.dart';
+import 'data/offline_prefetcher.dart';
 import 'data/offline_storage.dart';
 import 'data/quiz_stats_store.dart';
 import 'data/species_api.dart';
@@ -25,6 +27,7 @@ class AppServices {
     PokemonApi? pokemonApi,
     EvolutionApi? evolutionApi,
     SpeciesApi? speciesApi,
+    AbilityApi? abilityApi,
     PokemonTypeIndex? typeIndex,
     FavouritesManager? favourites,
     AppSettings? settings,
@@ -32,13 +35,16 @@ class AppServices {
     NetworkStatus? networkStatus,
     ImageProviderFactory? imageProvider,
     OfflineStorage? storage,
+    OfflinePrefetcher? prefetcher,
   }) : networkStatus = networkStatus ?? NetworkStatus(),
        imageProvider = imageProvider ?? NetworkImage.new,
        storage = storage ?? OfflineStorage(),
+       _prefetcher = prefetcher,
        repository = repository ?? PokemonRepository(),
        pokemonApi = pokemonApi ?? PokemonApi(),
        evolutionApi = evolutionApi ?? EvolutionApi(),
        speciesApi = speciesApi ?? SpeciesApi(),
+       abilityApi = abilityApi ?? AbilityApi(),
        typeIndex = typeIndex ?? PokemonTypeIndex(),
        favourites = favourites ?? FavouritesManager(),
        settings = settings ?? AppSettings(),
@@ -50,12 +56,26 @@ class AppServices {
   factory AppServices.production() {
     final status = NetworkStatus();
     final disk = DiskCache();
+    final pokemon = PokemonApi(disk: disk, status: status);
     final species = SpeciesApi(disk: disk, status: status);
+    final evolution = EvolutionApi(
+      disk: disk,
+      status: status,
+      species: species,
+    );
+    final abilities = AbilityApi(disk: disk, status: status);
     return AppServices(
       networkStatus: status,
-      pokemonApi: PokemonApi(disk: disk, status: status),
-      evolutionApi: EvolutionApi(disk: disk, status: status, species: species),
+      pokemonApi: pokemon,
+      evolutionApi: evolution,
       speciesApi: species,
+      abilityApi: abilities,
+      prefetcher: OfflinePrefetcher.production(
+        pokemon: pokemon,
+        species: species,
+        evolution: evolution,
+        abilities: abilities,
+      ),
       typeIndex: PokemonTypeIndex(status: status),
       imageProvider: CachedNetworkImageProvider.new,
       storage: OfflineStorage.production(disk),
@@ -66,6 +86,7 @@ class AppServices {
   final PokemonApi pokemonApi;
   final EvolutionApi evolutionApi;
   final SpeciesApi speciesApi;
+  final AbilityApi abilityApi;
   final PokemonTypeIndex typeIndex;
   final FavouritesManager favourites;
   final AppSettings settings;
@@ -73,6 +94,19 @@ class AppServices {
   final NetworkStatus networkStatus;
   final ImageProviderFactory imageProvider;
   final OfflineStorage storage;
+
+  final OfflinePrefetcher? _prefetcher;
+
+  /// Downloads Pokémon for offline use (Settings). Without an explicit one it
+  /// uses these services and skips the images.
+  late final OfflinePrefetcher prefetcher =
+      _prefetcher ??
+      OfflinePrefetcher(
+        pokemon: pokemonApi,
+        species: speciesApi,
+        evolution: evolutionApi,
+        abilities: abilityApi,
+      );
 
   /// Loads what the first screen needs: the bundled list (favourites are
   /// re-hydrated from it) and the saved settings. The type index is started
@@ -102,6 +136,7 @@ class AppProviders extends StatelessWidget {
         Provider<PokemonApi>.value(value: services.pokemonApi),
         Provider<EvolutionApi>.value(value: services.evolutionApi),
         Provider<SpeciesApi>.value(value: services.speciesApi),
+        Provider<AbilityApi>.value(value: services.abilityApi),
         // Listenables are only looked up (widgets listen to them explicitly),
         // so they use InheritedProvider, which Provider's lint does not flag.
         InheritedProvider<PokemonTypeIndex>.value(value: services.typeIndex),
@@ -111,6 +146,7 @@ class AppProviders extends StatelessWidget {
         InheritedProvider<NetworkStatus>.value(value: services.networkStatus),
         Provider<ImageProviderFactory>.value(value: services.imageProvider),
         Provider<OfflineStorage>.value(value: services.storage),
+        Provider<OfflinePrefetcher>.value(value: services.prefetcher),
       ],
       child: child,
     );

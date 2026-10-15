@@ -33,18 +33,39 @@ Size designSizeFor(Size screen) {
   );
 }
 
-/// Centres [child] and limits its width to [maxContentWidth].
+/// Centres [child] and limits its width to [maxWidth] ([maxContentWidth] by
+/// default).
 class ContentWidth extends StatelessWidget {
-  const ContentWidth({super.key, required this.child});
+  const ContentWidth({
+    super.key,
+    required this.child,
+    this.maxWidth = maxContentWidth,
+  });
 
   final Widget child;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) => Align(
     alignment: Alignment.topCenter,
     child: ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: maxContentWidth),
+      constraints: BoxConstraints(maxWidth: maxWidth),
       child: child,
     ),
   );
 }
+
+/// How much the system font size enlarges text (1 = normal, 2 = 200 %).
+double textScaleOf(BuildContext context) =>
+    MediaQuery.textScalerOf(context).scale(16) / 16;
+
+/// [base] grown by [share] of the growth of text beyond 1×, for boxes of fixed
+/// height that hold text. The growth counted stops at 2×, the largest size
+/// Android offers.
+double scaledByText(BuildContext context, double base, {double share = 0.5}) =>
+    base * (1 + (textScaleOf(context) - 1).clamp(0.0, 1.0) * share);
+
+/// Whether a page given [box] should lay its parts out side by side: it is
+/// wide enough and clearly wider than tall (a phone or tablet held sideways).
+bool sideBySide(BoxConstraints box) =>
+    box.maxWidth >= 640 && box.maxWidth > box.maxHeight * 1.2;

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/controllers/pokemon_detail_controller.dart';
 import 'package:pokeflutter/app_services.dart';
 import 'package:pokeflutter/data/favourites_manager.dart';
+import 'package:pokeflutter/theme/app_colors.dart';
 import 'package:pokeflutter/model/pokemon_list_item.dart';
 import 'package:pokeflutter/theme/theme.dart';
 import 'package:pokeflutter/views/detail/pokemon_detail_page.dart';
@@ -26,6 +27,7 @@ Future<PokemonDetailController> _pump(
   FakePokemonApi? api,
   FakeEvolutionApi? evolution,
   FakeSpeciesApi? species,
+  FakeAbilityApi? ability,
   Locale locale = const Locale('en'),
   ThemeData? theme,
 }) async {
@@ -38,6 +40,7 @@ Future<PokemonDetailController> _pump(
     api: api ?? FakePokemonApi(types: ['fire', 'flying']),
     evolutionApi: evolution ?? FakeEvolutionApi(chainBody: eeveeChainBody()),
     speciesApi: species ?? FakeSpeciesApi(),
+    abilityApi: ability ?? FakeAbilityApi(),
     repository: fakeRepository(count: 500),
   );
   addTearDown(controller.dispose);
@@ -79,6 +82,21 @@ void main() {
     expect(find.text('Base Stats'), findsOneWidget);
     expect(find.text('HP'), findsOneWidget);
     expect(find.text('78'), findsOneWidget);
+  });
+
+  testWidgets('abilities are shown with their translated name', (tester) async {
+    await _pump(tester, locale: const Locale('it'));
+
+    expect(find.text('Fuocardore'), findsOneWidget);
+    expect(find.text('Blaze'), findsNothing);
+  });
+
+  testWidgets('an ability without a translation shows its English id', (
+    tester,
+  ) async {
+    await _pump(tester, ability: FakeAbilityApi(fail: true));
+
+    expect(find.text('Blaze'), findsOneWidget);
   });
 
   testWidgets('shows the Pokédex entry in English', (tester) async {
@@ -187,6 +205,28 @@ void main() {
     expect(find.text('About'), findsOneWidget);
   });
 
+  testWidgets('a favourite heart is red on a white disc, readable on red', (
+    tester,
+  ) async {
+    // Charizard-like red Pokémon: the page background is the fire colour.
+    await _pump(tester, api: FakePokemonApi(types: ['fire']));
+    await tester.tap(find.byTooltip('Add to favourites'));
+    await tester.pump();
+
+    final button = tester.widget<IconButton>(
+      find.widgetWithIcon(IconButton, Icons.favorite_rounded),
+    );
+    expect(button.style?.backgroundColor?.resolve({}), Colors.white);
+    expect((button.icon as Icon).color, dangerRed);
+
+    await tester.tap(find.byTooltip('Remove from favourites'));
+    await tester.pump();
+    final outline = tester.widget<IconButton>(
+      find.widgetWithIcon(IconButton, Icons.favorite_border_rounded),
+    );
+    expect(outline.style, isNull);
+  });
+
   testWidgets('the favourite button toggles the Pokémon', (tester) async {
     await _pump(tester);
 
@@ -224,6 +264,7 @@ void main() {
         api: FakePokemonApi(types: ['fire']),
         evolutionApi: FakeEvolutionApi(),
         speciesApi: FakeSpeciesApi(),
+        abilityApi: FakeAbilityApi(),
         repository: fakeRepository(count: 500),
       ),
     );

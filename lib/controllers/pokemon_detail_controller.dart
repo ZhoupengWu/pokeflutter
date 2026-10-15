@@ -3,6 +3,7 @@ import '../model/evolution.dart';
 import '../model/pokemon.dart';
 import '../model/pokemon_list_item.dart';
 import '../model/pokemon_species.dart';
+import '../data/ability_api.dart';
 import '../data/evolution_api.dart';
 import '../data/pokemon_api.dart';
 import '../data/pokemon_repository.dart';
@@ -19,10 +20,12 @@ class PokemonDetailController extends ChangeNotifier {
     required PokemonApi api,
     required EvolutionApi evolutionApi,
     required SpeciesApi speciesApi,
+    required AbilityApi abilityApi,
     required PokemonRepository repository,
   }) : _api = api,
        _evolutionApi = evolutionApi,
        _speciesApi = speciesApi,
+       _abilityApi = abilityApi,
        _repository = repository;
 
   /// The entry that was opened (from the list, favourites, an evolution…).
@@ -31,6 +34,7 @@ class PokemonDetailController extends ChangeNotifier {
   final PokemonApi _api;
   final EvolutionApi _evolutionApi;
   final SpeciesApi _speciesApi;
+  final AbilityApi _abilityApi;
   final PokemonRepository _repository;
 
   LoadStatus status = LoadStatus.loading;
@@ -39,6 +43,10 @@ class PokemonDetailController extends ChangeNotifier {
   /// Pokédex entry, category and habitat. Null until loaded, and when they
   /// could not be (the page then simply leaves the section out).
   PokemonSpecies? species;
+
+  /// Translated names of the abilities that have loaded, by ability id and
+  /// language code. Abilities missing here are shown with their English id.
+  final Map<String, Map<String, String>> abilityNames = {};
 
   LoadStatus evolutionStatus = LoadStatus.loading;
   EvolutionChain? evolution;
@@ -63,7 +71,7 @@ class PokemonDetailController extends ChangeNotifier {
     }
     notifyListeners();
     if (status == LoadStatus.loaded) {
-      await Future.wait([loadSpecies(), loadEvolution()]);
+      await Future.wait([loadSpecies(), loadAbilityNames(), loadEvolution()]);
     }
   }
 
@@ -79,6 +87,23 @@ class PokemonDetailController extends ChangeNotifier {
     } on PokemonApiException {
       // Optional information: nothing to show.
     }
+  }
+
+  /// Loads the translated ability names; abilities that fail keep their id.
+  Future<void> loadAbilityNames() async {
+    final current = pokemon;
+    if (current == null) return;
+    await Future.wait([
+      for (final id in current.abilities)
+        _abilityApi
+            .getNames(id)
+            .then((names) {
+              if (_disposed) return;
+              abilityNames[id] = names;
+              notifyListeners();
+            })
+            .catchError((Object _) {}, test: (e) => e is PokemonApiException),
+    ]);
   }
 
   /// Loads (or retries) the evolution chain of the current Pokémon.

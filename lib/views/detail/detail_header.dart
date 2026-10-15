@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
+import '../../theme/app_colors.dart';
 import '../../model/pokemon_list_item.dart';
 import '../../core/capitalize.dart';
 import '../../data/favourites_manager.dart';
@@ -79,11 +80,16 @@ class DetailHeader extends StatelessWidget {
                     tooltip: isFav
                         ? l10n.removeFromFavourites
                         : l10n.addToFavourites,
+                    // A red heart disappears on a red Pokémon: a favourite sits
+                    // on a white disc, which reads on every type colour.
+                    style: isFav
+                        ? IconButton.styleFrom(backgroundColor: Colors.white)
+                        : null,
                     icon: Icon(
                       isFav
                           ? Icons.favorite_rounded
                           : Icons.favorite_border_rounded,
-                      color: isFav ? Colors.redAccent : Colors.white,
+                      color: isFav ? dangerRed : Colors.white,
                     ),
                     onPressed: () => favourites.toggle(favouriteItem),
                   );
