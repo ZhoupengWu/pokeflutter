@@ -15,6 +15,7 @@ Future<List<FilterSelection>> _open(
   WidgetTester tester, {
   FilterSelection initial = _empty,
   Locale locale = const Locale('en'),
+  bool bottomAligned = false,
 }) async {
   tester.view.physicalSize = const Size(1080, 2340);
   tester.view.devicePixelRatio = 3;
@@ -22,7 +23,12 @@ Future<List<FilterSelection>> _open(
   final applied = <FilterSelection>[];
   await tester.pumpWidget(
     testApp(
-      FilterSheet(initial: initial, onApply: applied.add),
+      bottomAligned
+          ? Align(
+              alignment: Alignment.bottomCenter,
+              child: FilterSheet(initial: initial, onApply: applied.add),
+            )
+          : FilterSheet(initial: initial, onApply: applied.add),
       locale: locale,
     ),
   );
@@ -120,5 +126,21 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('Show all'), findsOneWidget);
+  });
+
+  testWidgets('keeps the Apply button above the system navigation bar', (
+    tester,
+  ) async {
+    await _open(tester, bottomAligned: true);
+    // 48 dp navigation bar at the bottom of a 3x screen (edge-to-edge).
+    tester.view.viewPadding = const FakeViewPadding(bottom: 144);
+    addTearDown(tester.view.resetViewPadding);
+    await tester.pump();
+
+    final screenHeight = tester.view.physicalSize.height / 3;
+    final apply = tester.getRect(
+      find.widgetWithText(ElevatedButton, 'Show all'),
+    );
+    expect(apply.bottom, lessThanOrEqualTo(screenHeight - 48));
   });
 }
