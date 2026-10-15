@@ -561,4 +561,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get storageClearSemantics => 'Clear offline data';
+
+  @override
+  String get detailEntry => 'Pokédex entry';
+
+  @override
+  String get speciesLegendary => 'Legendary';
+
+  @override
+  String get speciesMythical => 'Mythical';
+
+  @override
+  String habitatValue(String name) {
+    return 'Habitat: $name';
+  }
+
+  @override
+  String get habitatCave => 'Cave';
+
+  @override
+  String get habitatForest => 'Forest';
+
+  @override
+  String get habitatGrassland => 'Grassland';
+
+  @override
+  String get habitatMountain => 'Mountain';
+
+  @override
+  String get habitatRare => 'Rare';
+
+  @override
+  String get habitatRoughTerrain => 'Rough terrain';
+
+  @override
+  String get habitatSea => 'Sea';
+
+  @override
+  String get habitatUrban => 'Urban';
+
+  @override
+  String get habitatWatersEdge => 'Water\'s edge';
 }

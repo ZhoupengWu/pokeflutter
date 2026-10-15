@@ -44,6 +44,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: check
     timeout-minutes: 30
+    env:
+      # The release key (see README, "Release signing"). GitHub hides secrets from pull
+      # requests opened from forks: these are then empty and the APK is debug-signed.
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
@@ -60,8 +67,25 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Restore the release keystore
+        if: env.ANDROID_KEYSTORE_BASE64 != ''
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
       - name: Build release APK
         run: flutter build apk --release
+
+      # A build that should be signed with the release key must not silently fall back
+      # to the debug key (that APK could not update the installed app).
+      - name: Show the signing certificate
+        run: |
+          apksigner=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort | tail -n 1)
+          "$apksigner" verify --print-certs build/app/outputs/flutter-apk/app-release.apk | tee certs.txt
+          if [ -n "$ANDROID_KEYSTORE_PATH" ] && grep -q 'CN=Android Debug' certs.txt; then
+            echo "::error::A release key is configured but the APK is signed with the debug key"
+            exit 1
+          fi
 
       # Release builds have no debug-only permissions: the app talks to PokéAPI,
       # so a missing INTERNET permission must fail the build, not the users.

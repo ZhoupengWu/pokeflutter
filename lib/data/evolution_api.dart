@@ -5,11 +5,12 @@ import 'disk_cache.dart';
 import 'network_status.dart';
 import 'pokeapi_client.dart';
 import 'pokemon_api.dart';
+import 'species_api.dart';
 
 /// Fetches evolution chains from PokéAPI.
 ///
-/// A chain takes two requests (`pokemon-species` → `evolution-chain`), so
-/// results are cached per species: in memory for the session and, with a
+/// A chain takes two requests (`pokemon-species` → `evolution-chain`; the
+/// species part is shared with [SpeciesApi]), so results are cached per species: in memory for the session and, with a
 /// [DiskCache], across restarts (a stale copy is used when the network fails).
 /// Concurrent requests share one fetch.
 class EvolutionApi {
@@ -17,6 +18,7 @@ class EvolutionApi {
     http.Client? client,
     DiskCache? disk,
     NetworkStatus? status,
+    SpeciesApi? species,
     this.maxAge = const Duration(days: 30),
     DateTime Function()? now,
     Duration timeout = const Duration(seconds: 15),
@@ -29,10 +31,23 @@ class EvolutionApi {
          maxAttempts: maxAttempts,
          status: status,
        ),
+       _species =
+           species ??
+           SpeciesApi(
+             client: client,
+             disk: disk,
+             status: status,
+             maxAge: maxAge,
+             now: now,
+             timeout: timeout,
+             retryDelay: retryDelay,
+             maxAttempts: maxAttempts,
+           ),
        _disk = disk,
        _now = now ?? DateTime.now;
 
   final PokeApiClient _http;
+  final SpeciesApi _species;
   final DiskCache? _disk;
   final DateTime Function() _now;
 
@@ -99,17 +114,7 @@ class EvolutionApi {
 
   /// species → evolution-chain; returns the chain's raw JSON.
   Future<Map<String, dynamic>> _fetchJson(String speciesName) async {
-    final species = await _http.getJson(
-      '${PokeApiClient.baseUrl}/pokemon-species/$speciesName',
-      notFoundMessage: 'Unknown species "$speciesName"',
-    );
-    final String chainUrl;
-    try {
-      chainUrl =
-          (species['evolution_chain'] as Map<String, dynamic>)['url'] as String;
-    } catch (e) {
-      throw PokemonApiException(PokemonApiErrorType.parse, '$e');
-    }
-    return _http.getJson(chainUrl);
+    final species = await _species.getSpecies(speciesName);
+    return _http.getJson(species.evolutionChainUrl);
   }
 }

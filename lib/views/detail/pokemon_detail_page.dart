@@ -16,6 +16,7 @@ import '../../theme/theme.dart';
 import 'about_sections.dart';
 import 'detail_header.dart';
 import 'evolution_section.dart';
+import 'species_section.dart';
 import 'type_matchups_section.dart';
 
 /// Full details of one Pokémon: header with artwork, about, abilities,
@@ -51,6 +52,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
           item: widget.pokemon,
           api: context.read(),
           evolutionApi: context.read(),
+          speciesApi: context.read(),
           repository: context.read(),
         );
     _controller.load();
@@ -247,6 +249,13 @@ class _DetailView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            if (controller.species?.hasInfo ?? false) ...[
+                              SpeciesSection(
+                                species: controller.species!,
+                                accent: readableAccent,
+                              ),
+                              SizedBox(height: 24.h),
+                            ],
                             AboutSection(
                               pokemon: pokemon,
                               accent: readableAccent,

@@ -56,9 +56,12 @@ Type Filter, Favourites System, Pokémon Comparison.
   content width cap.
 - **Search and filters**: Pokédex number search, generation filter, four sort orders.
 
-## ✅ Phase 8 — Polish and storage
+## ✅ Phase 8 — Polish, storage and release (v1.7.0)
 - **Sheets** (filter, Pokémon picker) keep their content above the Android navigation bar.
 - **Settings**: shows the space used by the offline data and can clear it (`OfflineStorage`).
 - **README** rewritten.
+- **Release signing** with a real key (`key.properties` / CI secrets), `CLAUDE.md` with the
+  project conventions, version bumped in every PR.
+- **Pokédex entry** on the detail page (EN/IT description, category, habitat, legendary/mythical).
 
 See [`backlog.md`](backlog.md) for what is next.

@@ -421,5 +421,23 @@
   },
   "storageEmpty": "Nothing saved on this device",
   "storageClear": "Clear",
-  "storageClearSemantics": "Clear offline data"
+  "storageClearSemantics": "Clear offline data",
+  "detailEntry": "Pokédex entry",
+  "speciesLegendary": "Legendary",
+  "speciesMythical": "Mythical",
+  "habitatValue": "Habitat: {name}",
+  "@habitatValue": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "habitatCave": "Cave",
+  "habitatForest": "Forest",
+  "habitatGrassland": "Grassland",
+  "habitatMountain": "Mountain",
+  "habitatRare": "Rare",
+  "habitatRoughTerrain": "Rough terrain",
+  "habitatSea": "Sea",
+  "habitatUrban": "Urban",
+  "habitatWatersEdge": "Water's edge"
 }

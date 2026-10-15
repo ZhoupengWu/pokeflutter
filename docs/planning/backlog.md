@@ -16,7 +16,8 @@ When an item is done, move it to `roadmap.md` / `todo.md` and delete it here.
 4. **Accessibility audit** with TalkBack/VoiceOver on a device (labels exist, quiz options and
    evolution stages are buttons; not verified on hardware). Check text scaling at 200 %.
 5. **Release hygiene**: confirm/replace `applicationId` (`com.wux.pokeflutter`) before publishing;
-   add an iOS build job if a macOS runner is acceptable; real release signing config.
+   add an iOS build job if a macOS runner is acceptable. The release key itself is created by the
+   owner and stored in the CI secrets (README, "Release signing").
 6. **Cache management follow-ups**: optional prefetch of favourites for offline use (Settings
    already shows the space used and can clear it).
 7. **Landscape polish**: the quiz and detail pages are cramped in landscape (they work, but little
@@ -26,7 +27,8 @@ When an item is done, move it to `roadmap.md` / `todo.md` and delete it here.
 **High value**
 - Advanced search: by ability, stat ranges, weakness (the `TypeChart` already makes "weak to X"
   cheap)
-- Extended details: flavor text, category, habitat, moves, alternate forms, shiny sprites
+- Extended details: moves, alternate forms, shiny sprites (Pokédex entry, category and habitat
+  are done)
 
 **Medium**
 - Cry audio playback (`audioplayers`)

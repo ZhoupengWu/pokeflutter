@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:pokeflutter/model/pokemon_species.dart';
 
 /// Builds a minimal PokéAPI `/pokemon/{name}` response body.
 ///
@@ -125,3 +126,55 @@ String eeveeChainBody() => jsonEncode({
 /// A Pokémon that does not evolve.
 String singleStageChainBody() =>
     jsonEncode({'id': 99, 'chain': _stage('tauros', 128)});
+
+/// A full `/pokemon-species/{name}` body: old and new entries in several
+/// languages, as the real API returns them (oldest game first).
+String richSpeciesBody({int chainId = 1}) => jsonEncode({
+  'evolution_chain': {
+    'url': 'https://pokeapi.co/api/v2/evolution-chain/$chainId/',
+  },
+  'is_legendary': false,
+  'is_mythical': true,
+  'habitat': {'name': 'waters-edge'},
+  'flavor_text_entries': [
+    {
+      'flavor_text': 'Old English entry.',
+      'language': {'name': 'en'},
+    },
+    {
+      'flavor_text': 'Ein deutscher Eintrag.',
+      'language': {'name': 'de'},
+    },
+    {
+      'flavor_text': 'Vecchia scheda.',
+      'language': {'name': 'it'},
+    },
+    {
+      'flavor_text': 'It stores\nelectricity in\fits ch\u00adeeks.  Really.',
+      'language': {'name': 'en'},
+    },
+    {
+      'flavor_text': 'Accumula elettricità\nnelle guance.',
+      'language': {'name': 'it'},
+    },
+  ],
+  'genera': [
+    {
+      'genus': 'Mouse Pokémon',
+      'language': {'name': 'en'},
+    },
+    {
+      'genus': 'Pokémon Topo',
+      'language': {'name': 'it'},
+    },
+    {
+      'genus': 'Mauspokémon',
+      'language': {'name': 'de'},
+    },
+  ],
+});
+
+/// A species with an entry in English and Italian.
+PokemonSpecies sampleSpecies() => PokemonSpecies.fromApiJson(
+  jsonDecode(richSpeciesBody()) as Map<String, dynamic>,
+);
