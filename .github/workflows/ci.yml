@@ -73,20 +73,6 @@ jobs:
           echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
           echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
 
-      # TEMPORARY: exercises the signed-build path with a throwaway key.
-      - name: Create a throwaway keystore
-        if: env.ANDROID_KEYSTORE_BASE64 == ''
-        run: |
-          keytool -genkeypair -keystore "$RUNNER_TEMP/test.jks" -storepass testpass \
-            -keypass testpass -alias test -keyalg RSA -keysize 2048 -validity 2 \
-            -dname "CN=CI test"
-          {
-            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/test.jks"
-            echo "ANDROID_KEYSTORE_PASSWORD=testpass"
-            echo "ANDROID_KEY_ALIAS=test"
-            echo "ANDROID_KEY_PASSWORD=testpass"
-          } >> "$GITHUB_ENV"
-
       - name: Build release APK
         run: flutter build apk --release
 
@@ -99,9 +85,6 @@ jobs:
           if [ -n "$ANDROID_KEYSTORE_PATH" ] && grep -q 'CN=Android Debug' certs.txt; then
             echo "::error::A release key is configured but the APK is signed with the debug key"
             exit 1
-          fi
-          if [ -n "$ANDROID_KEYSTORE_PATH" ] && grep -q 'CN=CI test' certs.txt; then
-            echo "TEMPORARY throwaway key was used, as expected"
           fi
 
       # Release builds have no debug-only permissions: the app talks to PokéAPI,
