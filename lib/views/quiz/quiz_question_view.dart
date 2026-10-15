@@ -3,11 +3,11 @@ import '../shared/pokemon_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
-import '../../model/pokemon.dart';
 import '../../model/quiz_model.dart';
 import '../../theme/app_colors.dart';
 import '../../core/capitalize.dart';
 import '../../core/pokemon_constants.dart';
+import '../../theme/responsive.dart';
 import 'quiz_widgets.dart';
 
 class QuizQuestionView extends StatelessWidget {
@@ -24,9 +24,6 @@ class QuizQuestionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    final question = controller.question;
     final pokemon = controller.pokemon;
 
     // Accent colour from the Pokémon's first type (neutral until loaded).
@@ -35,20 +32,41 @@ class QuizQuestionView extends StatelessWidget {
         : listPokemonTypeColor[pokemon.typesList.first.toLowerCase()] ??
               context.colors.border;
 
+    // The sprite card takes the space the other parts leave. When they do not
+    // fit (a small screen with a large system font) the page scrolls and the
+    // card keeps a minimum height.
+    return CustomScrollView(
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: _content(context, accent),
+        ),
+      ],
+    );
+  }
+
+  Widget _content(BuildContext context, Color accent) {
+    final l10n = context.l10n;
+    final textTheme = Theme.of(context).textTheme;
+    final question = controller.question;
+
     return Column(
       children: [
         _Header(controller: controller, accent: accent),
 
-        // ── Sprite card (takes the space the other parts leave) ────────────
+        // ── Sprite card ────────────────────────────────────────────────────
         Expanded(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            margin: EdgeInsets.symmetric(horizontal: 24.w),
-            decoration: BoxDecoration(
-              color: accent,
-              borderRadius: BorderRadius.circular(24.r),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: 160.h),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: EdgeInsets.symmetric(horizontal: 24.w),
+              decoration: BoxDecoration(
+                color: accent,
+                borderRadius: BorderRadius.circular(24.r),
+              ),
+              child: _SpriteCard(controller: controller),
             ),
-            child: _SpriteCard(controller: controller),
           ),
         ),
 
@@ -76,7 +94,7 @@ class QuizQuestionView extends StatelessWidget {
               for (var row = 0; row < question.options.length; row += 2) ...[
                 if (row > 0) SizedBox(height: 8.h),
                 SizedBox(
-                  height: 60,
+                  height: scaledByText(context, 60),
                   child: Row(
                     children: [
                       for (var i = row; i < row + 2; i++) ...[
@@ -103,7 +121,8 @@ class QuizQuestionView extends StatelessWidget {
 
         // ── Feedback + Next button ─────────────────────────────────────────
         SizedBox(
-          height: 132, // room for verdict, 2-line reveal and the button
+          // Room for the verdict, a 2-line reveal and the button.
+          height: scaledByText(context, 132, share: 0.8),
           child: controller.answered
               ? _Feedback(controller: controller, accent: accent)
               : null,
@@ -247,35 +266,32 @@ class _SpriteCard extends StatelessWidget {
 
     final hidden =
         controller.question.mode == QuizMode.guessName && !controller.answered;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Fill most of the card, within reason.
-        final size = (constraints.maxHeight * 0.75).clamp(96.0, 240.0);
-        return _sprite(context, pokemon, hidden, size);
-      },
-    );
-  }
-
-  Widget _sprite(
-    BuildContext context,
-    Pokemon pokemon,
-    bool hidden,
-    double size,
-  ) {
+    // A square that fills the card within reason. No LayoutBuilder here: the
+    // page measures its content when it has to scroll.
     return Center(
-      child: PokemonImage(
-        // The small sprite blacked out is the "silhouette".
-        hidden ? pokemon.urlSprite : pokemon.urlImage,
-        height: size,
-        width: size,
-        fit: BoxFit.contain,
-        color: hidden ? Colors.black : null,
-        colorBlendMode: BlendMode.srcATop,
-        semanticLabel: hidden
-            ? context.l10n.quizSilhouette
-            : pokemon.name.capitalize(),
-        errorBuilder: (_, _, _) =>
-            Icon(Icons.catching_pokemon, size: 96.r, color: Colors.white38),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 240, maxHeight: 240),
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Padding(
+            padding: EdgeInsets.all(12.r),
+            child: PokemonImage(
+              // The small sprite blacked out is the "silhouette".
+              hidden ? pokemon.urlSprite : pokemon.urlImage,
+              fit: BoxFit.contain,
+              color: hidden ? Colors.black : null,
+              colorBlendMode: BlendMode.srcATop,
+              semanticLabel: hidden
+                  ? context.l10n.quizSilhouette
+                  : pokemon.name.capitalize(),
+              errorBuilder: (_, _, _) => Icon(
+                Icons.catching_pokemon,
+                size: 96.r,
+                color: Colors.white38,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

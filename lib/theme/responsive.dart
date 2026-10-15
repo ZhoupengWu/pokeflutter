@@ -48,3 +48,13 @@ class ContentWidth extends StatelessWidget {
     ),
   );
 }
+
+/// How much the system font size enlarges text (1 = normal, 2 = 200 %).
+double textScaleOf(BuildContext context) =>
+    MediaQuery.textScalerOf(context).scale(16) / 16;
+
+/// [base] grown by [share] of the growth of text beyond 1×, for boxes of fixed
+/// height that hold text. The growth counted stops at 2×, the largest size
+/// Android offers.
+double scaledByText(BuildContext context, double base, {double share = 0.5}) =>
+    base * (1 + (textScaleOf(context) - 1).clamp(0.0, 1.0) * share);

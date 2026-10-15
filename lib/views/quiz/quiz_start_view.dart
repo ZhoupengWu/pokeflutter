@@ -13,71 +13,90 @@ class QuizStartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Scrolls when the content outgrows the screen (large system font);
+    // otherwise the three groups spread over the full height.
+    return LayoutBuilder(
+      builder: (context, box) => SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: box.maxHeight - 32.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _intro(context),
+              SizedBox(height: 16.h),
+              Center(
+                child: ExcludeSemantics(
+                  child: Icon(
+                    Icons.quiz_rounded,
+                    size: 96.r,
+                    color: context.colors.border,
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              QuizPrimaryButton(
+                label: controller.isLoadingList
+                    ? context.l10n.quizLoading
+                    : context.l10n.quizStart,
+                onPressed: controller.canStart ? controller.start : null,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Title, intro, difficulty picker and best score.
+  Widget _intro(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
     final difficulty = controller.difficulty;
     final record = controller.record;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(l10n.quizTitle, style: textTheme.displaySmall),
-          SizedBox(height: 8.h),
-          Text(
-            l10n.quizIntro,
-            style: textTheme.bodyLarge?.copyWith(
-              color: context.colors.muted,
-              height: 1.5,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.quizTitle, style: textTheme.displaySmall),
+        SizedBox(height: 8.h),
+        Text(
+          l10n.quizIntro,
+          style: textTheme.bodyLarge?.copyWith(
+            color: context.colors.muted,
+            height: 1.5,
           ),
-          SizedBox(height: 24.h),
-          Text(l10n.quizDifficulty, style: textTheme.titleSmall),
-          SizedBox(height: 8.h),
-          SizedBox(
-            width: double.infinity,
-            child: SegmentedButton<QuizDifficulty>(
-              showSelectedIcon: false,
-              segments: [
-                for (final d in QuizDifficulty.values)
-                  ButtonSegment(value: d, label: Text(difficultyName(l10n, d))),
-              ],
-              selected: {difficulty},
-              onSelectionChanged: (values) =>
-                  controller.setDifficulty(values.first),
-            ),
+        ),
+        SizedBox(height: 24.h),
+        Text(l10n.quizDifficulty, style: textTheme.titleSmall),
+        SizedBox(height: 8.h),
+        SizedBox(
+          width: double.infinity,
+          child: SegmentedButton<QuizDifficulty>(
+            showSelectedIcon: false,
+            segments: [
+              for (final d in QuizDifficulty.values)
+                ButtonSegment(value: d, label: Text(difficultyName(l10n, d))),
+            ],
+            selected: {difficulty},
+            onSelectionChanged: (values) =>
+                controller.setDifficulty(values.first),
           ),
-          SizedBox(height: 8.h),
-          Text(
-            difficultyHint(l10n, difficulty),
-            style: textTheme.bodySmall?.copyWith(color: context.colors.muted),
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            record.gamesPlayed == 0
-                ? l10n.quizNoBestScore
-                : l10n.quizBestScore(record.bestScore),
-            style: textTheme.bodySmall?.copyWith(color: context.colors.subtle),
-          ),
-          const Spacer(),
-          Center(
-            child: ExcludeSemantics(
-              child: Icon(
-                Icons.quiz_rounded,
-                size: 96.r,
-                color: context.colors.border,
-              ),
-            ),
-          ),
-          const Spacer(),
-          QuizPrimaryButton(
-            label: controller.isLoadingList ? l10n.quizLoading : l10n.quizStart,
-            onPressed: controller.canStart ? controller.start : null,
-          ),
-          SizedBox(height: 16.h),
-        ],
-      ),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          difficultyHint(l10n, difficulty),
+          style: textTheme.bodySmall?.copyWith(color: context.colors.muted),
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          record.gamesPlayed == 0
+              ? l10n.quizNoBestScore
+              : l10n.quizBestScore(record.bestScore),
+          style: textTheme.bodySmall?.copyWith(color: context.colors.subtle),
+        ),
+      ],
     );
   }
 }

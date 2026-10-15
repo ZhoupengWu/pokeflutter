@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../model/pokemon_list_item.dart';
+import '../../theme/responsive.dart';
 import 'grid_item.dart';
 
 class PokemonList extends StatelessWidget {
@@ -10,6 +11,11 @@ class PokemonList extends StatelessWidget {
   final String? heroScope;
 
   const PokemonList({super.key, required this.pokemonList, this.heroScope});
+
+  /// Cell height: the text inside grows with the system font size, so a cell
+  /// gets taller by part of that growth instead of cutting the text off.
+  static double cellHeight(BuildContext context) =>
+      scaledByText(context, 100.h, share: 0.3);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,7 @@ class PokemonList extends StatelessWidget {
           maxCrossAxisExtent: 190.w,
           crossAxisSpacing: 8.w,
           mainAxisSpacing: 8.h,
-          mainAxisExtent: 100.h,
+          mainAxisExtent: cellHeight(context),
         ),
         itemBuilder: (BuildContext context, int index) {
           final pokemon = pokemonList[index];
