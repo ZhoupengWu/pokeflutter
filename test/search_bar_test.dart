@@ -52,4 +52,43 @@ void main() {
     expect(find.bySemanticsLabel('Filter by type'), findsOneWidget);
     handle.dispose();
   });
+
+  testWidgets('tapping elsewhere takes the focus off the field', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      testApp(
+        Column(
+          children: [
+            SearchBarWidget(onSearch: (_) {}),
+            const Expanded(child: Center(child: Text('somewhere else'))),
+          ],
+        ),
+      ),
+    );
+
+    await tester.tap(find.byType(TextField));
+    await tester.pump();
+    expect(FocusManager.instance.primaryFocus?.hasPrimaryFocus, isTrue);
+    expect(tester.widget<TextField>(find.byType(TextField)).focusNode, isNull);
+    expect(
+      tester
+          .state<EditableTextState>(find.byType(EditableText))
+          .widget
+          .focusNode
+          .hasFocus,
+      isTrue,
+    );
+
+    await tester.tap(find.text('somewhere else'));
+    await tester.pump();
+    expect(
+      tester
+          .state<EditableTextState>(find.byType(EditableText))
+          .widget
+          .focusNode
+          .hasFocus,
+      isFalse,
+    );
+  });
 }

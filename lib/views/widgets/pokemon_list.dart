@@ -17,6 +17,7 @@ class PokemonList extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: GridView.builder(
         clipBehavior: Clip.hardEdge,
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemCount: pokemonList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
