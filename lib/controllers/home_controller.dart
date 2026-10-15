@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import '../core/pokedex.dart';
 import '../model/pokemon_list_item.dart';
 import '../data/pokemon_repository.dart';
 import '../data/pokemon_type_index.dart';
@@ -26,6 +27,16 @@ class HomeController extends ChangeNotifier {
   List<PokemonListItem> filtered = const [];
   String searchQuery = '';
   Set<String> activeTypes = const {};
+
+  /// Selected generations (1…9); empty means all.
+  Set<int> activeGenerations = const {};
+  PokemonSort sort = PokemonSort.numberAsc;
+
+  /// Number of filters and sort orders that differ from the defaults.
+  int get activeFilterCount =>
+      activeTypes.length +
+      activeGenerations.length +
+      (sort == PokemonSort.numberAsc ? 0 : 1);
 
   /// A type filter is waiting for the type index to download.
   bool isFilterLoading = false;
@@ -68,6 +79,29 @@ class HomeController extends ChangeNotifier {
     return applyFilters();
   }
 
+  /// Replaces the type and generation filters and the sort order at once
+  /// (the filter sheet's Apply).
+  Future<void> setSelection({
+    required Set<String> types,
+    required Set<int> generations,
+    required PokemonSort sort,
+  }) {
+    activeTypes = Set.of(types);
+    activeGenerations = Set.of(generations);
+    this.sort = sort;
+    notifyListeners();
+    return applyFilters();
+  }
+
+  Future<void> setGenerationFilters(Set<int> generations) =>
+      setSelection(types: activeTypes, generations: generations, sort: sort);
+
+  Future<void> setSort(PokemonSort value) => setSelection(
+    types: activeTypes,
+    generations: activeGenerations,
+    sort: value,
+  );
+
   /// Applies search text and type filters to the full list (also the Retry
   /// action after [filterFailed]).
   Future<void> applyFilters() async {
@@ -90,14 +124,32 @@ class HomeController extends ChangeNotifier {
 
     isFilterLoading = false;
     filterFailed = false;
-    filtered = [
+    final number = int.tryParse(searchQuery.replaceFirst('#', ''));
+    final generationsSelected = activeGenerations;
+    filtered = _sorted([
       for (final p in allPokemon)
         if ((searchQuery.isEmpty ||
-                p.name.toLowerCase().contains(searchQuery)) &&
-            (types.isEmpty || _typeIndex.matchesAny(p.name, types)))
+                p.name.toLowerCase().contains(searchQuery) ||
+                (number != null && p.id == number)) &&
+            (types.isEmpty || _typeIndex.matchesAny(p.name, types)) &&
+            (generationsSelected.isEmpty ||
+                generationsSelected.contains(generationOf(p.id))))
           p,
-    ];
+    ]);
     notifyListeners();
+  }
+
+  List<PokemonListItem> _sorted(List<PokemonListItem> items) {
+    switch (sort) {
+      case PokemonSort.numberAsc:
+        return items; // the list is already in Pokédex order
+      case PokemonSort.numberDesc:
+        return items.reversed.toList();
+      case PokemonSort.nameAsc:
+        return items..sort((a, b) => a.name.compareTo(b.name));
+      case PokemonSort.nameDesc:
+        return items..sort((a, b) => b.name.compareTo(a.name));
+    }
   }
 
   /// A random Pokémon from the whole list, or null before it is loaded.

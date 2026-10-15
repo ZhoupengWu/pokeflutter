@@ -37,7 +37,7 @@ void main() {
       _app(onSearch: (_) {}, onFilterTap: () => taps++, activeFilterCount: 2),
     );
 
-    final button = find.bySemanticsLabel('Filter by type, 2 selected');
+    final button = find.bySemanticsLabel('Filters, 2 selected');
     expect(button, findsOneWidget);
 
     await tester.tap(button);
@@ -49,7 +49,7 @@ void main() {
     final handle = tester.ensureSemantics();
     await tester.pumpWidget(_app(onSearch: (_) {}));
 
-    expect(find.bySemanticsLabel('Filter by type'), findsOneWidget);
+    expect(find.bySemanticsLabel('Filters'), findsOneWidget);
     handle.dispose();
   });
 

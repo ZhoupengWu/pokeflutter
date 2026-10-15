@@ -30,8 +30,8 @@
   "random": "Random",
   "searchHint": "Search a Pokémon",
   "clearSearch": "Clear search",
-  "filterByType": "Filter by type",
-  "filterByTypeSelected": "Filter by type, {count} selected",
+  "filterByType": "Filters",
+  "filterByTypeSelected": "Filters, {count} selected",
   "@filterByTypeSelected": {
     "placeholders": {
       "count": {
@@ -39,7 +39,7 @@
       }
     }
   },
-  "filterSheetTitle": "Filter by Type",
+  "filterSheetTitle": "Filter and sort",
   "showAll": "Show all",
   "applyCount": "Apply ({count})",
   "@applyCount": {
@@ -395,5 +395,21 @@
       }
     }
   },
-  "offlineBanner": "You're offline. Pokémon you've already opened are still available."
+  "offlineBanner": "You're offline. Pokémon you've already opened are still available.",
+  "filterTypeSection": "Type",
+  "filterGenerationSection": "Generation",
+  "filterGenerationHint": "Alternate forms are hidden when a generation is selected.",
+  "filterSortSection": "Sort by",
+  "generationName": "Gen {roman}",
+  "@generationName": {
+    "placeholders": {
+      "roman": {
+        "type": "String"
+      }
+    }
+  },
+  "sortNumberAsc": "Number (low to high)",
+  "sortNumberDesc": "Number (high to low)",
+  "sortNameAsc": "Name (A–Z)",
+  "sortNameDesc": "Name (Z–A)"
 }
