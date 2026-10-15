@@ -411,5 +411,15 @@
   "sortNumberAsc": "Number (low to high)",
   "sortNumberDesc": "Number (high to low)",
   "sortNameAsc": "Name (A–Z)",
-  "sortNameDesc": "Name (Z–A)"
+  "sortNameDesc": "Name (Z–A)",
+  "settingsStorage": "Offline data",
+  "storageUsed": "{size} of Pokémon data and images saved on this device",
+  "@storageUsed": {
+    "placeholders": {
+      "size": {"type": "String"}
+    }
+  },
+  "storageEmpty": "Nothing saved on this device",
+  "storageClear": "Clear",
+  "storageClearSemantics": "Clear offline data"
 }

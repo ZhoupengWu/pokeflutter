@@ -1033,6 +1033,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Name (Z–A)'**
   String get sortNameDesc;
+
+  /// No description provided for @settingsStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline data'**
+  String get settingsStorage;
+
+  /// No description provided for @storageUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'{size} of Pokémon data and images saved on this device'**
+  String storageUsed(String size);
+
+  /// No description provided for @storageEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing saved on this device'**
+  String get storageEmpty;
+
+  /// No description provided for @storageClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get storageClear;
+
+  /// No description provided for @storageClearSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear offline data'**
+  String get storageClearSemantics;
 }
 
 class _AppLocalizationsDelegate

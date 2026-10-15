@@ -544,4 +544,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sortNameDesc => 'Name (Z–A)';
+
+  @override
+  String get settingsStorage => 'Offline data';
+
+  @override
+  String storageUsed(String size) {
+    return '$size of Pokémon data and images saved on this device';
+  }
+
+  @override
+  String get storageEmpty => 'Nothing saved on this device';
+
+  @override
+  String get storageClear => 'Clear';
+
+  @override
+  String get storageClearSemantics => 'Clear offline data';
 }

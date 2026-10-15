@@ -100,6 +100,21 @@ class DiskCache {
     }
   }
 
+  /// Total size of the stored files, in bytes (0 when unavailable).
+  Future<int> sizeBytes() async {
+    try {
+      final dir = await _dir();
+      if (dir == null) return 0;
+      var total = 0;
+      await for (final entity in dir.list()) {
+        if (entity is File) total += await entity.length();
+      }
+      return total;
+    } catch (_) {
+      return 0;
+    }
+  }
+
   /// Deletes everything.
   Future<void> clear() async {
     try {
