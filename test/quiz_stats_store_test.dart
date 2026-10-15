@@ -19,27 +19,27 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   test('starts with empty records', () async {
-    final records = await QuizStatsStore.test().load();
+    final records = await QuizStatsStore().load();
 
     expect(records.keys, QuizDifficulty.values);
     expect(records.values.map((r) => r.gamesPlayed), everyElement(0));
   });
 
   test('the first scoring game is a record and is saved', () async {
-    final store = QuizStatsStore.test();
+    final store = QuizStatsStore();
 
     expect(
       await store.submit(QuizDifficulty.normal, _game(correct: 4)),
       isTrue,
     );
 
-    final record = (await QuizStatsStore.test().load())[QuizDifficulty.normal]!;
+    final record = (await QuizStatsStore().load())[QuizDifficulty.normal]!;
     expect(record.bestScore, _game(correct: 4).score);
     expect(record.gamesPlayed, 1);
   });
 
   test('only a better score replaces the record', () async {
-    final store = QuizStatsStore.test();
+    final store = QuizStatsStore();
     await store.submit(QuizDifficulty.hard, _game(correct: 8));
 
     expect(await store.submit(QuizDifficulty.hard, _game(correct: 3)), isFalse);
@@ -52,7 +52,7 @@ void main() {
   });
 
   test('difficulties keep separate records', () async {
-    final store = QuizStatsStore.test();
+    final store = QuizStatsStore();
     await store.submit(QuizDifficulty.easy, _game(correct: 9));
 
     final records = await store.load();
@@ -63,7 +63,7 @@ void main() {
   test('corrupted data is ignored', () async {
     SharedPreferences.setMockInitialValues({'quiz_records_v1': '{not json'});
 
-    final records = await QuizStatsStore.test().load();
+    final records = await QuizStatsStore().load();
     expect(records[QuizDifficulty.easy]!.bestScore, 0);
   });
 }

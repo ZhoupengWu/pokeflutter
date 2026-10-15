@@ -29,12 +29,7 @@ class QuizRecord {
 
 /// Persists the best quiz results per difficulty with `shared_preferences`.
 class QuizStatsStore {
-  QuizStatsStore._();
-
-  static final QuizStatsStore instance = QuizStatsStore._();
-
-  /// A store separate from [instance] (tests).
-  QuizStatsStore.test();
+  QuizStatsStore();
 
   static const _key = 'quiz_records_v1';
 

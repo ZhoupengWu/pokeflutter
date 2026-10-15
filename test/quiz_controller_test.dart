@@ -13,7 +13,7 @@ QuizController _controller({
 }) => QuizController(
   api: api ?? FakePokemonApi(),
   repository: fakeRepository(),
-  stats: stats ?? QuizStatsStore.test(),
+  stats: stats ?? QuizStatsStore(),
   questionCount: questionCount,
 );
 
@@ -128,7 +128,7 @@ void main() {
   });
 
   test('finishing a game shows the results and saves the record', () async {
-    final stats = QuizStatsStore.test();
+    final stats = QuizStatsStore();
     final c = _controller(stats: stats);
     await c.init();
     await c.start();

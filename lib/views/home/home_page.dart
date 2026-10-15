@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/home_controller.dart';
 import '../../l10n/l10n_extensions.dart';
@@ -28,7 +29,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? HomeController();
+    _controller =
+        widget.controller ??
+        HomeController(repository: context.read(), typeIndex: context.read());
     _controller.init();
   }
 

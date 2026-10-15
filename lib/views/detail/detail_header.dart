@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
@@ -26,6 +27,7 @@ class DetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
+    final favourites = context.read<FavouritesManager>();
 
     Widget artwork = Image.network(
       pokemon.urlImage,
@@ -69,11 +71,9 @@ class DetailHeader extends StatelessWidget {
                 ),
               ),
               ValueListenableBuilder(
-                valueListenable: FavouritesManager.instance.notifier,
+                valueListenable: favourites.notifier,
                 builder: (_, _, _) {
-                  final isFav = FavouritesManager.instance.isFavourite(
-                    favouriteItem.name,
-                  );
+                  final isFav = favourites.isFavourite(favouriteItem.name);
                   return IconButton(
                     tooltip: isFav
                         ? l10n.removeFromFavourites
@@ -84,8 +84,7 @@ class DetailHeader extends StatelessWidget {
                           : Icons.favorite_border_rounded,
                       color: isFav ? Colors.redAccent : Colors.white,
                     ),
-                    onPressed: () =>
-                        FavouritesManager.instance.toggle(favouriteItem),
+                    onPressed: () => favourites.toggle(favouriteItem),
                   );
                 },
               ),

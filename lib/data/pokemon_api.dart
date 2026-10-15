@@ -48,9 +48,7 @@ class PokemonApi {
          retryDelay: retryDelay,
          maxAttempts: maxAttempts,
        ),
-       _cache = cache ?? PokemonCache.instance;
-
-  static final PokemonApi instance = PokemonApi();
+       _cache = cache ?? PokemonCache();
 
   final PokeApiClient _http;
   final PokemonCache _cache;

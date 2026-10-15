@@ -4,15 +4,12 @@ import '../model/pokemon_list_item.dart';
 
 /// Manages favourite Pokémon with persistence via [shared_preferences].
 ///
-/// Usage:
-///   await FavouritesManager.instance.init(); // call once in main()
-///   FavouritesManager.instance.toggle(pokemon);
-///   FavouritesManager.instance.isFavourite('pikachu');
+/// One instance is created at startup (see `AppServices`) and provided to the
+/// widgets; call [init] once before use.
 ///
 /// Widgets can listen for changes via [notifier].
 class FavouritesManager {
-  FavouritesManager._();
-  static final FavouritesManager instance = FavouritesManager._();
+  FavouritesManager();
 
   static const _kPrefsKey = 'favourite_pokemon_names';
 

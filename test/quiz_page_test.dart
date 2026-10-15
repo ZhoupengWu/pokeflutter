@@ -22,7 +22,7 @@ Future<QuizController> _pump(
   final controller = QuizController(
     api: api ?? FakePokemonApi(),
     repository: fakeRepository(),
-    stats: QuizStatsStore.test(),
+    stats: QuizStatsStore(),
     questionCount: 2,
   );
   addTearDown(controller.dispose);

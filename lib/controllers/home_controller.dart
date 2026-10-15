@@ -11,11 +11,11 @@ import '../data/pokemon_type_index.dart';
 /// so [isFilterLoading] / [filterFailed] describe that wait.
 class HomeController extends ChangeNotifier {
   HomeController({
-    PokemonRepository? repository,
-    PokemonTypeIndex? typeIndex,
+    required PokemonRepository repository,
+    required PokemonTypeIndex typeIndex,
     Random? random,
-  }) : _repository = repository ?? PokemonRepository.instance,
-       _typeIndex = typeIndex ?? PokemonTypeIndex.instance,
+  }) : _repository = repository,
+       _typeIndex = typeIndex,
        _random = random ?? Random();
 
   final PokemonRepository _repository;

@@ -17,14 +17,14 @@ enum QuizScreen { start, quiz, results }
 /// saved to the [QuizStatsStore].
 class QuizController extends ChangeNotifier {
   QuizController({
-    PokemonApi? api,
-    PokemonRepository? repository,
-    QuizStatsStore? stats,
+    required PokemonApi api,
+    required PokemonRepository repository,
+    required QuizStatsStore stats,
     this.questionCount = 10,
     this.tick = const Duration(milliseconds: 100),
-  }) : _api = api ?? PokemonApi.instance,
-       _repository = repository ?? PokemonRepository.instance,
-       _stats = stats ?? QuizStatsStore.instance;
+  }) : _api = api,
+       _repository = repository,
+       _stats = stats;
 
   final PokemonApi _api;
   final PokemonRepository _repository;

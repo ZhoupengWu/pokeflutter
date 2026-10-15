@@ -16,8 +16,6 @@ import '../core/pokemon_constants.dart';
 class PokemonTypeIndex extends ChangeNotifier {
   PokemonTypeIndex({http.Client? client}) : _client = client ?? http.Client();
 
-  static final PokemonTypeIndex instance = PokemonTypeIndex();
-
   static const _kPrefsKey = 'pokemon_type_index_v2';
   static const _timeout = Duration(seconds: 15);
 

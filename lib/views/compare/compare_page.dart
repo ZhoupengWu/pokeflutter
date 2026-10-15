@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/compare_controller.dart';
 import '../../l10n/l10n_extensions.dart';
@@ -25,7 +26,9 @@ class _ComparePageState extends State<ComparePage> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? CompareController();
+    _controller =
+        widget.controller ??
+        CompareController(api: context.read(), repository: context.read());
     _controller.init();
   }
 

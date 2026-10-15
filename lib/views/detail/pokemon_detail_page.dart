@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -43,7 +44,13 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
   void initState() {
     super.initState();
     _controller =
-        widget.controller ?? PokemonDetailController(item: widget.pokemon);
+        widget.controller ??
+        PokemonDetailController(
+          item: widget.pokemon,
+          api: context.read(),
+          evolutionApi: context.read(),
+          repository: context.read(),
+        );
     _controller.load();
   }
 

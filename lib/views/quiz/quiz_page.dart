@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../controllers/quiz_controller.dart';
 import 'quiz_question_view.dart';
 import 'quiz_results_view.dart';
@@ -26,7 +27,13 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? QuizController();
+    _controller =
+        widget.controller ??
+        QuizController(
+          api: context.read(),
+          repository: context.read(),
+          stats: context.read(),
+        );
     _controller.init();
   }
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/controllers/pokemon_detail_controller.dart';
-import 'package:pokeflutter/model/pokemon_list_item.dart';
+import 'package:pokeflutter/app_services.dart';
 import 'package:pokeflutter/data/favourites_manager.dart';
+import 'package:pokeflutter/model/pokemon_list_item.dart';
 import 'package:pokeflutter/theme/theme.dart';
 import 'package:pokeflutter/views/detail/pokemon_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +17,9 @@ final _item = PokemonListItem(
   name: 'mon6',
   url: 'https://pokeapi.co/api/v2/pokemon/6/',
 );
+
+/// The favourites the page under test reads (fresh for every test).
+late FavouritesManager favourites;
 
 Future<PokemonDetailController> _pump(
   WidgetTester tester, {
@@ -38,6 +42,7 @@ Future<PokemonDetailController> _pump(
   await tester.pumpWidget(
     testApp(
       PokemonDetailPage(pokemon: _item, controller: controller),
+      services: AppServices(favourites: favourites),
       locale: locale,
       theme: theme,
     ),
@@ -54,7 +59,7 @@ Future<void> _scrollTo(WidgetTester tester, Finder finder) => tester
 void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({});
-    FavouritesManager.instance.notifier.value = [];
+    favourites = FavouritesManager();
   });
 
   testWidgets('shows the header, about, abilities and stats', (tester) async {
@@ -152,12 +157,12 @@ void main() {
 
     await tester.tap(find.byTooltip('Add to favourites'));
     await tester.pump();
-    expect(FavouritesManager.instance.isFavourite('mon6'), isTrue);
+    expect(favourites.isFavourite('mon6'), isTrue);
     expect(find.byTooltip('Remove from favourites'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Remove from favourites'));
     await tester.pump();
-    expect(FavouritesManager.instance.isFavourite('mon6'), isFalse);
+    expect(favourites.isFavourite('mon6'), isFalse);
   });
 
   testWidgets('is translated and readable in the dark theme', (tester) async {

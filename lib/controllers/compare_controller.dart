@@ -17,9 +17,11 @@ class SlotState {
 
 /// State of the Compare tab: the bundled list plus the two slots.
 class CompareController extends ChangeNotifier {
-  CompareController({PokemonApi? api, PokemonRepository? repository})
-    : _api = api ?? PokemonApi.instance,
-      _repository = repository ?? PokemonRepository.instance;
+  CompareController({
+    required PokemonApi api,
+    required PokemonRepository repository,
+  }) : _api = api,
+       _repository = repository;
 
   final PokemonApi _api;
   final PokemonRepository _repository;

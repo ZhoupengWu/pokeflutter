@@ -14,12 +14,12 @@ enum LoadStatus { loading, loaded, failed }
 class PokemonDetailController extends ChangeNotifier {
   PokemonDetailController({
     required this.item,
-    PokemonApi? api,
-    EvolutionApi? evolutionApi,
-    PokemonRepository? repository,
-  }) : _api = api ?? PokemonApi.instance,
-       _evolutionApi = evolutionApi ?? EvolutionApi.instance,
-       _repository = repository ?? PokemonRepository.instance;
+    required PokemonApi api,
+    required EvolutionApi evolutionApi,
+    required PokemonRepository repository,
+  }) : _api = api,
+       _evolutionApi = evolutionApi,
+       _repository = repository;
 
   /// The entry that was opened (from the list, favourites, an evolution…).
   final PokemonListItem item;

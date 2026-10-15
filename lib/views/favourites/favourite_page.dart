@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../theme/app_colors.dart';
@@ -38,7 +39,7 @@ class FavouritePage extends StatelessWidget {
             SizedBox(height: 24.h),
             Expanded(
               child: ValueListenableBuilder(
-                valueListenable: FavouritesManager.instance.notifier,
+                valueListenable: context.read<FavouritesManager>().notifier,
                 builder: (context, favourites, _) {
                   if (favourites.isEmpty) {
                     return Center(

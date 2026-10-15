@@ -21,8 +21,6 @@ class EvolutionApi {
          maxAttempts: maxAttempts,
        );
 
-  static final EvolutionApi instance = EvolutionApi();
-
   final PokeApiClient _http;
   final Map<String, Future<EvolutionChain>> _chains = {};
 

@@ -10,8 +10,6 @@ class PokemonRepository {
   PokemonRepository({Future<String> Function()? loadAsset})
     : _loadAsset = loadAsset ?? (() => rootBundle.loadString(assetPath));
 
-  static final PokemonRepository instance = PokemonRepository();
-
   static const assetPath = 'assets/pokemonList.json';
 
   final Future<String> Function() _loadAsset;
