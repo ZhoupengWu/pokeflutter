@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pokeflutter/utils/app_colors.dart';
-import 'package:pokeflutter/utils/app_settings.dart';
-import 'package:pokeflutter/utils/theme.dart';
-import 'package:pokeflutter/views/widgets/settings_sheet.dart';
+import 'package:pokeflutter/app_services.dart';
+import 'package:pokeflutter/theme/app_colors.dart';
+import 'package:pokeflutter/data/app_settings.dart';
+import 'package:pokeflutter/theme/theme.dart';
+import 'package:pokeflutter/views/home/settings_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'support/test_app.dart';
 
@@ -11,49 +12,49 @@ void main() {
   group('AppSettings', () {
     test('defaults to following the system theme', () async {
       SharedPreferences.setMockInitialValues({});
-      final settings = AppSettings.test();
+      final settings = AppSettings();
       await settings.init();
       expect(settings.themeMode, ThemeMode.system);
     });
 
     test('persists the chosen theme mode', () async {
       SharedPreferences.setMockInitialValues({});
-      final settings = AppSettings.test();
+      final settings = AppSettings();
       await settings.setThemeMode(ThemeMode.dark);
       expect(settings.themeMode, ThemeMode.dark);
 
-      final restored = AppSettings.test();
+      final restored = AppSettings();
       await restored.init();
       expect(restored.themeMode, ThemeMode.dark);
     });
 
     test('persists the language and can go back to the system one', () async {
       SharedPreferences.setMockInitialValues({});
-      final settings = AppSettings.test();
+      final settings = AppSettings();
       await settings.init();
       expect(settings.locale, isNull);
 
       await settings.setLocale(const Locale('it'));
-      final restored = AppSettings.test();
+      final restored = AppSettings();
       await restored.init();
       expect(restored.locale, const Locale('it'));
 
       await restored.setLocale(null);
-      final cleared = AppSettings.test();
+      final cleared = AppSettings();
       await cleared.init();
       expect(cleared.locale, isNull);
     });
 
     test('ignores a language the app is not translated into', () async {
       SharedPreferences.setMockInitialValues({'settings_locale': 'xx'});
-      final settings = AppSettings.test();
+      final settings = AppSettings();
       await settings.init();
       expect(settings.locale, isNull);
     });
 
     test('ignores an unknown stored value', () async {
       SharedPreferences.setMockInitialValues({'settings_theme_mode': 'neon'});
-      final settings = AppSettings.test();
+      final settings = AppSettings();
       await settings.init();
       expect(settings.themeMode, ThemeMode.system);
     });
@@ -85,8 +86,10 @@ void main() {
 
   testWidgets('the settings sheet switches the theme mode', (tester) async {
     SharedPreferences.setMockInitialValues({});
-    final settings = AppSettings.test();
-    await tester.pumpWidget(testApp(SettingsSheet(settings: settings)));
+    final settings = AppSettings();
+    await tester.pumpWidget(
+      testApp(const SettingsSheet(), services: AppServices(settings: settings)),
+    );
 
     await tester.tap(find.text('Dark'));
     await tester.pump();

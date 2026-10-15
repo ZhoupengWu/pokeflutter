@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pokeflutter/views/widgets/search_bar.dart';
+import 'package:pokeflutter/views/home/search_bar.dart';
 import 'support/test_app.dart';
 
 Widget _app({
@@ -37,7 +37,7 @@ void main() {
       _app(onSearch: (_) {}, onFilterTap: () => taps++, activeFilterCount: 2),
     );
 
-    final button = find.bySemanticsLabel('Filter by type, 2 selected');
+    final button = find.bySemanticsLabel('Filters, 2 selected');
     expect(button, findsOneWidget);
 
     await tester.tap(button);
@@ -49,7 +49,46 @@ void main() {
     final handle = tester.ensureSemantics();
     await tester.pumpWidget(_app(onSearch: (_) {}));
 
-    expect(find.bySemanticsLabel('Filter by type'), findsOneWidget);
+    expect(find.bySemanticsLabel('Filters'), findsOneWidget);
     handle.dispose();
+  });
+
+  testWidgets('tapping elsewhere takes the focus off the field', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      testApp(
+        Column(
+          children: [
+            SearchBarWidget(onSearch: (_) {}),
+            const Expanded(child: Center(child: Text('somewhere else'))),
+          ],
+        ),
+      ),
+    );
+
+    await tester.tap(find.byType(TextField));
+    await tester.pump();
+    expect(FocusManager.instance.primaryFocus?.hasPrimaryFocus, isTrue);
+    expect(tester.widget<TextField>(find.byType(TextField)).focusNode, isNull);
+    expect(
+      tester
+          .state<EditableTextState>(find.byType(EditableText))
+          .widget
+          .focusNode
+          .hasFocus,
+      isTrue,
+    );
+
+    await tester.tap(find.text('somewhere else'));
+    await tester.pump();
+    expect(
+      tester
+          .state<EditableTextState>(find.byType(EditableText))
+          .widget
+          .focusNode
+          .hasFocus,
+      isFalse,
+    );
   });
 }

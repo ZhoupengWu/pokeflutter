@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../utils/app_colors.dart';
+import '../../theme/app_colors.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final ValueChanged<String> onSearch;
@@ -122,6 +122,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           child: TextField(
             controller: _controller,
             onChanged: widget.onSearch,
+            // On phones a tap elsewhere (a Pokémon, the background) does not
+            // drop the focus by itself, so the cursor would stay in the field
+            // while browsing and after coming back from a detail page.
+            onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
             style: Theme.of(
               context,
             ).textTheme.bodyLarge?.copyWith(color: context.colors.strong),

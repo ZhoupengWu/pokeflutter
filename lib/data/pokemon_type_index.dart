@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'pokemon_constants.dart';
+import '../core/pokemon_constants.dart';
+import 'network_status.dart';
 
 /// Lookup of the types of every Pokémon.
 ///
@@ -14,9 +15,11 @@ import 'pokemon_constants.dart';
 ///
 /// Notifies its listeners when the index becomes available.
 class PokemonTypeIndex extends ChangeNotifier {
-  PokemonTypeIndex({http.Client? client}) : _client = client ?? http.Client();
+  PokemonTypeIndex({http.Client? client, this.status})
+    : _client = client ?? http.Client();
 
-  static final PokemonTypeIndex instance = PokemonTypeIndex();
+  /// Told whether PokéAPI could be reached.
+  final NetworkStatus? status;
 
   static const _kPrefsKey = 'pokemon_type_index_v2';
   static const _timeout = Duration(seconds: 15);
@@ -84,9 +87,16 @@ class PokemonTypeIndex extends ChangeNotifier {
 
   /// Returns (pokemon name, slot) for every Pokémon of [type].
   Future<List<(String, int)>> _fetchType(String type) async {
-    final response = await _client
-        .get(Uri.parse('https://pokeapi.co/api/v2/type/$type'))
-        .timeout(_timeout);
+    final http.Response response;
+    try {
+      response = await _client
+          .get(Uri.parse('https://pokeapi.co/api/v2/type/$type'))
+          .timeout(_timeout);
+    } catch (_) {
+      status?.reportFailure();
+      rethrow;
+    }
+    status?.reportSuccess();
     if (response.statusCode != 200) {
       throw Exception('Type $type: HTTP ${response.statusCode}');
     }

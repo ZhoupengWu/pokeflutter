@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../l10n/l10n_extensions.dart';
+import '../theme/responsive.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/app_colors.dart';
+import '../theme/app_colors.dart';
 import 'home/home_page.dart';
 import 'compare/compare_page.dart';
 import 'quiz/quiz_page.dart';
-import 'favourite_page.dart';
+import 'favourites/favourite_page.dart';
 
 class ShellPage extends StatefulWidget {
   const ShellPage({super.key});
@@ -28,14 +29,16 @@ class _ShellPageState extends State<ShellPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          // IndexedStack keeps hidden tabs running; switch their tickers off
-          // so animations (and the quiz countdown) wait until they are shown.
-          for (var i = 0; i < _pages.length; i++)
-            TickerMode(enabled: i == _currentIndex, child: _pages[i]),
-        ],
+      body: ContentWidth(
+        child: IndexedStack(
+          index: _currentIndex,
+          children: [
+            // IndexedStack keeps hidden tabs running; switch their tickers off
+            // so animations (and the quiz countdown) wait until they are shown.
+            for (var i = 0; i < _pages.length; i++)
+              TickerMode(enabled: i == _currentIndex, child: _pages[i]),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

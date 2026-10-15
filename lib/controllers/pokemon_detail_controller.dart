@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import '../model/evolution.dart';
 import '../model/pokemon.dart';
 import '../model/pokemon_list_item.dart';
-import '../utils/evolution_api.dart';
-import '../utils/pokemon_api.dart';
-import '../utils/pokemon_repository.dart';
+import '../data/evolution_api.dart';
+import '../data/pokemon_api.dart';
+import '../data/pokemon_repository.dart';
 
 enum LoadStatus { loading, loaded, failed }
 
@@ -14,12 +14,12 @@ enum LoadStatus { loading, loaded, failed }
 class PokemonDetailController extends ChangeNotifier {
   PokemonDetailController({
     required this.item,
-    PokemonApi? api,
-    EvolutionApi? evolutionApi,
-    PokemonRepository? repository,
-  }) : _api = api ?? PokemonApi.instance,
-       _evolutionApi = evolutionApi ?? EvolutionApi.instance,
-       _repository = repository ?? PokemonRepository.instance;
+    required PokemonApi api,
+    required EvolutionApi evolutionApi,
+    required PokemonRepository repository,
+  }) : _api = api,
+       _evolutionApi = evolutionApi,
+       _repository = repository;
 
   /// The entry that was opened (from the list, favourites, an evolution…).
   final PokemonListItem item;

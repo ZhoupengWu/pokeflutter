@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/pokemon_constants.dart';
-import '../../utils/type_chart.dart';
+import '../../theme/app_colors.dart';
+import '../../core/pokemon_constants.dart';
+import '../../core/type_chart.dart';
 import 'about_sections.dart';
 
 /// How much damage each type of move deals to this Pokémon, grouped into

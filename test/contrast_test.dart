@@ -1,7 +1,7 @@
 import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pokeflutter/utils/contrast.dart';
-import 'package:pokeflutter/utils/pokemon_constants.dart';
+import 'package:pokeflutter/theme/contrast.dart';
+import 'package:pokeflutter/core/pokemon_constants.dart';
 
 double _ratio(Color a, Color b) {
   final l1 = a.computeLuminance(), l2 = b.computeLuminance();

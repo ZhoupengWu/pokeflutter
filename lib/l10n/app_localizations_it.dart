@@ -82,15 +82,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get clearSearch => 'Cancella la ricerca';
 
   @override
-  String get filterByType => 'Filtra per tipo';
+  String get filterByType => 'Filtri';
 
   @override
   String filterByTypeSelected(int count) {
-    return 'Filtra per tipo, $count selezionati';
+    return 'Filtri, $count attivi';
   }
 
   @override
-  String get filterSheetTitle => 'Filtra per tipo';
+  String get filterSheetTitle => 'Filtra e ordina';
 
   @override
   String get showAll => 'Mostra tutti';
@@ -512,4 +512,38 @@ class AppLocalizationsIt extends AppLocalizations {
   String compareStatSemantics(String stat, int first, int second) {
     return '$stat: $first contro $second';
   }
+
+  @override
+  String get offlineBanner =>
+      'Sei offline. I Pokémon già aperti restano disponibili.';
+
+  @override
+  String get filterTypeSection => 'Tipo';
+
+  @override
+  String get filterGenerationSection => 'Generazione';
+
+  @override
+  String get filterGenerationHint =>
+      'Le forme alternative sono nascoste quando scegli una generazione.';
+
+  @override
+  String get filterSortSection => 'Ordina per';
+
+  @override
+  String generationName(String roman) {
+    return 'Gen. $roman';
+  }
+
+  @override
+  String get sortNumberAsc => 'Numero (crescente)';
+
+  @override
+  String get sortNumberDesc => 'Numero (decrescente)';
+
+  @override
+  String get sortNameAsc => 'Nome (A–Z)';
+
+  @override
+  String get sortNameDesc => 'Nome (Z–A)';
 }

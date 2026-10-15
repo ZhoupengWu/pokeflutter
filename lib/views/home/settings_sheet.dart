@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/app_settings.dart';
+import '../../theme/app_colors.dart';
+import '../../data/app_settings.dart';
 
-/// Bottom sheet with the app preferences (theme).
+/// Bottom sheet with the app preferences (theme and language).
 class SettingsSheet extends StatelessWidget {
-  final AppSettings settings;
-
-  SettingsSheet({super.key, AppSettings? settings})
-    : settings = settings ?? AppSettings.instance;
+  const SettingsSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.read<AppSettings>();
     final textTheme = Theme.of(context).textTheme;
 
     return SafeArea(

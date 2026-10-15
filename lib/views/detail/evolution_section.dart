@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import '../shared/pokemon_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/pokemon_detail_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/evolution.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/capitalize.dart';
+import '../../theme/app_colors.dart';
+import '../../core/capitalize.dart';
 import 'about_sections.dart';
 import 'pokemon_detail_page.dart';
 
@@ -198,7 +199,7 @@ class _StageTile extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.network(
+              PokemonImage(
                 PokemonListItem.spriteUrlFor(stage.id),
                 width: 56.r,
                 height: 56.r,

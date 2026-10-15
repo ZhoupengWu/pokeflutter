@@ -5,7 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:pokeflutter/controllers/home_controller.dart';
-import 'package:pokeflutter/utils/pokemon_type_index.dart';
+import 'package:pokeflutter/core/pokedex.dart';
+import 'package:pokeflutter/data/pokemon_repository.dart';
+import 'package:pokeflutter/data/pokemon_type_index.dart';
 import 'package:pokeflutter/views/home/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,8 +58,114 @@ HomeController _controller([_Network? network]) {
 
 List<String> _names(HomeController c) => c.filtered.map((p) => p.name).toList();
 
+/// A list spanning generations and including an alternate form.
+PokemonRepository _mixedRepository() => PokemonRepository(
+  loadAsset: () async => jsonEncode({
+    'pokemonList': [
+      for (final (name, id) in [
+        ('bulbasaur', 1),
+        ('pikachu', 25),
+        ('chikorita', 152),
+        ('treecko', 252),
+        ('charizard-mega-x', 10034),
+      ])
+        {'name': name, 'url': 'https://pokeapi.co/api/v2/pokemon/$id/'},
+    ],
+  }),
+);
+
+HomeController _mixed() => HomeController(
+  repository: _mixedRepository(),
+  typeIndex: PokemonTypeIndex(client: MockClient((r) async => _types(r))),
+  random: Random(1),
+);
+
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
+
+  group('search by number, generation and sort', () {
+    test('a number finds that Pokémon, with or without #', () async {
+      final c = _mixed();
+      await c.init();
+
+      await c.setSearch('25');
+      expect(_names(c), ['pikachu']);
+
+      await c.setSearch('#152');
+      expect(_names(c), ['chikorita']);
+
+      await c.setSearch('999');
+      expect(c.filtered, isEmpty);
+      c.dispose();
+    });
+
+    test('filters by generation and hides alternate forms', () async {
+      final c = _mixed();
+      await c.init();
+
+      await c.setGenerationFilters({1});
+      expect(_names(c), ['bulbasaur', 'pikachu']);
+
+      await c.setGenerationFilters({1, 3});
+      expect(_names(c), ['bulbasaur', 'pikachu', 'treecko']);
+
+      await c.setGenerationFilters({});
+      expect(c.filtered, hasLength(5)); // the Mega form is back
+      c.dispose();
+    });
+
+    test('sorts by number and by name', () async {
+      final c = _mixed();
+      await c.init();
+
+      await c.setSort(PokemonSort.numberDesc);
+      expect(_names(c), [
+        'charizard-mega-x',
+        'treecko',
+        'chikorita',
+        'pikachu',
+        'bulbasaur',
+      ]);
+
+      await c.setSort(PokemonSort.nameAsc);
+      expect(_names(c).first, 'bulbasaur');
+      expect(_names(c).last, 'treecko');
+
+      await c.setSort(PokemonSort.nameDesc);
+      expect(_names(c).first, 'treecko');
+
+      await c.setSort(PokemonSort.numberAsc);
+      expect(_names(c).first, 'bulbasaur');
+      c.dispose();
+    });
+
+    test('filters, search and sort combine and are counted', () async {
+      final c = _mixed();
+      await c.init();
+      expect(c.activeFilterCount, 0);
+
+      await c.setSelection(
+        types: {'fire'},
+        generations: {1, 2},
+        sort: PokemonSort.nameDesc,
+      );
+
+      expect(c.activeFilterCount, 4); // 1 type + 2 generations + the sort
+      // mon1/mon2 are the "fire" Pokémon of the fake type API, not in this list.
+      expect(c.filtered, isEmpty);
+
+      await c.setSelection(
+        types: const {},
+        generations: {1, 2},
+        sort: PokemonSort.nameDesc,
+      );
+      expect(_names(c), ['pikachu', 'chikorita', 'bulbasaur']);
+
+      await c.setSearch('chi');
+      expect(_names(c), ['chikorita']);
+      c.dispose();
+    });
+  });
 
   group('HomeController', () {
     test('shows the whole list once loaded', () async {

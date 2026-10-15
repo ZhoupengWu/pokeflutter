@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/quiz_model.dart';
-import '../../utils/app_colors.dart';
+import '../../theme/app_colors.dart';
 import 'quiz_widgets.dart';
 
 class QuizStartView extends StatelessWidget {

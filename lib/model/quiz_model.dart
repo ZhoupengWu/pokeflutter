@@ -1,4 +1,4 @@
-import '../model/pokemon_list_item.dart';
+import 'pokemon_list_item.dart';
 
 enum QuizMode { guessName, guessType }
 

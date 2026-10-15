@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/main.dart';
-import 'package:pokeflutter/utils/app_settings.dart';
-import 'package:pokeflutter/utils/pokemon_repository.dart';
+import 'package:pokeflutter/app_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -17,10 +16,12 @@ void main() {
     tester.view.physicalSize = const Size(1080, 2340);
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
-    // Assets are read through the real event loop, not the fake test clock.
-    await tester.runAsync(PokemonRepository.instance.getAll);
+    // Assets and preferences are read through the real event loop, not the
+    // fake test clock.
+    final services = AppServices();
+    await tester.runAsync(services.init);
 
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(services: services));
     // Let the pages receive the list, then rebuild with it.
     await tester.runAsync(() => Future<void>.delayed(Duration.zero));
     await tester.pump();
@@ -63,11 +64,11 @@ void main() {
     tester.view.physicalSize = const Size(1080, 2340);
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
-    await tester.runAsync(PokemonRepository.instance.getAll);
-    final settings = AppSettings.test();
-    await tester.runAsync(settings.init);
+    final services = AppServices();
+    await tester.runAsync(services.init);
+    final settings = services.settings;
 
-    await tester.pumpWidget(MyApp(settings: settings));
+    await tester.pumpWidget(MyApp(services: services));
     await tester.runAsync(() => Future<void>.delayed(Duration.zero));
     await tester.pump();
 

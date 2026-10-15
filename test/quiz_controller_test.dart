@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/controllers/quiz_controller.dart';
 import 'package:pokeflutter/model/quiz_model.dart';
-import 'package:pokeflutter/utils/quiz_stats_store.dart';
+import 'package:pokeflutter/data/quiz_stats_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/quiz_fakes.dart';
@@ -13,7 +13,7 @@ QuizController _controller({
 }) => QuizController(
   api: api ?? FakePokemonApi(),
   repository: fakeRepository(),
-  stats: stats ?? QuizStatsStore.test(),
+  stats: stats ?? QuizStatsStore(),
   questionCount: questionCount,
 );
 
@@ -128,7 +128,7 @@ void main() {
   });
 
   test('finishing a game shows the results and saves the record', () async {
-    final stats = QuizStatsStore.test();
+    final stats = QuizStatsStore();
     final c = _controller(stats: stats);
     await c.init();
     await c.start();

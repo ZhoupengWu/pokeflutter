@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../shared/pokemon_image.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,10 +8,11 @@ import '../../controllers/pokemon_detail_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/contrast.dart';
-import '../../utils/pokemon_constants.dart';
-import '../../utils/theme.dart';
+import '../../theme/app_colors.dart';
+import '../../theme/contrast.dart';
+import '../../core/pokemon_constants.dart';
+import '../../theme/responsive.dart';
+import '../../theme/theme.dart';
 import 'about_sections.dart';
 import 'detail_header.dart';
 import 'evolution_section.dart';
@@ -43,7 +46,13 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
   void initState() {
     super.initState();
     _controller =
-        widget.controller ?? PokemonDetailController(item: widget.pokemon);
+        widget.controller ??
+        PokemonDetailController(
+          item: widget.pokemon,
+          api: context.read(),
+          evolutionApi: context.read(),
+          repository: context.read(),
+        );
     _controller.load();
   }
 
@@ -106,7 +115,7 @@ class _LoadingView extends StatelessWidget {
           if (tag != null) ...[
             Hero(
               tag: tag,
-              child: Image.network(
+              child: PokemonImage(
                 item.spriteUrl,
                 width: 96.r,
                 height: 96.r,
@@ -139,7 +148,8 @@ class _ErrorView extends StatelessWidget {
             child: IconButton(
               tooltip: context.l10n.back,
               icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () =>
+                  Navigator.of(context).popUntil((route) => route.isFirst),
             ),
           ),
         ),
@@ -207,66 +217,68 @@ class _DetailView extends StatelessWidget {
         ),
         SafeArea(
           bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DetailHeader(
-                pokemon: pokemon,
-                favouriteItem: favouriteItem,
-                heroTag: heroTag,
-              ),
+          child: ContentWidth(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DetailHeader(
+                  pokemon: pokemon,
+                  favouriteItem: favouriteItem,
+                  heroTag: heroTag,
+                ),
 
-              // ── Card with the details ──────────────────────────────────
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: colors.surface,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(32.r),
-                    ),
-                  ),
-                  child: SafeArea(
-                    top: false,
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24.w,
-                        vertical: 24.h,
+                // ── Card with the details ──────────────────────────────────
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(32.r),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AboutSection(
-                            pokemon: pokemon,
-                            accent: readableAccent,
-                          ),
-                          SizedBox(height: 24.h),
-                          AbilitiesSection(
-                            pokemon: pokemon,
-                            accent: readableAccent,
-                          ),
-                          SizedBox(height: 24.h),
-                          StatsSection(
-                            pokemon: pokemon,
-                            accent: readableAccent,
-                          ),
-                          SizedBox(height: 24.h),
-                          TypeMatchupsSection(
-                            pokemon: pokemon,
-                            accent: readableAccent,
-                          ),
-                          SizedBox(height: 24.h),
-                          EvolutionSection(
-                            controller: controller,
-                            accent: readableAccent,
-                          ),
-                        ],
+                    ),
+                    child: SafeArea(
+                      top: false,
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24.w,
+                          vertical: 24.h,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AboutSection(
+                              pokemon: pokemon,
+                              accent: readableAccent,
+                            ),
+                            SizedBox(height: 24.h),
+                            AbilitiesSection(
+                              pokemon: pokemon,
+                              accent: readableAccent,
+                            ),
+                            SizedBox(height: 24.h),
+                            StatsSection(
+                              pokemon: pokemon,
+                              accent: readableAccent,
+                            ),
+                            SizedBox(height: 24.h),
+                            TypeMatchupsSection(
+                              pokemon: pokemon,
+                              accent: readableAccent,
+                            ),
+                            SizedBox(height: 24.h),
+                            EvolutionSection(
+                              controller: controller,
+                              accent: readableAccent,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import '../model/pokemon.dart';
 import '../model/pokemon_list_item.dart';
 import '../model/quiz_model.dart';
-import '../utils/pokemon_api.dart';
-import '../utils/pokemon_repository.dart';
-import '../utils/quiz_logic.dart';
-import '../utils/quiz_stats_store.dart';
+import '../data/pokemon_api.dart';
+import '../data/pokemon_repository.dart';
+import '../core/quiz_logic.dart';
+import '../data/quiz_stats_store.dart';
 
 enum QuizScreen { start, quiz, results }
 
@@ -17,14 +17,14 @@ enum QuizScreen { start, quiz, results }
 /// saved to the [QuizStatsStore].
 class QuizController extends ChangeNotifier {
   QuizController({
-    PokemonApi? api,
-    PokemonRepository? repository,
-    QuizStatsStore? stats,
+    required PokemonApi api,
+    required PokemonRepository repository,
+    required QuizStatsStore stats,
     this.questionCount = 10,
     this.tick = const Duration(milliseconds: 100),
-  }) : _api = api ?? PokemonApi.instance,
-       _repository = repository ?? PokemonRepository.instance,
-       _stats = stats ?? QuizStatsStore.instance;
+  }) : _api = api,
+       _repository = repository,
+       _stats = stats;
 
   final PokemonApi _api;
   final PokemonRepository _repository;

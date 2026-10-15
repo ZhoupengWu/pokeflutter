@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import '../shared/pokemon_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
 import '../../model/quiz_model.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/capitalize.dart';
-import '../../utils/pokemon_constants.dart';
+import '../../theme/app_colors.dart';
+import '../../core/capitalize.dart';
+import '../../core/pokemon_constants.dart';
 import 'quiz_widgets.dart';
 
 class QuizQuestionView extends StatelessWidget {
@@ -262,7 +263,7 @@ class _SpriteCard extends StatelessWidget {
     double size,
   ) {
     return Center(
-      child: Image.network(
+      child: PokemonImage(
         // The small sprite blacked out is the "silhouette".
         hidden ? pokemon.urlSprite : pokemon.urlImage,
         height: size,

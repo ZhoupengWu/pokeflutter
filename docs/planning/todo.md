@@ -9,9 +9,11 @@
   shared repository, theme + bundled font, accessibility labels, tests, CI, docs
 - Phase 6 (v1.5.0): dark theme + settings, IT/EN localisation, type matchups, evolution chain,
   quiz difficulty/timer/records, controllers + split pages, APK build in CI
+- Phase 7 (v1.6.0): Provider services, new folder layout, offline cache, responsive layout,
+  number search + generation filter + sorting, back-navigation and search-focus fixes
 
 ## 🔲 Next
 Everything left is in [`backlog.md`](backlog.md). Suggested first steps:
 1. Manual pass on a device/emulator (P2-1): the UI was only checked in a headless web build.
-2. State management / dependency injection refactor (P2-2).
-3. Persistent details cache + offline mode, then the other features.
+2. Named routes / `go_router` (P2-5) and localised Pokémon names (P2-6).
+3. The remaining features: extended details, team builder, cry playback, …

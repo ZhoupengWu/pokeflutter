@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import '../model/pokemon.dart';
 import '../model/pokemon_list_item.dart';
-import '../utils/pokemon_api.dart';
-import '../utils/pokemon_repository.dart';
+import '../data/pokemon_api.dart';
+import '../data/pokemon_repository.dart';
 
 enum CompareSlot { a, b }
 
@@ -17,9 +17,11 @@ class SlotState {
 
 /// State of the Compare tab: the bundled list plus the two slots.
 class CompareController extends ChangeNotifier {
-  CompareController({PokemonApi? api, PokemonRepository? repository})
-    : _api = api ?? PokemonApi.instance,
-      _repository = repository ?? PokemonRepository.instance;
+  CompareController({
+    required PokemonApi api,
+    required PokemonRepository repository,
+  }) : _api = api,
+       _repository = repository;
 
   final PokemonApi _api;
   final PokemonRepository _repository;

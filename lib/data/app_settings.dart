@@ -3,12 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// User preferences that apply to the whole app, persisted locally.
 class AppSettings extends ChangeNotifier {
-  AppSettings._();
-
-  static final AppSettings instance = AppSettings._();
-
-  /// A fresh, unshared instance (tests).
-  AppSettings.test();
+  AppSettings();
 
   static const _themeKey = 'settings_theme_mode';
   static const _localeKey = 'settings_locale';

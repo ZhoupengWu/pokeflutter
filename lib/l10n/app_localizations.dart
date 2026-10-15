@@ -239,19 +239,19 @@ abstract class AppLocalizations {
   /// No description provided for @filterByType.
   ///
   /// In en, this message translates to:
-  /// **'Filter by type'**
+  /// **'Filters'**
   String get filterByType;
 
   /// No description provided for @filterByTypeSelected.
   ///
   /// In en, this message translates to:
-  /// **'Filter by type, {count} selected'**
+  /// **'Filters, {count} selected'**
   String filterByTypeSelected(int count);
 
   /// No description provided for @filterSheetTitle.
   ///
   /// In en, this message translates to:
-  /// **'Filter by Type'**
+  /// **'Filter and sort'**
   String get filterSheetTitle;
 
   /// No description provided for @showAll.
@@ -973,6 +973,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{stat}: {first} against {second}'**
   String compareStatSemantics(String stat, int first, int second);
+
+  /// No description provided for @offlineBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline. Pokémon you\'ve already opened are still available.'**
+  String get offlineBanner;
+
+  /// No description provided for @filterTypeSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get filterTypeSection;
+
+  /// No description provided for @filterGenerationSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Generation'**
+  String get filterGenerationSection;
+
+  /// No description provided for @filterGenerationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternate forms are hidden when a generation is selected.'**
+  String get filterGenerationHint;
+
+  /// No description provided for @filterSortSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get filterSortSection;
+
+  /// No description provided for @generationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Gen {roman}'**
+  String generationName(String roman);
+
+  /// No description provided for @sortNumberAsc.
+  ///
+  /// In en, this message translates to:
+  /// **'Number (low to high)'**
+  String get sortNumberAsc;
+
+  /// No description provided for @sortNumberDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Number (high to low)'**
+  String get sortNumberDesc;
+
+  /// No description provided for @sortNameAsc.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (A–Z)'**
+  String get sortNameAsc;
+
+  /// No description provided for @sortNameDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (Z–A)'**
+  String get sortNameDesc;
 }
 
 class _AppLocalizationsDelegate

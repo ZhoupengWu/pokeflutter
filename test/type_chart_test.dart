@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pokeflutter/utils/type_chart.dart';
+import 'package:pokeflutter/core/type_chart.dart';
 
 void main() {
   test('single matchups', () {

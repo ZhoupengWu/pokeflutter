@@ -6,7 +6,6 @@ import '../model/pokemon.dart';
 /// or Hive implementation in [get] and [set].
 class PokemonCache {
   PokemonCache();
-  static final PokemonCache instance = PokemonCache();
 
   final Map<String, Pokemon> _cache = {};
 

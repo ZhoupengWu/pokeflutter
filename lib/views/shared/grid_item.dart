@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'pokemon_image.dart';
+import 'package:provider/provider.dart';
 import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../utils/capitalize.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/pokemon_constants.dart';
-import '../../utils/pokemon_type_index.dart';
+import '../../core/capitalize.dart';
+import '../../theme/app_colors.dart';
+import '../../core/pokemon_constants.dart';
+import '../../data/pokemon_type_index.dart';
 import '../detail/pokemon_detail_page.dart';
-import '../../views/widgets/styled_text.dart';
+import 'styled_text.dart';
 
 /// Card shown in the Pokédex and favourites grids.
 ///
@@ -18,25 +20,16 @@ import '../../views/widgets/styled_text.dart';
 /// the cell is neutral grey, without type badges.
 class GridItem extends StatelessWidget {
   final PokemonListItem pokemon;
-  final PokemonTypeIndex? _typeIndex;
 
   /// Names the screen the cell is on (`home`, `favourites`). When set, the
   /// sprite flies into the detail page; the scope keeps the tags unique
   /// because every tab stays alive and may show the same Pokémon.
   final String? heroScope;
 
-  /// [typeIndex] defaults to [PokemonTypeIndex.instance]; tests inject their own.
-  const GridItem({
-    super.key,
-    required this.pokemon,
-    this.heroScope,
-    PokemonTypeIndex? typeIndex,
-  }) : _typeIndex = typeIndex;
+  const GridItem({super.key, required this.pokemon, this.heroScope});
 
   Object? get _heroTag =>
       heroScope == null ? null : '$heroScope-${pokemon.name}';
-
-  PokemonTypeIndex get _index => _typeIndex ?? PokemonTypeIndex.instance;
 
   void _navigateToDetail(BuildContext context) {
     Navigator.push(
@@ -49,10 +42,11 @@ class GridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final index = context.read<PokemonTypeIndex>();
     return ListenableBuilder(
-      listenable: _index,
+      listenable: index,
       builder: (context, _) {
-        final types = _index.typesOf(pokemon.name) ?? [];
+        final types = index.typesOf(pokemon.name) ?? [];
         final color =
             listPokemonTypeColor[types.firstOrNull?.toLowerCase()] ??
             context.colors.subtle;
@@ -131,7 +125,7 @@ class GridItem extends StatelessWidget {
   }
 
   Widget _sprite() {
-    final image = Image.network(
+    final image = PokemonImage(
       pokemon.spriteUrl,
       fit: BoxFit.contain,
       excludeFromSemantics: true,

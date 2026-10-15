@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../l10n/l10n_extensions.dart';
-import 'styled_text.dart';
+import '../shared/styled_text.dart';
 
 // The button is yellow in both themes, so its content stays dark.
 const _onYellow = Color(0xFF283141);

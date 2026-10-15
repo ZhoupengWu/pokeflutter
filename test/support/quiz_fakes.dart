@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:pokeflutter/model/pokemon.dart';
-import 'package:pokeflutter/utils/pokemon_api.dart';
-import 'package:pokeflutter/utils/pokemon_repository.dart';
+import 'package:pokeflutter/data/pokemon_api.dart';
+import 'package:pokeflutter/data/pokemon_repository.dart';
 
 import 'fixtures.dart';
 

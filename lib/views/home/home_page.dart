@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/home_controller.dart';
+import '../../core/pokedex.dart';
+import '../../core/pokemon_constants.dart';
+import '../../data/network_status.dart';
 import '../../l10n/l10n_extensions.dart';
-import '../../utils/app_colors.dart';
+import '../../theme/app_colors.dart';
 import '../detail/pokemon_detail_page.dart';
-import '../widgets/pokemon_list.dart';
-import '../widgets/random_floating_button.dart';
-import '../widgets/search_bar.dart';
-import '../widgets/settings_sheet.dart';
-import '../widgets/type_filter_sheet.dart';
+import '../shared/pokemon_list.dart';
+import 'random_floating_button.dart';
+import 'search_bar.dart';
+import 'settings_sheet.dart';
+import 'filter_sheet.dart';
 import 'home_widgets.dart';
 
 /// The Pokédex tab: search, type filters and the grid of Pokémon.
@@ -24,11 +28,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final HomeController _controller;
+  late final NetworkStatus _network;
 
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? HomeController();
+    _controller =
+        widget.controller ??
+        HomeController(repository: context.read(), typeIndex: context.read());
+    _network = context.read<NetworkStatus>();
     _controller.init();
   }
 
@@ -47,9 +55,17 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: TypeFilterSheet(
-          selectedTypes: _controller.activeTypes,
-          onApply: _controller.setTypeFilters,
+        child: FilterSheet(
+          initial: FilterSelection(
+            types: _controller.activeTypes,
+            generations: _controller.activeGenerations,
+            sort: _controller.sort,
+          ),
+          onApply: (selection) => _controller.setSelection(
+            types: selection.types,
+            generations: selection.generations,
+            sort: selection.sort,
+          ),
         ),
       ),
     );
@@ -71,6 +87,36 @@ class _HomePageState extends State<HomePage> {
         builder: (_) => PokemonDetailPage(pokemon: random),
       ),
     );
+  }
+
+  /// One removable chip per active type, generation and non-default sort.
+  List<ActiveFilter> _activeFilters(BuildContext context) {
+    final l10n = context.l10n;
+    final colors = context.colors;
+    return [
+      for (final type in _controller.activeTypes)
+        ActiveFilter(
+          label: l10n.typeName(type),
+          color: listPokemonTypeColor[type] ?? colors.muted,
+          onRemove: () => _controller.setTypeFilters(
+            Set.of(_controller.activeTypes)..remove(type),
+          ),
+        ),
+      for (final number in _controller.activeGenerations.toList()..sort())
+        ActiveFilter(
+          label: l10n.generationName(generations[number - 1].roman),
+          color: colors.muted,
+          onRemove: () => _controller.setGenerationFilters(
+            Set.of(_controller.activeGenerations)..remove(number),
+          ),
+        ),
+      if (_controller.sort != PokemonSort.numberAsc)
+        ActiveFilter(
+          label: sortName(l10n, _controller.sort),
+          color: colors.muted,
+          onRemove: () => _controller.setSort(PokemonSort.numberAsc),
+        ),
+    ];
   }
 
   Widget _buildResults(BuildContext context) {
@@ -105,7 +151,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: RandomFloatingButton(onPressed: _goToRandomPokemon),
       body: ListenableBuilder(
-        listenable: _controller,
+        listenable: Listenable.merge([_controller, _network]),
         builder: (context, _) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -141,19 +187,25 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 16.h),
             SearchBarWidget(
               onSearch: _controller.setSearch,
-              activeFilterCount: _controller.activeTypes.length,
+              activeFilterCount: _controller.activeFilterCount,
               onFilterTap: _openFilterSheet,
             ),
             if (_controller.typesUnavailable)
-              TypesUnavailableBanner(onRetry: _controller.loadTypes),
-            if (_controller.activeTypes.isNotEmpty) ...[
+              ConnectionBanner(
+                message: l10n.typesUnavailableOffline,
+                onRetry: _controller.loadTypes,
+              )
+            else if (_network.isOffline)
+              ConnectionBanner(message: l10n.offlineBanner),
+            if (_controller.activeFilterCount > 0) ...[
               SizedBox(height: 8.h),
               ActiveFilterChips(
-                filters: _controller.activeTypes,
-                onRemove: (type) => _controller.setTypeFilters(
-                  Set.of(_controller.activeTypes)..remove(type),
+                filters: _activeFilters(context),
+                onClearAll: () => _controller.setSelection(
+                  types: const {},
+                  generations: const {},
+                  sort: PokemonSort.numberAsc,
                 ),
-                onClearAll: () => _controller.setTypeFilters({}),
               ),
             ],
             SizedBox(height: 16.h),

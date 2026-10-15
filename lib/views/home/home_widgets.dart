@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/pokemon_constants.dart';
+import '../../theme/app_colors.dart';
 
 // ── Empty / error message ─────────────────────────────────────────────────────
 class HomeMessage extends StatelessWidget {
@@ -43,10 +42,15 @@ class HomeMessage extends StatelessWidget {
 }
 
 // ── "Types could not be loaded" banner ────────────────────────────────────────
-class TypesUnavailableBanner extends StatelessWidget {
-  final VoidCallback onRetry;
+/// A thin notice under the search bar: either the types could not be loaded
+/// (with a Retry), or PokéAPI is unreachable but saved data still works.
+class ConnectionBanner extends StatelessWidget {
+  final String message;
 
-  const TypesUnavailableBanner({super.key, required this.onRetry});
+  /// Shows a Retry button when set.
+  final VoidCallback? onRetry;
+
+  const ConnectionBanner({super.key, required this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +66,14 @@ class TypesUnavailableBanner extends StatelessWidget {
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
-              context.l10n.typesUnavailableOffline,
+              message,
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: context.colors.subtle),
             ),
           ),
-          TextButton(onPressed: onRetry, child: Text(context.l10n.retry)),
+          if (onRetry != null)
+            TextButton(onPressed: onRetry, child: Text(context.l10n.retry)),
         ],
       ),
     );
@@ -76,15 +81,28 @@ class TypesUnavailableBanner extends StatelessWidget {
 }
 
 // ── Active filter chips row ───────────────────────────────────────────────────
+/// One removable chip of [ActiveFilterChips].
+class ActiveFilter {
+  const ActiveFilter({
+    required this.label,
+    required this.color,
+    required this.onRemove,
+  });
+
+  final String label;
+  final Color color;
+  final VoidCallback onRemove;
+}
+
+/// The filters and sort order currently applied, each removable, plus a
+/// "Clear all" at the end.
 class ActiveFilterChips extends StatelessWidget {
-  final Set<String> filters;
-  final ValueChanged<String> onRemove;
+  final List<ActiveFilter> filters;
   final VoidCallback onClearAll;
 
   const ActiveFilterChips({
     super.key,
     required this.filters,
-    required this.onRemove,
     required this.onClearAll,
   });
 
@@ -96,20 +114,19 @@ class ActiveFilterChips extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         children: [
-          ...filters.map((type) {
-            final color = listPokemonTypeColor[type] ?? context.colors.muted;
-            return Container(
+          for (final filter in filters)
+            Container(
               margin: EdgeInsets.only(right: 8.w),
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
               decoration: BoxDecoration(
-                color: color,
+                color: filter.color,
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    context.l10n.typeName(type),
+                    filter.label,
                     style: Theme.of(
                       context,
                     ).textTheme.labelSmall?.copyWith(color: Colors.white),
@@ -117,13 +134,11 @@ class ActiveFilterChips extends StatelessWidget {
                   SizedBox(width: 4.w),
                   Semantics(
                     button: true,
-                    label: context.l10n.removeFilter(
-                      context.l10n.typeName(type),
-                    ),
+                    label: context.l10n.removeFilter(filter.label),
                     excludeSemantics: true,
-                    onTap: () => onRemove(type),
+                    onTap: filter.onRemove,
                     child: GestureDetector(
-                      onTap: () => onRemove(type),
+                      onTap: filter.onRemove,
                       child: Icon(
                         Icons.close_rounded,
                         size: 14.r,
@@ -133,8 +148,7 @@ class ActiveFilterChips extends StatelessWidget {
                   ),
                 ],
               ),
-            );
-          }),
+            ),
           GestureDetector(
             onTap: onClearAll,
             child: Container(

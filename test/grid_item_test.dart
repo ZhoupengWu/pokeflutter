@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:pokeflutter/app_services.dart';
 import 'package:pokeflutter/model/pokemon_list_item.dart';
-import 'package:pokeflutter/utils/pokemon_type_index.dart';
-import 'package:pokeflutter/views/widgets/grid_item.dart';
+import 'package:pokeflutter/data/pokemon_type_index.dart';
+import 'package:pokeflutter/views/shared/grid_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'support/test_app.dart';
 
@@ -24,8 +25,10 @@ http.Response _typeResponse(http.Request request) {
   );
 }
 
-Widget _app(Widget child) =>
-    testApp(SizedBox(width: 160, height: 100, child: child));
+Widget _app(Widget child, [AppServices? services]) => testApp(
+  SizedBox(width: 160, height: 100, child: child),
+  services: services,
+);
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
@@ -54,7 +57,7 @@ void main() {
       client: MockClient((r) async => _typeResponse(r)),
     );
     await tester.pumpWidget(
-      _app(GridItem(pokemon: charizard, typeIndex: index)),
+      _app(GridItem(pokemon: charizard), AppServices(typeIndex: index)),
     );
 
     expect(find.text('Charizard'), findsOneWidget);
@@ -74,7 +77,7 @@ void main() {
       client: MockClient((r) async => _typeResponse(r)),
     );
     await tester.pumpWidget(
-      _app(GridItem(pokemon: charizard, typeIndex: index)),
+      _app(GridItem(pokemon: charizard), AppServices(typeIndex: index)),
     );
     await tester.runAsync(index.ensureLoaded);
     await tester.pump();

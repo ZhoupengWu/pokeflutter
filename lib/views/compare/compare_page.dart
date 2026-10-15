@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../controllers/compare_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../utils/app_colors.dart';
+import '../../theme/app_colors.dart';
 import 'pokemon_picker_sheet.dart';
 import 'pokemon_slot.dart';
 import 'stats_comparison.dart';
@@ -25,7 +26,9 @@ class _ComparePageState extends State<ComparePage> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? CompareController();
+    _controller =
+        widget.controller ??
+        CompareController(api: context.read(), repository: context.read());
     _controller.init();
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/l10n/l10n_extensions.dart';
-import 'package:pokeflutter/utils/pokemon_constants.dart';
+import 'package:pokeflutter/core/pokemon_constants.dart';
 
 void main() {
   test('both languages translate the same keys', () {

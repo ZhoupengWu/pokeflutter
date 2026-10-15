@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/capitalize.dart';
-import '../widgets/styled_text.dart';
+import '../../theme/app_colors.dart';
+import '../../core/capitalize.dart';
+import '../shared/styled_text.dart';
 
 /// Heading of a section on the detail card, in the Pokémon's colour.
 class SectionTitle extends StatelessWidget {
