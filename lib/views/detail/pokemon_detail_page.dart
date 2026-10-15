@@ -11,6 +11,7 @@ import '../../model/pokemon_list_item.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/contrast.dart';
 import '../../core/pokemon_constants.dart';
+import '../../theme/responsive.dart';
 import '../../theme/theme.dart';
 import 'about_sections.dart';
 import 'detail_header.dart';
@@ -216,66 +217,68 @@ class _DetailView extends StatelessWidget {
         ),
         SafeArea(
           bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DetailHeader(
-                pokemon: pokemon,
-                favouriteItem: favouriteItem,
-                heroTag: heroTag,
-              ),
+          child: ContentWidth(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DetailHeader(
+                  pokemon: pokemon,
+                  favouriteItem: favouriteItem,
+                  heroTag: heroTag,
+                ),
 
-              // ── Card with the details ──────────────────────────────────
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: colors.surface,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(32.r),
-                    ),
-                  ),
-                  child: SafeArea(
-                    top: false,
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24.w,
-                        vertical: 24.h,
+                // ── Card with the details ──────────────────────────────────
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(32.r),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AboutSection(
-                            pokemon: pokemon,
-                            accent: readableAccent,
-                          ),
-                          SizedBox(height: 24.h),
-                          AbilitiesSection(
-                            pokemon: pokemon,
-                            accent: readableAccent,
-                          ),
-                          SizedBox(height: 24.h),
-                          StatsSection(
-                            pokemon: pokemon,
-                            accent: readableAccent,
-                          ),
-                          SizedBox(height: 24.h),
-                          TypeMatchupsSection(
-                            pokemon: pokemon,
-                            accent: readableAccent,
-                          ),
-                          SizedBox(height: 24.h),
-                          EvolutionSection(
-                            controller: controller,
-                            accent: readableAccent,
-                          ),
-                        ],
+                    ),
+                    child: SafeArea(
+                      top: false,
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24.w,
+                          vertical: 24.h,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AboutSection(
+                              pokemon: pokemon,
+                              accent: readableAccent,
+                            ),
+                            SizedBox(height: 24.h),
+                            AbilitiesSection(
+                              pokemon: pokemon,
+                              accent: readableAccent,
+                            ),
+                            SizedBox(height: 24.h),
+                            StatsSection(
+                              pokemon: pokemon,
+                              accent: readableAccent,
+                            ),
+                            SizedBox(height: 24.h),
+                            TypeMatchupsSection(
+                              pokemon: pokemon,
+                              accent: readableAccent,
+                            ),
+                            SizedBox(height: 24.h),
+                            EvolutionSection(
+                              controller: controller,
+                              accent: readableAccent,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

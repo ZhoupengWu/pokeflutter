@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'l10n/l10n_extensions.dart';
 import 'app_services.dart';
+import 'theme/responsive.dart';
 import 'theme/theme.dart';
 import 'views/shell_page.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     return AppProviders(
       services: services,
       child: ScreenUtilInit(
-        designSize: const Size(360, 979),
+        designSize: designSizeFor(MediaQuery.sizeOf(context)),
         minTextAdapt: true,
         builder: (context, child) {
           return ListenableBuilder(

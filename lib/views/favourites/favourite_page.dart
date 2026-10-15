@@ -76,8 +76,8 @@ class FavouritePage extends StatelessWidget {
                     child: GridView.builder(
                       clipBehavior: Clip.hardEdge,
                       itemCount: favourites.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 190.w,
                         crossAxisSpacing: 8.w,
                         mainAxisSpacing: 8.h,
                         mainAxisExtent: 100.h,

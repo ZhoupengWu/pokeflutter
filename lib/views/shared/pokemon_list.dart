@@ -19,8 +19,8 @@ class PokemonList extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemCount: pokemonList.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 190.w,
           crossAxisSpacing: 8.w,
           mainAxisSpacing: 8.h,
           mainAxisExtent: 100.h,
