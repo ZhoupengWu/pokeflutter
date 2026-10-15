@@ -4,6 +4,7 @@ import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/quiz_model.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/responsive.dart';
 import 'quiz_widgets.dart';
 
 class QuizStartView extends StatelessWidget {
@@ -13,39 +14,67 @@ class QuizStartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Scrolls when the content outgrows the screen (large system font);
-    // otherwise the three groups spread over the full height.
+    // Scrolls when the content outgrows the screen (large system font).
     return LayoutBuilder(
-      builder: (context, box) => SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: box.maxHeight - 32.h),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _intro(context),
-              SizedBox(height: 16.h),
-              Center(
-                child: ExcludeSemantics(
-                  child: Icon(
-                    Icons.quiz_rounded,
-                    size: 96.r,
-                    color: context.colors.border,
+      builder: (context, box) {
+        final minHeight = box.maxHeight - 32.h;
+        final start = QuizPrimaryButton(
+          label: controller.isLoadingList
+              ? context.l10n.quizLoading
+              : context.l10n.quizStart,
+          onPressed: controller.canStart ? controller.start : null,
+        );
+        final icon = Center(
+          child: ExcludeSemantics(
+            child: Icon(
+              Icons.quiz_rounded,
+              size: 96.r,
+              color: context.colors.border,
+            ),
+          ),
+        );
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+          child: sideBySide(box)
+              // Sideways: the setup on the left, the icon and Start on the right.
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: _intro(context)),
+                    SizedBox(width: 24.w),
+                    Expanded(
+                      child: SizedBox(
+                        height: minHeight,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            icon,
+                            SizedBox(height: 16.h),
+                            start,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              // Upright: the three groups spread over the full height.
+              : ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: minHeight),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _intro(context),
+                      SizedBox(height: 16.h),
+                      icon,
+                      SizedBox(height: 16.h),
+                      start,
+                    ],
                   ),
                 ),
-              ),
-              SizedBox(height: 16.h),
-              QuizPrimaryButton(
-                label: controller.isLoadingList
-                    ? context.l10n.quizLoading
-                    : context.l10n.quizStart,
-                onPressed: controller.canStart ? controller.start : null,
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 

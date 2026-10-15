@@ -32,104 +32,142 @@ class QuizQuestionView extends StatelessWidget {
         : listPokemonTypeColor[pokemon.typesList.first.toLowerCase()] ??
               context.colors.border;
 
-    // The sprite card takes the space the other parts leave. When they do not
-    // fit (a small screen with a large system font) the page scrolls and the
-    // card keeps a minimum height.
+    return LayoutBuilder(
+      builder: (context, box) =>
+          sideBySide(box) ? _wide(context, accent) : _narrow(context, accent),
+    );
+  }
+
+  /// The sprite card takes the space the other parts leave. When they do not
+  /// fit (a small screen with a large system font) the page scrolls and the
+  /// card keeps a minimum height.
+  Widget _narrow(BuildContext context, Color accent) {
     return CustomScrollView(
       slivers: [
         SliverFillRemaining(
           hasScrollBody: false,
-          child: _content(context, accent),
-        ),
-      ],
-    );
-  }
-
-  Widget _content(BuildContext context, Color accent) {
-    final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    final question = controller.question;
-
-    return Column(
-      children: [
-        _Header(controller: controller, accent: accent),
-
-        // ── Sprite card ────────────────────────────────────────────────────
-        Expanded(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 160.h),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: EdgeInsets.symmetric(horizontal: 24.w),
-              decoration: BoxDecoration(
-                color: accent,
-                borderRadius: BorderRadius.circular(24.r),
-              ),
-              child: _SpriteCard(controller: controller),
-            ),
-          ),
-        ),
-
-        SizedBox(height: 16.h),
-
-        // ── Question label ─────────────────────────────────────────────────
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Text(
-            question.mode == QuizMode.guessName
-                ? l10n.quizWhoIsThis
-                : l10n.quizWhatType(question.subject.name.capitalize()),
-            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-            textAlign: TextAlign.center,
-          ),
-        ),
-
-        SizedBox(height: 12.h),
-
-        // ── Answer options (two per row) ───────────────────────────────────
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
-              for (var row = 0; row < question.options.length; row += 2) ...[
-                if (row > 0) SizedBox(height: 8.h),
-                SizedBox(
-                  height: scaledByText(context, 60),
-                  child: Row(
-                    children: [
-                      for (var i = row; i < row + 2; i++) ...[
-                        if (i > row) SizedBox(width: 8.w),
-                        Expanded(
-                          child: i < question.options.length
-                              ? QuizOptionButton(
-                                  label: question.mode == QuizMode.guessType
-                                      ? l10n.typeName(question.options[i])
-                                      : question.options[i].capitalize(),
-                                  state: _optionState(i),
-                                  onTap: () => controller.answer(i),
-                                )
-                              : const SizedBox.shrink(),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
+              _Header(controller: controller, accent: accent),
+              Expanded(child: _card(accent)),
+              SizedBox(height: 16.h),
+              _label(context),
+              SizedBox(height: 12.h),
+              _options(context),
+              _feedbackArea(context, accent),
             ],
           ),
         ),
+      ],
+    );
+  }
 
-        // ── Feedback + Next button ─────────────────────────────────────────
-        SizedBox(
-          // Room for the verdict, a 2-line reveal and the button.
-          height: scaledByText(context, 132, share: 0.8),
-          child: controller.answered
-              ? _Feedback(controller: controller, accent: accent)
-              : null,
+  /// Sideways: the sprite on the left, question, options and feedback on the
+  /// right.
+  Widget _wide(BuildContext context, Color accent) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            children: [
+              _Header(controller: controller, accent: accent),
+              Expanded(child: _card(accent)),
+              SizedBox(height: 16.h),
+            ],
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 16.h),
+                _label(context),
+                SizedBox(height: 12.h),
+                _options(context),
+                _feedbackArea(context, accent),
+              ],
+            ),
+          ),
         ),
       ],
     );
   }
+
+  Widget _card(Color accent) => ConstrainedBox(
+    constraints: BoxConstraints(minHeight: 160.h),
+    child: AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: EdgeInsets.symmetric(horizontal: 24.w),
+      decoration: BoxDecoration(
+        color: accent,
+        borderRadius: BorderRadius.circular(24.r),
+      ),
+      child: _SpriteCard(controller: controller),
+    ),
+  );
+
+  Widget _label(BuildContext context) {
+    final l10n = context.l10n;
+    final question = controller.question;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: Text(
+        question.mode == QuizMode.guessName
+            ? l10n.quizWhoIsThis
+            : l10n.quizWhatType(question.subject.name.capitalize()),
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  /// Answer options, two per row.
+  Widget _options(BuildContext context) {
+    final l10n = context.l10n;
+    final question = controller.question;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: Column(
+        children: [
+          for (var row = 0; row < question.options.length; row += 2) ...[
+            if (row > 0) SizedBox(height: 8.h),
+            SizedBox(
+              height: scaledByText(context, 60),
+              child: Row(
+                children: [
+                  for (var i = row; i < row + 2; i++) ...[
+                    if (i > row) SizedBox(width: 8.w),
+                    Expanded(
+                      child: i < question.options.length
+                          ? QuizOptionButton(
+                              label: question.mode == QuizMode.guessType
+                                  ? l10n.typeName(question.options[i])
+                                  : question.options[i].capitalize(),
+                              state: _optionState(i),
+                              onTap: () => controller.answer(i),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Verdict, reveal and Next button, once answered.
+  Widget _feedbackArea(BuildContext context, Color accent) => SizedBox(
+    // Room for the verdict, a 2-line reveal and the button.
+    height: scaledByText(context, 132, share: 0.8),
+    child: controller.answered
+        ? _Feedback(controller: controller, accent: accent)
+        : null,
+  );
 }
 
 // ── Progress, score and timer ────────────────────────────────────────────────
