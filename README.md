@@ -17,7 +17,7 @@ or Italian.
 - [How it works](#how-it-works)
 - [Development](#development)
 - [Project layout](#project-layout)
-- [Releasing](#releasing)
+- [Releasing](#releasing) · [Release signing](#release-signing)
 - [Roadmap](#roadmap)
 - [Credits](#credits) · [License](#license)
 
@@ -38,6 +38,8 @@ The app has four tabs: **Pokédex**, **Compare**, **Quiz** and **Favourites**.
 ### Pokémon detail
 
 - Official artwork, types, base stats with bars, abilities, height and weight.
+- **Pokédex entry**: category ("Mouse Pokémon"), description in English or Italian, habitat and
+  legendary / mythical tags.
 - **Type matchups**: what the Pokémon is weak to, resists and is immune to, with the damage
   multiplier (4×, 2×, ½×, ¼×, 0×) computed from its types.
 - **Evolution chain**: every stage, including branches such as Eevee's; tap a stage to open it.
@@ -64,7 +66,7 @@ Saved on the device and shown in the same grid as the Pokédex.
 
 ### Works offline
 
-Anything you have already opened — details, evolution chains, the type index, artwork — is cached
+Anything you have already opened — details, Pokédex entries, evolution chains, the type index, artwork — is cached
 on the device, so it is still there without a connection. If the network is down the app says so
 with a banner instead of showing errors.
 
@@ -102,9 +104,10 @@ Every push and pull request builds a release APK in CI. Open the workflow run on
 `app-release-apk` artifact (kept for 7 days), unzip it and install `app-release.apk`.
 
 > **Updating.** Android only installs an update over an existing app if both have the same
-> package name and the **same signing key**. CI builds are currently signed with a debug key that
-> is not guaranteed to be the same between runs, so you may have to uninstall the previous version
-> first (this clears favourites, settings and records). See [Releasing](#releasing).
+> package name and the **same signing key**. Builds signed with the release key (see
+> [Release signing](#release-signing)) always update in place. Builds signed with a debug key
+> (forks, local builds without a key) differ from machine to machine, so you may have to
+> uninstall the previous version first, which clears favourites, settings and records.
 
 ## How it works
 
@@ -152,7 +155,8 @@ CI also builds a release APK and verifies that the merged Android manifest decla
   to **both**. `flutter pub get` (or `flutter gen-l10n`) regenerates the committed
   `app_localizations*.dart`.
 - **Branches.** Work happens on feature branches that are merged into `dev` through pull
-  requests; `dev` is merged into `main` for releases.
+  requests; `dev` is merged into `main` for releases. Every pull request bumps the version in
+  `pubspec.yaml`.
 
 ## Project layout
 
@@ -182,19 +186,64 @@ docs/                      # architecture, technical debt, roadmap, backlog
 3. Build with `flutter build apk --release` / `flutter build appbundle` (Android) or
    `flutter build ipa` (iOS).
 
-**Signing.** Release builds are currently signed with the debug key
-(`android/app/build.gradle.kts`). Before distributing the app to other people, create a release
-keystore, configure it in Gradle (reading the passwords from a git-ignored `key.properties` or
-from CI secrets) and keep a backup of it: with the same key, users can update in place; without
-it they have to uninstall first. If you publish on Google Play, enable Play App Signing.
+**Signing.** See [Release signing](#release-signing) below.
 
 **Identifiers.** The Android application id is `com.wux.pokeflutter`. Change it in
 `android/app/build.gradle.kts` (and the iOS bundle identifier) before publishing under your own
 account.
 
+## Release signing
+
+Release builds are signed with a key that is **never committed**. It is read from
+`android/key.properties` (local builds) or from environment variables (CI). If neither is
+complete the build falls back to the debug key, so `flutter run --release` and forks keep working,
+but that APK cannot update an app signed with the real key.
+
+**1. Create the key (once) and back it up.** Keep the file and the passwords somewhere safe and
+separate from the repository: if you lose the key you can no longer update the installed app.
+
+```bash
+keytool -genkeypair -v -keystore pokeflutter-release.jks -alias pokeflutter \
+  -keyalg RSA -keysize 2048 -validity 10000
+```
+
+**2. Local release builds.** Put the keystore in `android/app/` (git-ignored) and create
+`android/key.properties` (git-ignored):
+
+```properties
+storeFile=pokeflutter-release.jks
+storePassword=…
+keyAlias=pokeflutter
+keyPassword=…
+```
+
+then `flutter build apk --release`. Check the signature with
+`apksigner verify --print-certs build/app/outputs/flutter-apk/app-release.apk`.
+
+**3. CI.** In the repository go to *Settings → Secrets and variables → Actions* and add four
+repository secrets:
+
+| Secret | Value |
+| --- | --- |
+| `ANDROID_KEYSTORE_BASE64` | the keystore, base64-encoded: `base64 -w0 pokeflutter-release.jks` (`base64 -i … ` on macOS) |
+| `ANDROID_KEYSTORE_PASSWORD` | the store password |
+| `ANDROID_KEY_ALIAS` | `pokeflutter` (the alias used above) |
+| `ANDROID_KEY_PASSWORD` | the key password |
+
+From then on the CI APK is signed with the release key, and the build fails if the secrets are
+set but the APK still ends up debug-signed. GitHub does not pass secrets to pull requests from
+forks, so those builds stay debug-signed.
+
+**First install with the real key.** Android refuses to update an app signed with a different
+key, so on each phone the first release-signed APK needs the old one to be uninstalled (this clears
+favourites, settings and records). Later updates install over the top as long as the build number
+(`+N` in `pubspec.yaml`) is higher.
+
+For Google Play, enable Play App Signing: this key then becomes the *upload* key.
+
 ## Roadmap
 
-What is planned next (real release signing, a pass on physical devices, localised Pokémon names,
+What is planned next (a pass on physical devices, localised Pokémon names,
 cache management, advanced search, team builder…) is in
 [`docs/planning/backlog.md`](docs/planning/backlog.md); what has been done is in
 [`docs/planning/roadmap.md`](docs/planning/roadmap.md).

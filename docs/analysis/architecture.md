@@ -19,6 +19,7 @@ lib/
 │   ├── pokemon.dart              # Pokemon + PokemonStat; fromJson (API) and toCacheJson/fromCacheJson (disk)
 │   ├── pokemon_list_item.dart    # name + url; derives id and sprite URL
 │   ├── evolution.dart            # EvolutionChain / EvolutionStage / EvolutionRequirement
+│   ├── pokemon_species.dart      # trimmed species info (en/it entry, genus, habitat, flags)
 │   └── quiz_model.dart           # QuizQuestion, QuizResult (scoring), QuizMode, QuizDifficulty
 ├── controllers/                  # state + rules, no widgets; collaborators are constructor arguments
 │   ├── home_controller.dart      # list, search (name or number), type/generation filters, sort
@@ -28,7 +29,8 @@ lib/
 ├── data/                         # everything that talks to the network or the disk
 │   ├── pokeapi_client.dart       # JSON GET: timeout, retry, typed PokemonApiException, NetworkStatus
 │   ├── pokemon_api.dart          # /pokemon/{name}: memory -> disk -> network, stale copy on failure
-│   ├── evolution_api.dart        # /pokemon-species -> /evolution-chain, same layering
+│   ├── species_api.dart          # /pokemon-species (entry, category, habitat, chain url), same layering
+│   ├── evolution_api.dart        # species -> /evolution-chain, same layering
 │   ├── disk_cache.dart           # one JSON file per key, LRU, failures swallowed
 │   ├── offline_storage.dart      # size of the disk cache + cached images, and a way to clear them (Settings)
 │   ├── network_status.dart       # "could PokéAPI be reached last time?" (drives the offline hint)
@@ -80,7 +82,8 @@ PokéAPI /type/{18 types} ──> PokemonTypeIndex ──> GridItem (colour, bad
         (once, then shared_preferences)
 
 PokéAPI /pokemon/{name} ──> PokemonApi ──> PokemonCache (memory) + DiskCache ──> Detail, Compare, Quiz
-PokéAPI /pokemon-species + /evolution-chain ──> EvolutionApi (+ DiskCache) ──> Detail (evolution section)
+PokéAPI /pokemon-species ──> SpeciesApi (+ DiskCache) ──> Detail (Pokédex entry) and EvolutionApi
+PokéAPI /evolution-chain ──> EvolutionApi (+ DiskCache) ──> Detail (evolution section)
 sprites / artwork ──> PokemonImage ──> cached_network_image (disk) ──> every screen
 TypeChart (static) ──> Detail (type matchups)
 ```

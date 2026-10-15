@@ -11,8 +11,8 @@
   quiz difficulty/timer/records, controllers + split pages, APK build in CI
 - Phase 7 (v1.6.0): Provider services, new folder layout, offline cache, responsive layout,
   number search + generation filter + sorting, back-navigation and search-focus fixes
-- Phase 8: filter/picker sheets above the navigation bar, offline data size + clear in Settings,
-  README rewrite
+- Phase 8 (v1.7.0): filter/picker sheets above the navigation bar, offline data size + clear in Settings,
+  README rewrite, release signing with a real key, CLAUDE.md, Pokédex entry on the detail page
 
 ## 🔲 Next
 Everything left is in [`backlog.md`](backlog.md). Suggested first steps:
