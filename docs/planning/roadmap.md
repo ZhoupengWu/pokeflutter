@@ -73,4 +73,12 @@ Type Filter, Favourites System, Pokémon Comparison.
 - **Large fonts**: grid cells grow, quiz screens scroll; a test renders every screen at 200 %.
 - **Landscape**: detail page, quiz start and quiz question use two columns.
 
+## ✅ Phase 10 — Names and icon (v1.9.0)
+- **Display names** from `assets/pokemonNames.json` ("Mr. Mime", "Charizard (Mega X)", "Tipo Zero"),
+  used everywhere a Pokémon is named; search finds a Pokémon by its name in any language and the name
+  sorts follow the language shown.
+- **App icon**: a Poké Ball on a dark gradient, with adaptive-icon layers
+  (`tool/generate_app_icon.py` + `flutter_launcher_icons`).
+- Release signing confirmed working in CI (APK signed with the owner's key).
+
 See [`backlog.md`](backlog.md) for what is next.
