@@ -43,6 +43,10 @@ CI also builds a release APK (job "Build release APK") and checks the INTERNET p
 - Pages are split into widgets under `lib/views/<feature>/`; keep files small.
 - Pokémon are shown with `context.pokemonName(apiName)` (table in `assets/pokemonNames.json`), never
   with `name.capitalize()`; the API name stays the key for caches, favourites and filters.
+- Look: iOS-like. Corner radii come from `lib/theme/shapes.dart` (`radiusCard`, `radiusControl`,
+  `radiusSheet`, `radiusPill`), never ad-hoc numbers. The tab bar floats (`FloatingTabBar`), so a
+  tab page uses `SafeArea(bottom: false)` and gives its scrollable `MediaQuery.paddingOf(context).bottom`
+  of room at the end (a `GridView` inside another scroll view needs `padding: EdgeInsets.zero`).
 - Match the surrounding code's comment density and naming.
 
 ## Sandbox gotchas

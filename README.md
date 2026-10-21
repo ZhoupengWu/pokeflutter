@@ -83,7 +83,8 @@ with a banner instead of showing errors.
 
 ### Looks right everywhere
 
-Edge-to-edge system bars that follow the page colour, light and dark themes with contrast-checked
+An iOS-inspired look: a floating, frosted tab bar the pages scroll under, large bold titles, pill
+buttons and soft corners, grouped settings. Edge-to-edge system bars that follow the page colour, light and dark themes with contrast-checked
 type colours, and a layout that adapts to small phones, large phones and
 tablets (content is capped to a comfortable width). Held sideways, the detail page and the quiz
 use two columns, and every screen is tested at the largest system font size.

@@ -70,7 +70,7 @@ class FloatingTabBar extends StatelessWidget {
                 filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: colors.surface.withValues(alpha: 0.78),
+                    color: colors.surface.withValues(alpha: 0.88),
                     borderRadius: BorderRadius.circular(radiusPill),
                     border: Border.all(
                       color: colors.border.withValues(alpha: 0.7),
@@ -125,7 +125,7 @@ class _TabButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final color = selected ? colors.strong : colors.subtle;
+    final color = selected ? colors.strong : colors.muted;
 
     return Semantics(
       button: true,
