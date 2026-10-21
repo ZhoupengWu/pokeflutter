@@ -159,7 +159,11 @@ class _HomePageState extends State<HomePage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      floatingActionButton: RandomFloatingButton(onPressed: _goToRandomPokemon),
+      // Lifted above the floating tab bar, whose height is the bottom padding.
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+        child: RandomFloatingButton(onPressed: _goToRandomPokemon),
+      ),
       body: ListenableBuilder(
         listenable: Listenable.merge([_controller, _network]),
         builder: (context, _) => Column(

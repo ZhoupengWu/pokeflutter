@@ -142,6 +142,9 @@ void main() {
     // The tab bar sits at the bottom, and the pages are padded by its height.
     expect(bar.bottom, closeTo(844, 1));
     expect(bottomPadding, closeTo(bar.height, 1));
+    // The Random button floats above the bar, not behind it.
+    final random = tester.getRect(find.byType(FloatingActionButton));
+    expect(random.bottom, lessThanOrEqualTo(bar.top));
     expect(tester.takeException(), isNull);
   });
 }

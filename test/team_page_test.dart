@@ -20,6 +20,7 @@ Future<TeamController> _pump(
   List<int> saved = const [],
   Locale locale = const Locale('en'),
   List<String> types = const ['water'],
+  EdgeInsets padding = EdgeInsets.zero,
 }) async {
   SharedPreferences.setMockInitialValues({
     'team_pokemon_names': [for (final id in saved) 'mon$id'],
@@ -40,7 +41,14 @@ Future<TeamController> _pump(
   addTearDown(controller.dispose);
   await tester.pumpWidget(
     testApp(
-      TeamPage(controller: controller),
+      MediaQuery(
+        data: MediaQueryData(
+          size: const Size(360, 780),
+          padding: padding,
+          viewPadding: padding,
+        ),
+        child: TeamPage(controller: controller),
+      ),
       services: AppServices(
         team: _team,
         pokemonApi: _api,
@@ -101,6 +109,23 @@ void main() {
     for (final center in [sprite, name, type]) {
       expect((center.dx - card.center.dx).abs(), lessThan(2));
     }
+  });
+
+  testWidgets('the slots do not leave a gap under them for the tab bar', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    // As in the app: the floating tab bar makes the bottom padding large.
+    final controller = await _pump(
+      tester,
+      saved: [1],
+      padding: const EdgeInsets.only(bottom: 90),
+    );
+    expect(controller.members, hasLength(1));
+
+    final lastSlot = tester.getRect(find.text('Add a Pokémon').last);
+    final defence = tester.getRect(find.text('Defence'));
+    expect(defence.top - lastSlot.bottom, lessThan(80));
   });
 
   testWidgets('shows what the team is weak to and what it covers', (

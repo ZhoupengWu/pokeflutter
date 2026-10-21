@@ -29,6 +29,8 @@ class TeamSlots extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: GridView.count(
         shrinkWrap: true,
+        // No automatic padding: it would add the tab bar's height under the grid.
+        padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         crossAxisCount: 3,
         crossAxisSpacing: 8.w,
