@@ -671,4 +671,83 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get detailForms => 'Forms';
+
+  @override
+  String get navTeam => 'Team';
+
+  @override
+  String get teamTitle => 'Team';
+
+  @override
+  String get teamSubtitle =>
+      'Pick up to six Pokémon and see what the team is weak to and what it hits hard.';
+
+  @override
+  String get teamClear => 'Clear team';
+
+  @override
+  String get teamSlotEmpty => 'Add a Pokémon';
+
+  @override
+  String teamSlotEmptySemantics(int number) {
+    return 'Empty slot $number, add a Pokémon';
+  }
+
+  @override
+  String teamRemove(String name) {
+    return 'Remove $name from the team';
+  }
+
+  @override
+  String get teamEmptyHint => 'Add a Pokémon to start building your team.';
+
+  @override
+  String teamLoadFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Pokémon could not be loaded. Tap to retry',
+      one: '1 Pokémon could not be loaded. Tap to retry',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get teamDefence => 'Defence';
+
+  @override
+  String get teamDefenceHint =>
+      'Types with more Pokémon weak to them than resisting them; ×N is how many.';
+
+  @override
+  String get teamWeakTo => 'Weak to';
+
+  @override
+  String get teamResists => 'Resists';
+
+  @override
+  String get teamNoWeakness => 'No type gives this team trouble.';
+
+  @override
+  String get teamNoResistance =>
+      'No type is resisted by more Pokémon than it hurts.';
+
+  @override
+  String get teamOffence => 'Offence';
+
+  @override
+  String get teamOffenceHint =>
+      'Judged by the types of your Pokémon, not by their moves.';
+
+  @override
+  String get teamHits => 'Hits super effectively';
+
+  @override
+  String get teamMisses => 'Not covered';
+
+  @override
+  String get teamNoCoverage => 'No type is hit super effectively yet.';
+
+  @override
+  String get teamNoGaps => 'Every type is covered.';
 }

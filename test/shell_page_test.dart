@@ -7,6 +7,7 @@ import 'package:pokeflutter/views/favourites/favourite_page.dart';
 import 'package:pokeflutter/views/home/home_page.dart';
 import 'package:pokeflutter/views/quiz/quiz_page.dart';
 import 'package:pokeflutter/views/shell_page.dart';
+import 'package:pokeflutter/views/team/team_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/detail_fakes.dart';
@@ -43,11 +44,17 @@ void main() {
     expect(find.byType(ComparePage), findsNothing);
     expect(find.byType(QuizPage), findsNothing);
     expect(find.byType(FavouritePage), findsNothing);
+    expect(find.byType(TeamPage), findsNothing);
 
     await tester.tap(find.text('Quiz'));
     await tester.pump();
     expect(find.byType(QuizPage), findsOneWidget);
     expect(find.byType(ComparePage), findsNothing);
+
+    await tester.tap(find.text('Team'));
+    await tester.pump();
+    expect(find.byType(TeamPage), findsOneWidget);
+    expect(find.text('Add a Pokémon'), findsNWidgets(6));
 
     // Going back to Home does not throw the Quiz tab away.
     await tester.tap(find.text('Home'));

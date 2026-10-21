@@ -1247,6 +1247,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forms'**
   String get detailForms;
+
+  /// No description provided for @navTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Team'**
+  String get navTeam;
+
+  /// No description provided for @teamTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Team'**
+  String get teamTitle;
+
+  /// No description provided for @teamSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up to six Pokémon and see what the team is weak to and what it hits hard.'**
+  String get teamSubtitle;
+
+  /// No description provided for @teamClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear team'**
+  String get teamClear;
+
+  /// No description provided for @teamSlotEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Pokémon'**
+  String get teamSlotEmpty;
+
+  /// No description provided for @teamSlotEmptySemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty slot {number}, add a Pokémon'**
+  String teamSlotEmptySemantics(int number);
+
+  /// No description provided for @teamRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name} from the team'**
+  String teamRemove(String name);
+
+  /// No description provided for @teamEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Pokémon to start building your team.'**
+  String get teamEmptyHint;
+
+  /// No description provided for @teamLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 Pokémon could not be loaded. Tap to retry} other{{count} Pokémon could not be loaded. Tap to retry}}'**
+  String teamLoadFailed(int count);
+
+  /// No description provided for @teamDefence.
+  ///
+  /// In en, this message translates to:
+  /// **'Defence'**
+  String get teamDefence;
+
+  /// No description provided for @teamDefenceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Types with more Pokémon weak to them than resisting them; ×N is how many.'**
+  String get teamDefenceHint;
+
+  /// No description provided for @teamWeakTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak to'**
+  String get teamWeakTo;
+
+  /// No description provided for @teamResists.
+  ///
+  /// In en, this message translates to:
+  /// **'Resists'**
+  String get teamResists;
+
+  /// No description provided for @teamNoWeakness.
+  ///
+  /// In en, this message translates to:
+  /// **'No type gives this team trouble.'**
+  String get teamNoWeakness;
+
+  /// No description provided for @teamNoResistance.
+  ///
+  /// In en, this message translates to:
+  /// **'No type is resisted by more Pokémon than it hurts.'**
+  String get teamNoResistance;
+
+  /// No description provided for @teamOffence.
+  ///
+  /// In en, this message translates to:
+  /// **'Offence'**
+  String get teamOffence;
+
+  /// No description provided for @teamOffenceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Judged by the types of your Pokémon, not by their moves.'**
+  String get teamOffenceHint;
+
+  /// No description provided for @teamHits.
+  ///
+  /// In en, this message translates to:
+  /// **'Hits super effectively'**
+  String get teamHits;
+
+  /// No description provided for @teamMisses.
+  ///
+  /// In en, this message translates to:
+  /// **'Not covered'**
+  String get teamMisses;
+
+  /// No description provided for @teamNoCoverage.
+  ///
+  /// In en, this message translates to:
+  /// **'No type is hit super effectively yet.'**
+  String get teamNoCoverage;
+
+  /// No description provided for @teamNoGaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Every type is covered.'**
+  String get teamNoGaps;
 }
 
 class _AppLocalizationsDelegate

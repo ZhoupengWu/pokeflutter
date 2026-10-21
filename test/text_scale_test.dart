@@ -15,6 +15,7 @@ import 'package:pokeflutter/views/home/filter_sheet.dart';
 import 'package:pokeflutter/views/home/home_page.dart';
 import 'package:pokeflutter/views/home/settings_sheet.dart';
 import 'package:pokeflutter/views/quiz/quiz_page.dart';
+import 'package:pokeflutter/views/team/team_page.dart';
 import 'package:pokeflutter/views/quiz/quiz_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -109,6 +110,11 @@ void main() {
         find.byType(QuizOptionButton).at(controller.question.correctIndex),
       );
       await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('Team at 200 % ($name)', (tester) async {
+      await _pump(tester, const TeamPage(), locale: locale);
       expect(tester.takeException(), isNull);
     });
 
