@@ -7,6 +7,7 @@ import 'data/app_settings.dart';
 import 'data/evolution_api.dart';
 import 'data/favourites_manager.dart';
 import 'data/pokemon_api.dart';
+import 'data/pokemon_names.dart';
 import 'data/pokemon_repository.dart';
 import 'data/pokemon_type_index.dart';
 import 'data/disk_cache.dart';
@@ -36,10 +37,12 @@ class AppServices {
     ImageProviderFactory? imageProvider,
     OfflineStorage? storage,
     OfflinePrefetcher? prefetcher,
+    PokemonNames? names,
   }) : networkStatus = networkStatus ?? NetworkStatus(),
        imageProvider = imageProvider ?? NetworkImage.new,
        storage = storage ?? OfflineStorage(),
        _prefetcher = prefetcher,
+       names = names ?? PokemonNames(),
        repository = repository ?? PokemonRepository(),
        pokemonApi = pokemonApi ?? PokemonApi(),
        evolutionApi = evolutionApi ?? EvolutionApi(),
@@ -94,6 +97,7 @@ class AppServices {
   final NetworkStatus networkStatus;
   final ImageProviderFactory imageProvider;
   final OfflineStorage storage;
+  final PokemonNames names;
 
   final OfflinePrefetcher? _prefetcher;
 
@@ -116,6 +120,7 @@ class AppServices {
     final all = await repository.getAll();
     await favourites.init(all);
     await settings.init();
+    await names.load();
     unawaited(typeIndex.ensureLoaded());
   }
 }
@@ -146,6 +151,7 @@ class AppProviders extends StatelessWidget {
         InheritedProvider<NetworkStatus>.value(value: services.networkStatus),
         Provider<ImageProviderFactory>.value(value: services.imageProvider),
         Provider<OfflineStorage>.value(value: services.storage),
+        Provider<PokemonNames>.value(value: services.names),
         Provider<OfflinePrefetcher>.value(value: services.prefetcher),
       ],
       child: child,

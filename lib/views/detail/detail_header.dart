@@ -6,7 +6,6 @@ import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
 import '../../theme/app_colors.dart';
 import '../../model/pokemon_list_item.dart';
-import '../../core/capitalize.dart';
 import '../../data/favourites_manager.dart';
 
 /// Top of the detail page, on the type-coloured background: back button,
@@ -36,7 +35,7 @@ class DetailHeader extends StatelessWidget {
       height: 180.r,
       width: 180.r,
       fit: BoxFit.contain,
-      semanticLabel: pokemon.name.capitalize(),
+      semanticLabel: context.pokemonName(pokemon.name),
       errorBuilder: (_, _, _) => Icon(
         Icons.image_not_supported_rounded,
         size: 120.r,
@@ -63,7 +62,7 @@ class DetailHeader extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  pokemon.name.capitalize(),
+                  context.pokemonName(pokemon.name),
                   style: textTheme.headlineSmall?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,

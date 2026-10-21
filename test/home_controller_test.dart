@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:pokeflutter/controllers/home_controller.dart';
 import 'package:pokeflutter/core/pokedex.dart';
+import 'package:pokeflutter/data/pokemon_names.dart';
 import 'package:pokeflutter/data/pokemon_repository.dart';
 import 'package:pokeflutter/data/pokemon_type_index.dart';
 import 'package:pokeflutter/views/home/home_page.dart';
@@ -52,6 +53,7 @@ HomeController _controller([_Network? network]) {
             net.offline ? http.Response('', 503) : _types(request),
       ),
     ),
+    names: PokemonNames(),
     random: Random(1),
   );
 }
@@ -77,6 +79,7 @@ PokemonRepository _mixedRepository() => PokemonRepository(
 HomeController _mixed() => HomeController(
   repository: _mixedRepository(),
   typeIndex: PokemonTypeIndex(client: MockClient((r) async => _types(r))),
+  names: PokemonNames(),
   random: Random(1),
 );
 

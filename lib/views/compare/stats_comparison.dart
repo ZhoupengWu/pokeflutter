@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
 import '../../theme/app_colors.dart';
-import '../../core/capitalize.dart';
 import '../../theme/contrast.dart';
 import '../../core/pokemon_constants.dart';
 
@@ -63,7 +62,7 @@ class StatsComparison extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                a.name.capitalize(),
+                context.pokemonName(a.name),
                 style: textTheme.labelMedium?.copyWith(
                   color: nameColor(a),
                   fontWeight: FontWeight.w700,
@@ -74,7 +73,7 @@ class StatsComparison extends StatelessWidget {
             SizedBox(width: 48.w),
             Expanded(
               child: Text(
-                b.name.capitalize(),
+                context.pokemonName(b.name),
                 style: textTheme.labelMedium?.copyWith(
                   color: nameColor(b),
                   fontWeight: FontWeight.w700,

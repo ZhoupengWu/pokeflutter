@@ -43,5 +43,6 @@ flutter:
 
   assets:
     - assets/pokemonList.json
+    - assets/pokemonNames.json
     - assets/pokeball.svg
     - assets/typesIcons/

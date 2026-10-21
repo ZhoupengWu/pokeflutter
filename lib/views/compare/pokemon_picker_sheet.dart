@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import '../../data/pokemon_names.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon_list_item.dart';
 import '../../theme/app_colors.dart';
-import '../../core/capitalize.dart';
 
 /// Bottom sheet with a searchable list of every Pokémon. Pops with the
 /// chosen [PokemonListItem].
@@ -19,15 +20,13 @@ class PokemonPickerSheet extends StatefulWidget {
 class _PokemonPickerSheetState extends State<PokemonPickerSheet> {
   String _query = '';
 
-  List<PokemonListItem> get _filtered => _query.isEmpty
+  List<PokemonListItem> _filtered(PokemonNames names) => _query.isEmpty
       ? widget.allPokemon
-      : widget.allPokemon
-            .where((p) => p.name.toLowerCase().contains(_query))
-            .toList();
+      : widget.allPokemon.where((p) => names.matches(p.name, _query)).toList();
 
   @override
   Widget build(BuildContext context) {
-    final filtered = _filtered;
+    final filtered = _filtered(context.read<PokemonNames>());
 
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
@@ -72,7 +71,7 @@ class _PokemonPickerSheetState extends State<PokemonPickerSheet> {
               itemBuilder: (_, i) {
                 final p = filtered[i];
                 return ListTile(
-                  title: Text(p.name.capitalize()),
+                  title: Text(context.pokemonName(p.name)),
                   onTap: () => Navigator.pop(context, p),
                 );
               },

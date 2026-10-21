@@ -35,9 +35,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _controller =
         widget.controller ??
-        HomeController(repository: context.read(), typeIndex: context.read());
+        HomeController(
+          repository: context.read(),
+          typeIndex: context.read(),
+          names: context.read(),
+        );
     _network = context.read<NetworkStatus>();
     _controller.init();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.setLanguage(Localizations.localeOf(context).languageCode);
   }
 
   @override

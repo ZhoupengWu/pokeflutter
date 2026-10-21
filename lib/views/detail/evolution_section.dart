@@ -6,7 +6,6 @@ import '../../l10n/l10n_extensions.dart';
 import '../../model/evolution.dart';
 import '../../model/pokemon_list_item.dart';
 import '../../theme/app_colors.dart';
-import '../../core/capitalize.dart';
 import 'about_sections.dart';
 import 'pokemon_detail_page.dart';
 
@@ -167,7 +166,7 @@ class _StageTile extends StatelessWidget {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
     final requirement = l10n.evolutionRequirementLabel(stage.requirement);
-    final name = stage.name.capitalize();
+    final name = context.pokemonName(stage.name);
 
     var semantics = requirement.isEmpty
         ? l10n.evolutionStageSemantics(name, stage.id)
