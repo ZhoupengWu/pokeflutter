@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/controllers/pokemon_detail_controller.dart';
@@ -5,6 +7,7 @@ import 'package:pokeflutter/app_services.dart';
 import 'package:pokeflutter/data/favourites_manager.dart';
 import 'package:pokeflutter/theme/app_colors.dart';
 import 'package:pokeflutter/model/pokemon_list_item.dart';
+import 'package:pokeflutter/model/pokemon_species.dart';
 import 'package:pokeflutter/theme/theme.dart';
 import 'package:pokeflutter/views/detail/pokemon_detail_page.dart';
 import 'package:pokeflutter/views/detail/stat_radar.dart';
@@ -36,19 +39,34 @@ Future<PokemonDetailController> _pump(
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
 
+  final pokemonApi = api ?? FakePokemonApi(types: ['fire', 'flying']);
+  final evolutionApi =
+      evolution ?? FakeEvolutionApi(chainBody: eeveeChainBody());
+  final speciesApi = species ?? FakeSpeciesApi();
+  final abilityApi = ability ?? FakeAbilityApi();
+  final repository = fakeRepository(count: 500);
   final controller = PokemonDetailController(
     item: _item,
-    api: api ?? FakePokemonApi(types: ['fire', 'flying']),
-    evolutionApi: evolution ?? FakeEvolutionApi(chainBody: eeveeChainBody()),
-    speciesApi: species ?? FakeSpeciesApi(),
-    abilityApi: ability ?? FakeAbilityApi(),
-    repository: fakeRepository(count: 500),
+    api: pokemonApi,
+    evolutionApi: evolutionApi,
+    speciesApi: speciesApi,
+    abilityApi: abilityApi,
+    repository: repository,
   );
   addTearDown(controller.dispose);
   await tester.pumpWidget(
     testApp(
       PokemonDetailPage(pokemon: _item, controller: controller),
-      services: AppServices(favourites: favourites),
+      // Pages pushed from this one (an evolution, a form) build their own
+      // controllers from these.
+      services: AppServices(
+        favourites: favourites,
+        pokemonApi: pokemonApi,
+        evolutionApi: evolutionApi,
+        speciesApi: speciesApi,
+        abilityApi: abilityApi,
+        repository: repository,
+      ),
       locale: locale,
       theme: theme,
     ),
@@ -126,6 +144,40 @@ void main() {
     await _pump(tester, api: FakePokemonApi(shiny: false));
 
     expect(find.byTooltip('Show shiny'), findsNothing);
+  });
+
+  testWidgets('lists the other forms and opens one', (tester) async {
+    final species = FakeSpeciesApi(
+      species: PokemonSpecies.fromApiJson(
+        jsonDecode(richSpeciesBody(varieties: ['mon6', 'mon7']))
+            as Map<String, dynamic>,
+      ),
+    );
+    await _pump(tester, species: species);
+
+    expect(find.text('Forms'), findsOneWidget);
+    // The one on screen is marked and not a link.
+    expect(find.bySemanticsLabel('Mon6, current'), findsOneWidget);
+
+    expect(find.byType(PokemonDetailPage), findsOneWidget);
+    await tester.tap(find.text('Mon7'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400)); // route transition
+
+    // A second detail page, for the other form, is on top.
+    expect(find.byType(PokemonDetailPage), findsNWidgets(2));
+    final pages = tester.widgetList<PokemonDetailPage>(
+      find.byType(PokemonDetailPage),
+    );
+    expect(pages.last.pokemon.name, 'mon7');
+  }, semanticsEnabled: true);
+
+  testWidgets('a species with a single form has no Forms section', (
+    tester,
+  ) async {
+    await _pump(tester);
+
+    expect(find.text('Forms'), findsNothing);
   });
 
   testWidgets('shows the Pokédex entry in English', (tester) async {

@@ -189,5 +189,6 @@
   "showShiny": "Mostra cromatico",
   "showNormal": "Mostra normale",
   "statsShowRadar": "Mostra come grafico radar",
-  "statsShowBars": "Mostra come barre"
+  "statsShowBars": "Mostra come barre",
+  "detailForms": "Forme"
 }

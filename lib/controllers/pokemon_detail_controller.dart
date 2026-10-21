@@ -80,7 +80,12 @@ class PokemonDetailController extends ChangeNotifier {
     }
     notifyListeners();
     if (status == LoadStatus.loaded) {
-      await Future.wait([loadSpecies(), loadAbilityNames(), loadEvolution()]);
+      await Future.wait([
+        loadSpecies(),
+        loadAbilityNames(),
+        loadEvolution(),
+        _loadList(),
+      ]);
     }
   }
 
@@ -124,18 +129,37 @@ class PokemonDetailController extends ChangeNotifier {
     try {
       final chain = await _evolutionApi.getChain(current.speciesName);
       // Without the list the chain is still shown, just not tappable.
-      final all = await _repository.getAll().catchError(
-        (Object _) => const <PokemonListItem>[],
-      );
+      await _loadList();
       if (_disposed) return;
       evolution = chain;
-      _all = all;
       evolutionStatus = LoadStatus.loaded;
     } on PokemonApiException {
       if (_disposed) return;
       evolutionStatus = LoadStatus.failed;
     }
     notifyListeners();
+  }
+
+  /// The bundled list, for the evolution links and the forms.
+  Future<void> _loadList() async {
+    if (_all.isNotEmpty) return;
+    final all = await _repository.getAll().catchError(
+      (Object _) => const <PokemonListItem>[],
+    );
+    if (_disposed) return;
+    _all = all;
+    notifyListeners();
+  }
+
+  /// Every form of the species that the bundled list has, default form first;
+  /// empty until both the species and the list are loaded.
+  List<PokemonListItem> get forms {
+    final names = species?.varieties ?? const <String>[];
+    return [
+      for (final name in names)
+        for (final candidate in _all)
+          if (candidate.name == name) candidate,
+    ];
   }
 
   /// The list entry of the default form of the species numbered [speciesId],

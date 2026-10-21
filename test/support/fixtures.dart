@@ -130,50 +130,60 @@ String singleStageChainBody() =>
 
 /// A full `/pokemon-species/{name}` body: old and new entries in several
 /// languages, as the real API returns them (oldest game first).
-String richSpeciesBody({int chainId = 1}) => jsonEncode({
-  'evolution_chain': {
-    'url': 'https://pokeapi.co/api/v2/evolution-chain/$chainId/',
-  },
-  'is_legendary': false,
-  'is_mythical': true,
-  'habitat': {'name': 'waters-edge'},
-  'flavor_text_entries': [
-    {
-      'flavor_text': 'Old English entry.',
-      'language': {'name': 'en'},
-    },
-    {
-      'flavor_text': 'Ein deutscher Eintrag.',
-      'language': {'name': 'de'},
-    },
-    {
-      'flavor_text': 'Vecchia scheda.',
-      'language': {'name': 'it'},
-    },
-    {
-      'flavor_text': 'It stores\nelectricity in\fits ch\u00adeeks.  Really.',
-      'language': {'name': 'en'},
-    },
-    {
-      'flavor_text': 'Accumula elettricità\nnelle guance.',
-      'language': {'name': 'it'},
-    },
-  ],
-  'genera': [
-    {
-      'genus': 'Mouse Pokémon',
-      'language': {'name': 'en'},
-    },
-    {
-      'genus': 'Pokémon Topo',
-      'language': {'name': 'it'},
-    },
-    {
-      'genus': 'Mauspokémon',
-      'language': {'name': 'de'},
-    },
-  ],
-});
+/// [varieties] are the forms of the species, default form first.
+String richSpeciesBody({int chainId = 1, List<String> varieties = const []}) =>
+    jsonEncode({
+      'evolution_chain': {
+        'url': 'https://pokeapi.co/api/v2/evolution-chain/$chainId/',
+      },
+      'is_legendary': false,
+      'is_mythical': true,
+      'varieties': [
+        for (final (i, name) in varieties.indexed)
+          {
+            'is_default': i == 0,
+            'pokemon': {'name': name},
+          },
+      ],
+      'habitat': {'name': 'waters-edge'},
+      'flavor_text_entries': [
+        {
+          'flavor_text': 'Old English entry.',
+          'language': {'name': 'en'},
+        },
+        {
+          'flavor_text': 'Ein deutscher Eintrag.',
+          'language': {'name': 'de'},
+        },
+        {
+          'flavor_text': 'Vecchia scheda.',
+          'language': {'name': 'it'},
+        },
+        {
+          'flavor_text':
+              'It stores\nelectricity in\fits ch\u00adeeks.  Really.',
+          'language': {'name': 'en'},
+        },
+        {
+          'flavor_text': 'Accumula elettricità\nnelle guance.',
+          'language': {'name': 'it'},
+        },
+      ],
+      'genera': [
+        {
+          'genus': 'Mouse Pokémon',
+          'language': {'name': 'en'},
+        },
+        {
+          'genus': 'Pokémon Topo',
+          'language': {'name': 'it'},
+        },
+        {
+          'genus': 'Mauspokémon',
+          'language': {'name': 'de'},
+        },
+      ],
+    });
 
 /// A species with an entry in English and Italian.
 PokemonSpecies sampleSpecies() => PokemonSpecies.fromApiJson(

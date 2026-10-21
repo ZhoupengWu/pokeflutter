@@ -473,5 +473,6 @@
   "showShiny": "Show shiny",
   "showNormal": "Show normal",
   "statsShowRadar": "Show as radar chart",
-  "statsShowBars": "Show as bars"
+  "statsShowBars": "Show as bars",
+  "detailForms": "Forms"
 }

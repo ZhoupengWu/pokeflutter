@@ -668,4 +668,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statsShowBars => 'Show as bars';
+
+  @override
+  String get detailForms => 'Forms';
 }

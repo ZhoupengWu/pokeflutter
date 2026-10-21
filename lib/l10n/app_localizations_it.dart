@@ -670,4 +670,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get statsShowBars => 'Mostra come barre';
+
+  @override
+  String get detailForms => 'Forme';
 }

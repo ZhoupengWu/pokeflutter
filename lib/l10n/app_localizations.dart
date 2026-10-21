@@ -1241,6 +1241,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show as bars'**
   String get statsShowBars;
+
+  /// No description provided for @detailForms.
+  ///
+  /// In en, this message translates to:
+  /// **'Forms'**
+  String get detailForms;
 }
 
 class _AppLocalizationsDelegate
