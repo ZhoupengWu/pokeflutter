@@ -85,7 +85,7 @@ void main() {
         ),
       );
 
-      expect(find.text('Offline data'), findsOneWidget);
+      expect(find.text('OFFLINE DATA'), findsOneWidget);
       expect(
         find.text('3.2 MB of Pokémon data and images saved on this device'),
         findsOneWidget,
@@ -109,7 +109,7 @@ void main() {
         locale: const Locale('it'),
       );
 
-      expect(find.text('Dati offline'), findsOneWidget);
+      expect(find.text('DATI OFFLINE'), findsOneWidget);
       expect(
         find.text(
           '1.5 KB di dati e immagini dei Pokémon salvati su questo dispositivo',
