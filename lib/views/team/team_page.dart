@@ -58,9 +58,13 @@ class _TeamPageState extends State<TeamPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
+    // Room for the floating tab bar at the end of the scrolled content.
+    final bottom = MediaQuery.paddingOf(context).bottom + 16.h;
 
     return Scaffold(
+      // Not SafeArea at the bottom: the page scrolls under the floating tab bar.
       body: SafeArea(
+        bottom: false,
         child: ListenableBuilder(
           listenable: _controller,
           builder: (context, _) {
@@ -110,14 +114,21 @@ class _TeamPageState extends State<TeamPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
-                                child: SingleChildScrollView(child: slots),
+                                child: SingleChildScrollView(
+                                  padding: EdgeInsets.only(bottom: bottom),
+                                  child: slots,
+                                ),
                               ),
                               Expanded(
-                                child: SingleChildScrollView(child: analysis),
+                                child: SingleChildScrollView(
+                                  padding: EdgeInsets.only(bottom: bottom),
+                                  child: analysis,
+                                ),
                               ),
                             ],
                           )
                         : SingleChildScrollView(
+                            padding: EdgeInsets.only(bottom: bottom),
                             child: Column(children: [slots, analysis]),
                           ),
                   ),

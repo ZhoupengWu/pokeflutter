@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import '../l10n/l10n_extensions.dart';
 import '../theme/responsive.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../theme/app_colors.dart';
 import 'home/home_page.dart';
 import 'compare/compare_page.dart';
 import 'quiz/quiz_page.dart';
 import 'favourites/favourite_page.dart';
+import 'shared/floating_tab_bar.dart';
 import 'team/team_page.dart';
 
 class ShellPage extends StatefulWidget {
@@ -34,7 +33,13 @@ class _ShellPageState extends State<ShellPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
+      // The tab bar floats over the content: the pages run underneath it and
+      // read its height from MediaQuery.padding.bottom.
+      extendBody: true,
+      // The keyboard slides over the tab bar instead of pushing it up.
+      resizeToAvoidBottomInset: false,
       body: ContentWidth(
         child: IndexedStack(
           index: _currentIndex,
@@ -49,38 +54,37 @@ class _ShellPageState extends State<ShellPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: FloatingTabBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() {
           _currentIndex = index;
           _visited.add(index);
         }),
-        selectedLabelStyle: Theme.of(context).textTheme.labelMedium,
-        unselectedLabelStyle: Theme.of(
-          context,
-        ).textTheme.labelMedium?.copyWith(color: context.colors.subtle),
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded, size: 24.r),
-            label: context.l10n.navHome,
+          FloatingTabItem(
+            icon: Icons.home_outlined,
+            selectedIcon: Icons.home_rounded,
+            label: l10n.navHome,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.compare_arrows_rounded, size: 24.r),
-            label: context.l10n.navCompare,
+          FloatingTabItem(
+            icon: Icons.compare_arrows_rounded,
+            selectedIcon: Icons.compare_arrows_rounded,
+            label: l10n.navCompare,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.quiz_rounded, size: 24.r),
-            label: context.l10n.navQuiz,
+          FloatingTabItem(
+            icon: Icons.quiz_outlined,
+            selectedIcon: Icons.quiz_rounded,
+            label: l10n.navQuiz,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.groups_rounded, size: 24.r),
-            label: context.l10n.navTeam,
+          FloatingTabItem(
+            icon: Icons.groups_outlined,
+            selectedIcon: Icons.groups_rounded,
+            label: l10n.navTeam,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_rounded, size: 24.r),
-            label: context.l10n.navFavourites,
+          FloatingTabItem(
+            icon: Icons.favorite_border_rounded,
+            selectedIcon: Icons.favorite_rounded,
+            label: l10n.navFavourites,
           ),
         ],
       ),
