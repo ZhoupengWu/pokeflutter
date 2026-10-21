@@ -664,4 +664,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get showNormal => 'Mostra normale';
+
+  @override
+  String get statsShowRadar => 'Mostra come grafico radar';
+
+  @override
+  String get statsShowBars => 'Mostra come barre';
 }

@@ -1229,6 +1229,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show normal'**
   String get showNormal;
+
+  /// No description provided for @statsShowRadar.
+  ///
+  /// In en, this message translates to:
+  /// **'Show as radar chart'**
+  String get statsShowRadar;
+
+  /// No description provided for @statsShowBars.
+  ///
+  /// In en, this message translates to:
+  /// **'Show as bars'**
+  String get statsShowBars;
 }
 
 class _AppLocalizationsDelegate

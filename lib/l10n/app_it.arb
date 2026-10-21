@@ -187,5 +187,7 @@
   "typeChartNoEffect": "Nessun effetto (0×)",
   "typeChartCellSemantics": "{attacker} contro {defender}: {multiplier}",
   "showShiny": "Mostra cromatico",
-  "showNormal": "Mostra normale"
+  "showNormal": "Mostra normale",
+  "statsShowRadar": "Mostra come grafico radar",
+  "statsShowBars": "Mostra come barre"
 }

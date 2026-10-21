@@ -662,4 +662,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showNormal => 'Show normal';
+
+  @override
+  String get statsShowRadar => 'Show as radar chart';
+
+  @override
+  String get statsShowBars => 'Show as bars';
 }

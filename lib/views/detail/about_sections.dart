@@ -5,6 +5,7 @@ import '../../model/pokemon.dart';
 import '../../theme/app_colors.dart';
 import '../../core/capitalize.dart';
 import '../shared/styled_text.dart';
+import 'stat_radar.dart';
 
 /// Heading of a section on the detail card, in the Pokémon's colour.
 class SectionTitle extends StatelessWidget {
@@ -162,71 +163,98 @@ class AbilitiesSection extends StatelessWidget {
   }
 }
 
-class StatsSection extends StatelessWidget {
+/// Base stats, as bars or as a radar chart (the button next to the title
+/// switches).
+class StatsSection extends StatefulWidget {
   const StatsSection({super.key, required this.pokemon, required this.accent});
 
   final Pokemon pokemon;
   final Color accent;
 
+  @override
+  State<StatsSection> createState() => _StatsSectionState();
+}
+
+class _StatsSectionState extends State<StatsSection> {
   /// Highest base stat of any Pokémon (Blissey's HP), the full-bar value.
   static const _maxStat = 255.0;
+
+  bool _radar = false;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
+    final pokemon = widget.pokemon;
+    final accent = widget.accent;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitle(l10n.detailBaseStats, accent: accent),
+        Row(
+          children: [
+            Expanded(child: SectionTitle(l10n.detailBaseStats, accent: accent)),
+            IconButton(
+              tooltip: _radar ? l10n.statsShowBars : l10n.statsShowRadar,
+              visualDensity: VisualDensity.compact,
+              color: accent,
+              icon: Icon(
+                _radar ? Icons.bar_chart_rounded : Icons.radar_rounded,
+              ),
+              onPressed: () => setState(() => _radar = !_radar),
+            ),
+          ],
+        ),
         SizedBox(height: 12.h),
-        for (final stat in pokemon.stats)
-          Semantics(
-            label: '${l10n.statLabel(stat.name)}: ${stat.value}',
-            excludeSemantics: true,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 8.h),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 40.w,
-                    child: Text(
-                      l10n.statLabel(stat.name),
-                      style: textTheme.bodySmall?.copyWith(
-                        color: accent,
-                        fontWeight: FontWeight.w700,
+        if (_radar)
+          StatRadar(stats: pokemon.stats, accent: accent)
+        else
+          for (final stat in pokemon.stats)
+            Semantics(
+              label: '${l10n.statLabel(stat.name)}: ${stat.value}',
+              excludeSemantics: true,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 8.h),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 40.w,
+                      child: Text(
+                        l10n.statLabel(stat.name),
+                        style: textTheme.bodySmall?.copyWith(
+                          color: accent,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 8.w),
-                  SizedBox(
-                    width: 28.w,
-                    child: Text(
-                      stat.value.toString(),
-                      style: textTheme.bodySmall?.copyWith(
-                        color: colors.strong,
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4.r),
-                      child: LinearProgressIndicator(
-                        value: stat.value / _maxStat,
-                        minHeight: 6.h,
-                        backgroundColor: colors.fill,
-                        valueColor: AlwaysStoppedAnimation<Color>(accent),
+                    SizedBox(width: 8.w),
+                    SizedBox(
+                      width: 28.w,
+                      child: Text(
+                        stat.value.toString(),
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.strong,
+                        ),
+                        textAlign: TextAlign.end,
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4.r),
+                        child: LinearProgressIndicator(
+                          value: stat.value / _maxStat,
+                          minHeight: 6.h,
+                          backgroundColor: colors.fill,
+                          valueColor: AlwaysStoppedAnimation<Color>(accent),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
       ],
     );
   }

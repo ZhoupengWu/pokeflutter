@@ -471,5 +471,7 @@
     }
   },
   "showShiny": "Show shiny",
-  "showNormal": "Show normal"
+  "showNormal": "Show normal",
+  "statsShowRadar": "Show as radar chart",
+  "statsShowBars": "Show as bars"
 }

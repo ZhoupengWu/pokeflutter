@@ -7,6 +7,7 @@ import 'package:pokeflutter/theme/app_colors.dart';
 import 'package:pokeflutter/model/pokemon_list_item.dart';
 import 'package:pokeflutter/theme/theme.dart';
 import 'package:pokeflutter/views/detail/pokemon_detail_page.dart';
+import 'package:pokeflutter/views/detail/stat_radar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/detail_fakes.dart';
@@ -158,6 +159,26 @@ void main() {
 
     expect(find.text('Pokédex entry'), findsNothing);
     expect(find.text('About'), findsOneWidget); // the rest is still there
+  });
+
+  testWidgets('the stats can be shown as a radar chart and back', (
+    tester,
+  ) async {
+    await _pump(tester);
+    await _scrollTo(tester, find.text('Base Stats'));
+
+    expect(find.byType(LinearProgressIndicator), findsWidgets);
+    expect(find.byType(StatRadar), findsNothing);
+
+    await tester.tap(find.byTooltip('Show as radar chart'));
+    await tester.pump();
+    expect(find.byType(StatRadar), findsOneWidget);
+    expect(find.byType(LinearProgressIndicator), findsNothing);
+
+    await tester.tap(find.byTooltip('Show as bars'));
+    await tester.pump();
+    expect(find.byType(StatRadar), findsNothing);
+    expect(find.byType(LinearProgressIndicator), findsWidgets);
   });
 
   testWidgets('type matchups follow the dual type (fire / flying)', (
