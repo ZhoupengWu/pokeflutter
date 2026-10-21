@@ -16,6 +16,7 @@ import 'data/offline_prefetcher.dart';
 import 'data/offline_storage.dart';
 import 'data/quiz_stats_store.dart';
 import 'data/species_api.dart';
+import 'data/team_manager.dart';
 import 'views/shared/pokemon_image.dart';
 
 /// The app's long-lived collaborators, created once and handed to the widget
@@ -38,11 +39,13 @@ class AppServices {
     OfflineStorage? storage,
     OfflinePrefetcher? prefetcher,
     PokemonNames? names,
+    TeamManager? team,
   }) : networkStatus = networkStatus ?? NetworkStatus(),
        imageProvider = imageProvider ?? NetworkImage.new,
        storage = storage ?? OfflineStorage(),
        _prefetcher = prefetcher,
        names = names ?? PokemonNames(),
+       team = team ?? TeamManager(),
        repository = repository ?? PokemonRepository(),
        pokemonApi = pokemonApi ?? PokemonApi(),
        evolutionApi = evolutionApi ?? EvolutionApi(),
@@ -98,6 +101,7 @@ class AppServices {
   final ImageProviderFactory imageProvider;
   final OfflineStorage storage;
   final PokemonNames names;
+  final TeamManager team;
 
   final OfflinePrefetcher? _prefetcher;
 
@@ -119,6 +123,7 @@ class AppServices {
   Future<void> init() async {
     final all = await repository.getAll();
     await favourites.init(all);
+    await team.init(all);
     await settings.init();
     await names.load();
     unawaited(typeIndex.ensureLoaded());
@@ -152,6 +157,7 @@ class AppProviders extends StatelessWidget {
         Provider<ImageProviderFactory>.value(value: services.imageProvider),
         Provider<OfflineStorage>.value(value: services.storage),
         Provider<PokemonNames>.value(value: services.names),
+        Provider<TeamManager>.value(value: services.team),
         Provider<OfflinePrefetcher>.value(value: services.prefetcher),
       ],
       child: child,

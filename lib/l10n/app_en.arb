@@ -455,5 +455,60 @@
     "placeholders": {
       "count": {"type": "int"}
     }
-  }
+  },
+  "typeChartOpen": "Full type chart",
+  "typeChartTitle": "Type chart",
+  "typeChartHint": "Rows are the attacking type, columns the defending type. Pinch to zoom, drag to move.",
+  "typeChartSuper": "Super effective (2×)",
+  "typeChartNotVery": "Not very effective (½×)",
+  "typeChartNoEffect": "No effect (0×)",
+  "typeChartCellSemantics": "{attacker} against {defender}: {multiplier}",
+  "@typeChartCellSemantics": {
+    "placeholders": {
+      "attacker": {"type": "String"},
+      "defender": {"type": "String"},
+      "multiplier": {"type": "String"}
+    }
+  },
+  "showShiny": "Show shiny",
+  "showNormal": "Show normal",
+  "statsShowRadar": "Show as radar chart",
+  "statsShowBars": "Show as bars",
+  "detailForms": "Forms",
+  "navTeam": "Team",
+  "teamTitle": "Team",
+  "teamSubtitle": "Pick up to six Pokémon and see what the team is weak to and what it hits hard.",
+  "teamClear": "Clear team",
+  "teamSlotEmpty": "Add a Pokémon",
+  "teamSlotEmptySemantics": "Empty slot {number}, add a Pokémon",
+  "@teamSlotEmptySemantics": {
+    "placeholders": {
+      "number": {"type": "int"}
+    }
+  },
+  "teamRemove": "Remove {name} from the team",
+  "@teamRemove": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "teamEmptyHint": "Add a Pokémon to start building your team.",
+  "teamLoadFailed": "{count, plural, =1{1 Pokémon could not be loaded. Tap to retry} other{{count} Pokémon could not be loaded. Tap to retry}}",
+  "@teamLoadFailed": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "teamDefence": "Defence",
+  "teamDefenceHint": "Types with more Pokémon weak to them than resisting them; ×N is how many.",
+  "teamWeakTo": "Weak to",
+  "teamResists": "Resists",
+  "teamNoWeakness": "No type gives this team trouble.",
+  "teamNoResistance": "No type is resisted by more Pokémon than it hurts.",
+  "teamOffence": "Offence",
+  "teamOffenceHint": "Judged by the types of your Pokémon, not by their moves.",
+  "teamHits": "Hits super effectively",
+  "teamMisses": "Not covered",
+  "teamNoCoverage": "No type is hit super effectively yet.",
+  "teamNoGaps": "Every type is covered."
 }

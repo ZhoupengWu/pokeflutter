@@ -23,7 +23,7 @@ or Italian.
 
 ## Features
 
-The app has four tabs: **Pokédex**, **Compare**, **Quiz** and **Favourites**.
+The app has five tabs: **Pokédex**, **Compare**, **Quiz**, **Team** and **Favourites**.
 
 ### Pokédex
 
@@ -38,12 +38,14 @@ The app has four tabs: **Pokédex**, **Compare**, **Quiz** and **Favourites**.
 
 ### Pokémon detail
 
-- Official artwork, types, base stats with bars, abilities (named in English or Italian),
-  height and weight.
+- Official artwork (with a **shiny** toggle), types, base stats as bars or as a **radar chart**,
+  abilities (named in English or Italian), height and weight.
 - **Pokédex entry**: category ("Mouse Pokémon"), description in English or Italian, habitat and
   legendary / mythical tags.
+- **Forms**: Mega, regional, Gigantamax… of the species, as chips that open each form.
 - **Type matchups**: what the Pokémon is weak to, resists and is immune to, with the damage
-  multiplier (4×, 2×, ½×, ¼×, 0×) computed from its types.
+  multiplier (4×, 2×, ½×, ¼×, 0×) computed from its types, and a link to the **full 18 × 18
+  type chart** (pan and zoom).
 - **Evolution chain**: every stage, including branches such as Eevee's; tap a stage to open it.
 - Favourite toggle and a back arrow that returns straight to the list, while the system back
   button steps back through the Pokémon you opened.
@@ -61,6 +63,12 @@ of each pair highlighted in green.
 - Score: 100 points per correct answer plus a streak bonus (+25 per consecutive correct answer, up
   to +100). Your best scores are saved per difficulty.
 - Options are exposed to screen readers, so the quiz is playable with TalkBack/VoiceOver.
+
+### Team
+
+Pick up to six Pokémon (saved on the device). The tab shows which types the team is **weak to** and
+**resists** (×N = how many members), and which types its own types **hit super effectively** or
+leave **uncovered**. It is based on types only, not on moves.
 
 ### Favourites
 

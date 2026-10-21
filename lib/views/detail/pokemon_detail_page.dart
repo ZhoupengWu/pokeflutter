@@ -16,6 +16,7 @@ import '../../theme/theme.dart';
 import 'about_sections.dart';
 import 'detail_header.dart';
 import 'evolution_section.dart';
+import 'forms_section.dart';
 import 'species_section.dart';
 import 'type_matchups_section.dart';
 
@@ -205,6 +206,8 @@ class _DetailView extends StatelessWidget {
       pokemon: pokemon,
       favouriteItem: favouriteItem,
       heroTag: heroTag,
+      shiny: controller.showShiny,
+      onToggleShiny: controller.toggleShiny,
     );
 
     return Stack(
@@ -308,6 +311,14 @@ class _DetailCard extends StatelessWidget {
               if (controller.species?.hasInfo ?? false) ...[
                 SpeciesSection(
                   species: controller.species!,
+                  accent: readableAccent,
+                ),
+                SizedBox(height: 24.h),
+              ],
+              if (controller.forms.length > 1) ...[
+                FormsSection(
+                  forms: controller.forms,
+                  currentName: pokemon.name,
                   accent: readableAccent,
                 ),
                 SizedBox(height: 24.h),

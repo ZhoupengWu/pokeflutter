@@ -81,4 +81,10 @@ Type Filter, Favourites System, Pokémon Comparison.
   (`tool/generate_app_icon.py` + `flutter_launcher_icons`).
 - Release signing confirmed working in CI (APK signed with the owner's key).
 
+## ✅ Phase 11 — Team and richer details (v1.10.0)
+- **Team** tab: six slots, weaknesses, resistances and type coverage (`TeamManager`,
+  `TeamController`, `TeamAnalysis`).
+- **Full type chart** page (18 × 18, pan and zoom) from the matchups section.
+- Detail page: **shiny** artwork toggle, **radar chart** of the stats, other **forms** of the species.
+
 See [`backlog.md`](backlog.md) for what is next.

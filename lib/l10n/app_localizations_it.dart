@@ -630,4 +630,128 @@ class AppLocalizationsIt extends AppLocalizations {
     );
     return '$_temp0. Controlla la connessione.';
   }
+
+  @override
+  String get typeChartOpen => 'Tabella completa dei tipi';
+
+  @override
+  String get typeChartTitle => 'Tabella dei tipi';
+
+  @override
+  String get typeChartHint =>
+      'Le righe sono il tipo che attacca, le colonne il tipo che difende. Pizzica per ingrandire, trascina per spostare.';
+
+  @override
+  String get typeChartSuper => 'Superefficace (2×)';
+
+  @override
+  String get typeChartNotVery => 'Poco efficace (½×)';
+
+  @override
+  String get typeChartNoEffect => 'Nessun effetto (0×)';
+
+  @override
+  String typeChartCellSemantics(
+    String attacker,
+    String defender,
+    String multiplier,
+  ) {
+    return '$attacker contro $defender: $multiplier';
+  }
+
+  @override
+  String get showShiny => 'Mostra cromatico';
+
+  @override
+  String get showNormal => 'Mostra normale';
+
+  @override
+  String get statsShowRadar => 'Mostra come grafico radar';
+
+  @override
+  String get statsShowBars => 'Mostra come barre';
+
+  @override
+  String get detailForms => 'Forme';
+
+  @override
+  String get navTeam => 'Squadra';
+
+  @override
+  String get teamTitle => 'Squadra';
+
+  @override
+  String get teamSubtitle =>
+      'Scegli fino a sei Pokémon e scopri a cosa è debole la squadra e cosa colpisce forte.';
+
+  @override
+  String get teamClear => 'Svuota la squadra';
+
+  @override
+  String get teamSlotEmpty => 'Aggiungi un Pokémon';
+
+  @override
+  String teamSlotEmptySemantics(int number) {
+    return 'Posto vuoto $number, aggiungi un Pokémon';
+  }
+
+  @override
+  String teamRemove(String name) {
+    return 'Togli $name dalla squadra';
+  }
+
+  @override
+  String get teamEmptyHint =>
+      'Aggiungi un Pokémon per iniziare a creare la squadra.';
+
+  @override
+  String teamLoadFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Impossibile caricare $count Pokémon. Tocca per riprovare',
+      one: 'Impossibile caricare 1 Pokémon. Tocca per riprovare',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get teamDefence => 'Difesa';
+
+  @override
+  String get teamDefenceHint =>
+      'Tipi a cui sono deboli più Pokémon di quanti resistano; ×N è quanti.';
+
+  @override
+  String get teamWeakTo => 'Debole a';
+
+  @override
+  String get teamResists => 'Resiste a';
+
+  @override
+  String get teamNoWeakness => 'Nessun tipo mette in difficoltà la squadra.';
+
+  @override
+  String get teamNoResistance =>
+      'Nessun tipo è resistito da più Pokémon di quanti ne danneggia.';
+
+  @override
+  String get teamOffence => 'Attacco';
+
+  @override
+  String get teamOffenceHint =>
+      'Calcolato sui tipi dei Pokémon, non sulle loro mosse.';
+
+  @override
+  String get teamHits => 'Colpisce in modo superefficace';
+
+  @override
+  String get teamMisses => 'Non coperti';
+
+  @override
+  String get teamNoCoverage =>
+      'Nessun tipo è ancora colpito in modo superefficace.';
+
+  @override
+  String get teamNoGaps => 'Tutti i tipi sono coperti.';
 }

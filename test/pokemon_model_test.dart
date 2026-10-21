@@ -53,4 +53,44 @@ void main() {
     expect(p.urlSprite, isEmpty);
     expect(p.urlImage, isEmpty);
   });
+
+  group('shiny artwork', () {
+    test('is read from the official artwork', () {
+      final p = Pokemon.fromJson(pokemonJson());
+
+      expect(p.urlShinyImage, 'https://img/shiny.png');
+    });
+
+    test('falls back to the home render, then to the shiny sprite', () {
+      final home = Pokemon.fromJson(
+        pokemonJson(
+          shiny: null,
+          extraOther: {
+            'home': {'front_shiny': 'https://img/home-shiny.png'},
+          },
+        ),
+      );
+      expect(home.urlShinyImage, 'https://img/home-shiny.png');
+
+      final json = pokemonJson(shiny: null);
+      (json['sprites'] as Map)['front_shiny'] = 'https://img/sprite-shiny.png';
+      expect(
+        Pokemon.fromJson(json).urlShinyImage,
+        'https://img/sprite-shiny.png',
+      );
+    });
+
+    test('is null when there is none', () {
+      expect(Pokemon.fromJson(pokemonJson(shiny: null)).urlShinyImage, isNull);
+    });
+
+    test('survives the cache, and old cache entries do not have it', () {
+      final p = Pokemon.fromJson(pokemonJson());
+      final copy = Pokemon.fromCacheJson(p.toCacheJson());
+      expect(copy.urlShinyImage, 'https://img/shiny.png');
+
+      final old = p.toCacheJson()..remove('shinyImage');
+      expect(Pokemon.fromCacheJson(old).urlShinyImage, isNull);
+    });
+  });
 }

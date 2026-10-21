@@ -7,6 +7,7 @@ import 'home/home_page.dart';
 import 'compare/compare_page.dart';
 import 'quiz/quiz_page.dart';
 import 'favourites/favourite_page.dart';
+import 'team/team_page.dart';
 
 class ShellPage extends StatefulWidget {
   const ShellPage({super.key});
@@ -27,6 +28,7 @@ class _ShellPageState extends State<ShellPage> {
     HomePage(),
     ComparePage(),
     QuizPage(),
+    TeamPage(),
     FavouritePage(),
   ];
 
@@ -71,6 +73,10 @@ class _ShellPageState extends State<ShellPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.quiz_rounded, size: 24.r),
             label: context.l10n.navQuiz,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.groups_rounded, size: 24.r),
+            label: context.l10n.navTeam,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_rounded, size: 24.r),

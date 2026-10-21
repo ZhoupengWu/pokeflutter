@@ -16,6 +16,7 @@
 - Phase 9 (v1.8.0): favourite heart fix, lazy tabs, ability names, offline favourites, large-font
   fixes, landscape layouts
 - Phase 10 (v1.9.0): Pokémon display names (EN/IT), new app icon, signing confirmed
+- Phase 11 (v1.10.0): Team tab, full type chart, shiny toggle, stats radar, forms
 
 ## 🔲 Next
 Everything left is in [`backlog.md`](backlog.md). Suggested first steps:

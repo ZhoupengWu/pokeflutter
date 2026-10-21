@@ -52,6 +52,35 @@ void main() {
       expect(bare.descriptionFor('en'), isNull);
     });
 
+    test('lists the forms, default first', () {
+      final withForms = PokemonSpecies.fromApiJson(
+        jsonDecode(
+              richSpeciesBody(
+                varieties: ['charizard', 'charizard-mega-x', 'charizard-gmax'],
+              ),
+            )
+            as Map<String, dynamic>,
+      );
+      expect(withForms.varieties, [
+        'charizard',
+        'charizard-mega-x',
+        'charizard-gmax',
+      ]);
+
+      // The API does not promise the default is listed first.
+      final json =
+          jsonDecode(richSpeciesBody(varieties: ['a', 'b', 'c']))
+              as Map<String, dynamic>;
+      final list = json['varieties'] as List<dynamic>;
+      list.insert(0, list.removeAt(2)); // c, a, b — with a still the default
+      expect(PokemonSpecies.fromApiJson(json).varieties.first, 'a');
+    });
+
+    test('a copy saved before forms existed is rejected, to be refetched', () {
+      final old = sampleSpecies().toCacheJson()..remove('varieties');
+      expect(() => PokemonSpecies.fromCacheJson(old), throwsA(anything));
+    });
+
     test('survives the disk cache round trip', () {
       final copy = PokemonSpecies.fromCacheJson(
         jsonDecode(jsonEncode(species.toCacheJson())) as Map<String, dynamic>,
@@ -60,6 +89,7 @@ void main() {
       expect(copy.categories, species.categories);
       expect(copy.habitat, species.habitat);
       expect(copy.isMythical, species.isMythical);
+      expect(copy.varieties, species.varieties);
       expect(copy.evolutionChainUrl, species.evolutionChainUrl);
     });
   });
