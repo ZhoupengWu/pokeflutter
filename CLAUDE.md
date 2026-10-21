@@ -61,9 +61,10 @@ CI also builds a release APK (job "Build release APK") and checks the INTERNET p
 - Seeing the UI: see "Notes for new sessions" in `docs/planning/backlog.md` (web build + Playwright).
 
 ## Releasing
-A release is a tag `vX.Y.Z` matching `version:` in `pubspec.yaml`; the Release workflow
-(`.github/workflows/release.yml`) builds the signed APK and drafts the GitHub release. Never push a
-tag unless the user asks for a release.
+A release is made by the Release workflow (`.github/workflows/release.yml`), started from the
+Actions tab with "Draft a GitHub release" ticked or by a tag `vX.Y.Z` matching `version:` in
+`pubspec.yaml`; it builds the signed APK and drafts the GitHub release. Never push a tag or start
+the workflow with the draft option unless the user asks for a release.
 
 ## Release signing
 Release APKs are signed with the key from `android/key.properties` or the `ANDROID_*` CI secrets
