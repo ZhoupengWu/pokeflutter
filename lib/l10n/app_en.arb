@@ -469,5 +469,7 @@
       "defender": {"type": "String"},
       "multiplier": {"type": "String"}
     }
-  }
+  },
+  "showShiny": "Show shiny",
+  "showNormal": "Show normal"
 }

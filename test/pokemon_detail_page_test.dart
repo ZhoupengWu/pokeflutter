@@ -99,6 +99,34 @@ void main() {
     expect(find.text('Blaze'), findsOneWidget);
   });
 
+  testWidgets('the sparkle button swaps in the shiny artwork', (tester) async {
+    await _pump(tester);
+    Finder artwork(String url) => find.byWidgetPredicate(
+      (w) =>
+          w is Image &&
+          w.image is NetworkImage &&
+          (w.image as NetworkImage).url == url,
+    );
+
+    expect(artwork('https://img/artwork.png'), findsWidgets);
+    expect(artwork('https://img/shiny.png'), findsNothing);
+
+    await tester.tap(find.byTooltip('Show shiny'));
+    await tester.pump();
+    expect(artwork('https://img/shiny.png'), findsWidgets);
+    expect(artwork('https://img/artwork.png'), findsNothing);
+
+    await tester.tap(find.byTooltip('Show normal'));
+    await tester.pump();
+    expect(artwork('https://img/artwork.png'), findsWidgets);
+  });
+
+  testWidgets('no sparkle button without a shiny artwork', (tester) async {
+    await _pump(tester, api: FakePokemonApi(shiny: false));
+
+    expect(find.byTooltip('Show shiny'), findsNothing);
+  });
+
   testWidgets('shows the Pokédex entry in English', (tester) async {
     await _pump(tester);
 

@@ -40,6 +40,15 @@ class PokemonDetailController extends ChangeNotifier {
   LoadStatus status = LoadStatus.loading;
   Pokemon? pokemon;
 
+  /// Whether the shiny artwork is shown (only when the Pokémon has one).
+  bool showShiny = false;
+
+  /// Switches between the normal and the shiny artwork.
+  void toggleShiny() {
+    showShiny = !showShiny;
+    notifyListeners();
+  }
+
   /// Pokédex entry, category and habitat. Null until loaded, and when they
   /// could not be (the page then simply leaves the section out).
   PokemonSpecies? species;

@@ -12,6 +12,7 @@ Map<String, dynamic> pokemonJson({
   List<String> types = const ['fire', 'flying'],
   String? sprite = 'https://img/sprite.png',
   String? artwork = 'https://img/artwork.png',
+  String? shiny = 'https://img/shiny.png',
   Map<String, dynamic>? extraOther,
 }) => {
   'id': id,
@@ -22,7 +23,7 @@ Map<String, dynamic> pokemonJson({
   'sprites': {
     'front_default': sprite,
     'other': {
-      'official-artwork': {'front_default': artwork},
+      'official-artwork': {'front_default': artwork, 'front_shiny': shiny},
       ...?extraOther,
     },
   },

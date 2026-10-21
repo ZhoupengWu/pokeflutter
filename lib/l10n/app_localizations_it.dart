@@ -658,4 +658,10 @@ class AppLocalizationsIt extends AppLocalizations {
   ) {
     return '$attacker contro $defender: $multiplier';
   }
+
+  @override
+  String get showShiny => 'Mostra cromatico';
+
+  @override
+  String get showNormal => 'Mostra normale';
 }

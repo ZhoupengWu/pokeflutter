@@ -14,6 +14,9 @@ class Pokemon {
 
   /// Large artwork; falls back to the sprite when there is no artwork.
   final String urlImage;
+
+  /// Large artwork of the shiny variant; null when PokéAPI has none.
+  final String? urlShinyImage;
   final double weight; // kg
   final double height; // cm
   final List<String> typesList;
@@ -26,6 +29,7 @@ class Pokemon {
     String? speciesName,
     required this.urlSprite,
     required this.urlImage,
+    this.urlShinyImage,
     required this.weight,
     required this.height,
     required this.typesList,
@@ -55,6 +59,11 @@ class Pokemon {
           (json['species'] as Map<String, dynamic>?)?['name'] as String?,
       urlSprite: sprite ?? artwork,
       urlImage: artwork,
+      urlShinyImage: _firstNonEmptyOrNull([
+        _nested(other, 'official-artwork', 'front_shiny'),
+        _nested(other, 'home', 'front_shiny'),
+        sprites['front_shiny'] as String?,
+      ]),
       // PokéAPI uses hectograms and decimetres.
       weight: (json['weight'] as num).toDouble() / 10.0,
       height: (json['height'] as num).toDouble() * 10.0,
@@ -72,6 +81,7 @@ class Pokemon {
     'species': speciesName,
     'sprite': urlSprite,
     'image': urlImage,
+    'shinyImage': urlShinyImage,
     'weight': weight,
     'height': height,
     'types': typesList,
@@ -87,6 +97,8 @@ class Pokemon {
     speciesName: json['species'] as String?,
     urlSprite: json['sprite'] as String,
     urlImage: json['image'] as String,
+    // Absent from copies saved by older versions of the app.
+    urlShinyImage: json['shinyImage'] as String?,
     weight: (json['weight'] as num).toDouble(),
     height: (json['height'] as num).toDouble(),
     typesList: (json['types'] as List<dynamic>).cast<String>(),
@@ -100,9 +112,18 @@ class Pokemon {
     abilities: (json['abilities'] as List<dynamic>).cast<String>(),
   );
 
-  static String? _nested(Map<String, dynamic> map, String key) {
+  static String? _nested(
+    Map<String, dynamic> map,
+    String key, [
+    String image = 'front_default',
+  ]) {
     final entry = map[key] as Map<String, dynamic>?;
-    return entry?['front_default'] as String?;
+    return entry?[image] as String?;
+  }
+
+  static String? _firstNonEmptyOrNull(List<String?> candidates) {
+    final found = _firstNonEmpty(candidates);
+    return found.isEmpty ? null : found;
   }
 
   static String _firstNonEmpty(List<String?> candidates) => candidates

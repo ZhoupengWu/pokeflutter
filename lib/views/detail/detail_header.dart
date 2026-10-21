@@ -16,6 +16,8 @@ class DetailHeader extends StatelessWidget {
     required this.pokemon,
     required this.favouriteItem,
     this.heroTag,
+    this.shiny = false,
+    this.onToggleShiny,
   });
 
   final Pokemon pokemon;
@@ -24,14 +26,20 @@ class DetailHeader extends StatelessWidget {
   final PokemonListItem favouriteItem;
   final Object? heroTag;
 
+  /// Whether the shiny artwork is shown, and the action that switches it
+  /// (the button only exists when the Pokémon has a shiny artwork).
+  final bool shiny;
+  final VoidCallback? onToggleShiny;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
     final favourites = context.read<FavouritesManager>();
 
+    final shinyUrl = pokemon.urlShinyImage;
     Widget artwork = PokemonImage(
-      pokemon.urlImage,
+      shiny && shinyUrl != null ? shinyUrl : pokemon.urlImage,
       height: 180.r,
       width: 180.r,
       fit: BoxFit.contain,
@@ -71,6 +79,20 @@ class DetailHeader extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
+              if (pokemon.urlShinyImage != null)
+                IconButton(
+                  tooltip: shiny ? l10n.showNormal : l10n.showShiny,
+                  isSelected: shiny,
+                  icon: const Icon(
+                    Icons.auto_awesome_outlined,
+                    color: Colors.white,
+                  ),
+                  selectedIcon: const Icon(
+                    Icons.auto_awesome_rounded,
+                    color: Colors.white,
+                  ),
+                  onPressed: onToggleShiny,
+                ),
               ValueListenableBuilder(
                 valueListenable: favourites.notifier,
                 builder: (_, _, _) {

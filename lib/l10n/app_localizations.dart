@@ -1217,6 +1217,18 @@ abstract class AppLocalizations {
     String defender,
     String multiplier,
   );
+
+  /// No description provided for @showShiny.
+  ///
+  /// In en, this message translates to:
+  /// **'Show shiny'**
+  String get showShiny;
+
+  /// No description provided for @showNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Show normal'**
+  String get showNormal;
 }
 
 class _AppLocalizationsDelegate

@@ -205,6 +205,8 @@ class _DetailView extends StatelessWidget {
       pokemon: pokemon,
       favouriteItem: favouriteItem,
       heroTag: heroTag,
+      shiny: controller.showShiny,
+      onToggleShiny: controller.toggleShiny,
     );
 
     return Stack(

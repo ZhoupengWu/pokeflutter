@@ -19,10 +19,16 @@ PokemonRepository fakeRepository({int count = 30}) => PokemonRepository(
 /// Answers every Pokémon with [types] and no network access. Names listed in
 /// [failing] throw a network error until removed from the set.
 class FakePokemonApi extends PokemonApi {
-  FakePokemonApi({this.types = const ['fire'], Set<String>? failing})
-    : failing = failing ?? <String>{};
+  FakePokemonApi({
+    this.types = const ['fire'],
+    Set<String>? failing,
+    this.shiny = true,
+  }) : failing = failing ?? <String>{};
 
   final List<String> types;
+
+  /// Whether the Pokémon have a shiny artwork.
+  final bool shiny;
   final Set<String> failing;
   final List<String> requested = [];
 
@@ -33,7 +39,12 @@ class FakePokemonApi extends PokemonApi {
       throw const PokemonApiException(PokemonApiErrorType.network, 'offline');
     }
     return Pokemon.fromJson(
-      pokemonJson(name: name, speciesName: name, types: types),
+      pokemonJson(
+        name: name,
+        speciesName: name,
+        types: types,
+        shiny: shiny ? 'https://img/shiny.png' : null,
+      ),
     );
   }
 }

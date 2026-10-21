@@ -185,5 +185,7 @@
   "typeChartSuper": "Superefficace (2×)",
   "typeChartNotVery": "Poco efficace (½×)",
   "typeChartNoEffect": "Nessun effetto (0×)",
-  "typeChartCellSemantics": "{attacker} contro {defender}: {multiplier}"
+  "typeChartCellSemantics": "{attacker} contro {defender}: {multiplier}",
+  "showShiny": "Mostra cromatico",
+  "showNormal": "Mostra normale"
 }
