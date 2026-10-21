@@ -17,6 +17,7 @@
   fixes, landscape layouts
 - Phase 10 (v1.9.0): Pokémon display names (EN/IT), new app icon, signing confirmed
 - Phase 11 (v1.10.0): Team tab, full type chart, shiny toggle, stats radar, forms
+- Phase 12 (v1.10.1): release workflow (tag → signed APK in a draft release)
 
 ## 🔲 Next
 Everything left is in [`backlog.md`](backlog.md). Suggested first steps:

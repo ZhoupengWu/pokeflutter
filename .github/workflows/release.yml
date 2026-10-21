@@ -1,0 +1,101 @@
+name: Release
+
+# Pushing a tag such as v1.10.0 builds the release APK, signs it with the release
+# key and attaches it to a *draft* GitHub release with generated notes; review the
+# draft and publish it. Running the workflow by hand (Actions tab) only builds and
+# keeps the APK as an artifact, to try the build without releasing anything.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write # create the release
+
+jobs:
+  release:
+    name: Build and draft the release
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the version of the app
+        id: version
+        run: |
+          full=$(sed -n 's/^version: *//p' pubspec.yaml | head -n 1)
+          echo "full=$full" >> "$GITHUB_OUTPUT"
+          echo "name=${full%%+*}" >> "$GITHUB_OUTPUT"
+
+      # A tag must say what the code says: v1.10.0 is for `version: 1.10.0+N`.
+      - name: Check the tag matches pubspec.yaml
+        if: github.ref_type == 'tag'
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$tag" != "${{ steps.version.outputs.name }}" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match version ${{ steps.version.outputs.full }} in pubspec.yaml"
+            exit 1
+          fi
+
+      # A release must be signed with the release key, never the debug one.
+      - name: Check the release key is configured
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "::error::The ANDROID_* secrets are not set (see README, Release signing)"
+            exit 1
+          fi
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Test
+        run: flutter test
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Check the signing certificate
+        run: |
+          apksigner=$(find "$ANDROID_HOME/build-tools" -name apksigner | sort | tail -n 1)
+          "$apksigner" verify --print-certs build/app/outputs/flutter-apk/app-release.apk | tee certs.txt
+          if grep -q 'CN=Android Debug' certs.txt; then
+            echo "::error::The APK is signed with the debug key"
+            exit 1
+          fi
+
+      - name: Name the APK after the version
+        run: cp build/app/outputs/flutter-apk/app-release.apk "pokeflutter-${{ steps.version.outputs.name }}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pokeflutter-${{ steps.version.outputs.name }}-apk
+          path: pokeflutter-${{ steps.version.outputs.name }}.apk
+          retention-days: 30
+
+      - name: Draft the GitHub release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "pokeflutter-${{ steps.version.outputs.name }}.apk" \
+            --draft \
+            --generate-notes \
+            --title "PokéFlutter ${{ steps.version.outputs.name }}"

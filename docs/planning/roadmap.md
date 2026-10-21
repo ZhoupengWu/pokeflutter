@@ -87,4 +87,8 @@ Type Filter, Favourites System, Pokémon Comparison.
 - **Full type chart** page (18 × 18, pan and zoom) from the matchups section.
 - Detail page: **shiny** artwork toggle, **radar chart** of the stats, other **forms** of the species.
 
+## ✅ Phase 12 — Release automation (v1.10.1)
+- **Release workflow**: a `vX.Y.Z` tag builds the signed APK and drafts a GitHub release with it
+  (`.github/workflows/release.yml`); run by hand it only builds.
+
 See [`backlog.md`](backlog.md) for what is next.

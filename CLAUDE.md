@@ -60,6 +60,11 @@ CI also builds a release APK (job "Build release APK") and checks the INTERNET p
   `loadRoboto()` (`test/support/fonts.dart`) in `setUpAll`.
 - Seeing the UI: see "Notes for new sessions" in `docs/planning/backlog.md` (web build + Playwright).
 
+## Releasing
+A release is a tag `vX.Y.Z` matching `version:` in `pubspec.yaml`; the Release workflow
+(`.github/workflows/release.yml`) builds the signed APK and drafts the GitHub release. Never push a
+tag unless the user asks for a release.
+
 ## Release signing
 Release APKs are signed with the key from `android/key.properties` or the `ANDROID_*` CI secrets
 (see README, "Release signing"). Never commit a keystore, its passwords or `key.properties`.

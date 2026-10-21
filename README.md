@@ -199,9 +199,16 @@ docs/                      # architecture, technical debt, roadmap, backlog
    user-visible changes and **always increase the build number** (`+N`) — Android refuses to
    install an update with a lower or equal build number, and Google Play and App Store Connect
    require it to be unique.
-2. Make sure the checks above pass.
-3. Build with `flutter build apk --release` / `flutter build appbundle` (Android) or
-   `flutter build ipa` (iOS).
+2. Make sure the checks above pass and merge to the branch you release from.
+3. **Tag it**: `git tag v1.10.0 && git push origin v1.10.0` (or create the tag from GitHub's
+   *Releases* page). The tag must match the version in `pubspec.yaml` (`v1.10.0` for
+   `1.10.0+8`). The **Release** workflow then runs the tests, builds the APK, signs it with the
+   release key, checks it is not debug-signed and attaches it to a **draft** release with
+   generated notes. Review the draft on GitHub's *Releases* page and publish it.
+   To try the build without releasing, run the workflow by hand from the Actions tab: it only keeps
+   the APK as an artifact.
+4. For the Play Store or the App Store build with `flutter build appbundle` or
+   `flutter build ipa` yourself.
 
 **Signing.** See [Release signing](#release-signing) below.
 
