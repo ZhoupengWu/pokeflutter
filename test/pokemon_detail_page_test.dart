@@ -148,6 +148,17 @@ void main() {
     expect(find.bySemanticsLabel('Ground: 0× damage'), findsOneWidget);
   }, semanticsEnabled: true);
 
+  testWidgets('the matchups link to the full type chart', (tester) async {
+    await _pump(tester);
+    await _scrollTo(tester, find.text('Full type chart'));
+
+    await tester.tap(find.text('Full type chart'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Type chart'), findsOneWidget);
+    expect(find.text('Super effective (2×)'), findsOneWidget);
+  });
+
   testWidgets('evolution branches are listed with how to reach them', (
     tester,
   ) async {

@@ -1171,6 +1171,52 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 Pokémon could not be saved} other{{count} Pokémon could not be saved}}. Check your connection.'**
   String storageSaveFailed(int count);
+
+  /// No description provided for @typeChartOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Full type chart'**
+  String get typeChartOpen;
+
+  /// No description provided for @typeChartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Type chart'**
+  String get typeChartTitle;
+
+  /// No description provided for @typeChartHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Rows are the attacking type, columns the defending type. Pinch to zoom, drag to move.'**
+  String get typeChartHint;
+
+  /// No description provided for @typeChartSuper.
+  ///
+  /// In en, this message translates to:
+  /// **'Super effective (2×)'**
+  String get typeChartSuper;
+
+  /// No description provided for @typeChartNotVery.
+  ///
+  /// In en, this message translates to:
+  /// **'Not very effective (½×)'**
+  String get typeChartNotVery;
+
+  /// No description provided for @typeChartNoEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'No effect (0×)'**
+  String get typeChartNoEffect;
+
+  /// No description provided for @typeChartCellSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'{attacker} against {defender}: {multiplier}'**
+  String typeChartCellSemantics(
+    String attacker,
+    String defender,
+    String multiplier,
+  );
 }
 
 class _AppLocalizationsDelegate

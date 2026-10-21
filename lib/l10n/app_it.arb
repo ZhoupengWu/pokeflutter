@@ -178,5 +178,12 @@
   "storageNoFavourites": "Aggiungi dei preferiti per salvarli offline",
   "storageSaving": "Salvataggio {done} di {total}…",
   "storageSaved": "Preferiti salvati",
-  "storageSaveFailed": "{count, plural, =1{Impossibile salvare 1 Pokémon} other{Impossibile salvare {count} Pokémon}}. Controlla la connessione."
+  "storageSaveFailed": "{count, plural, =1{Impossibile salvare 1 Pokémon} other{Impossibile salvare {count} Pokémon}}. Controlla la connessione.",
+  "typeChartOpen": "Tabella completa dei tipi",
+  "typeChartTitle": "Tabella dei tipi",
+  "typeChartHint": "Le righe sono il tipo che attacca, le colonne il tipo che difende. Pizzica per ingrandire, trascina per spostare.",
+  "typeChartSuper": "Superefficace (2×)",
+  "typeChartNotVery": "Poco efficace (½×)",
+  "typeChartNoEffect": "Nessun effetto (0×)",
+  "typeChartCellSemantics": "{attacker} contro {defender}: {multiplier}"
 }

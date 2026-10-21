@@ -5,6 +5,7 @@ import '../../model/pokemon.dart';
 import '../../theme/app_colors.dart';
 import '../../core/pokemon_constants.dart';
 import '../../core/type_chart.dart';
+import '../types/type_chart_page.dart';
 import 'about_sections.dart';
 
 /// How much damage each type of move deals to this Pokémon, grouped into
@@ -68,6 +69,19 @@ class TypeMatchupsSection extends StatelessWidget {
             children: [for (final item in items) _MatchupChip(matchup: item)],
           ),
         ],
+        SizedBox(height: 8.h),
+        TextButton.icon(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute<void>(builder: (_) => const TypeChartPage()),
+          ),
+          style: TextButton.styleFrom(
+            foregroundColor: accent,
+            padding: EdgeInsets.zero,
+          ),
+          icon: const Icon(Icons.grid_on_rounded),
+          label: Text(l10n.typeChartOpen),
+        ),
       ],
     );
   }

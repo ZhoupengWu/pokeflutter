@@ -628,4 +628,32 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0. Check your connection.';
   }
+
+  @override
+  String get typeChartOpen => 'Full type chart';
+
+  @override
+  String get typeChartTitle => 'Type chart';
+
+  @override
+  String get typeChartHint =>
+      'Rows are the attacking type, columns the defending type. Pinch to zoom, drag to move.';
+
+  @override
+  String get typeChartSuper => 'Super effective (2×)';
+
+  @override
+  String get typeChartNotVery => 'Not very effective (½×)';
+
+  @override
+  String get typeChartNoEffect => 'No effect (0×)';
+
+  @override
+  String typeChartCellSemantics(
+    String attacker,
+    String defender,
+    String multiplier,
+  ) {
+    return '$attacker against $defender: $multiplier';
+  }
 }

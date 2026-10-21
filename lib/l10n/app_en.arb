@@ -455,5 +455,19 @@
     "placeholders": {
       "count": {"type": "int"}
     }
+  },
+  "typeChartOpen": "Full type chart",
+  "typeChartTitle": "Type chart",
+  "typeChartHint": "Rows are the attacking type, columns the defending type. Pinch to zoom, drag to move.",
+  "typeChartSuper": "Super effective (2×)",
+  "typeChartNotVery": "Not very effective (½×)",
+  "typeChartNoEffect": "No effect (0×)",
+  "typeChartCellSemantics": "{attacker} against {defender}: {multiplier}",
+  "@typeChartCellSemantics": {
+    "placeholders": {
+      "attacker": {"type": "String"},
+      "defender": {"type": "String"},
+      "multiplier": {"type": "String"}
+    }
   }
 }

@@ -630,4 +630,32 @@ class AppLocalizationsIt extends AppLocalizations {
     );
     return '$_temp0. Controlla la connessione.';
   }
+
+  @override
+  String get typeChartOpen => 'Tabella completa dei tipi';
+
+  @override
+  String get typeChartTitle => 'Tabella dei tipi';
+
+  @override
+  String get typeChartHint =>
+      'Le righe sono il tipo che attacca, le colonne il tipo che difende. Pizzica per ingrandire, trascina per spostare.';
+
+  @override
+  String get typeChartSuper => 'Superefficace (2×)';
+
+  @override
+  String get typeChartNotVery => 'Poco efficace (½×)';
+
+  @override
+  String get typeChartNoEffect => 'Nessun effetto (0×)';
+
+  @override
+  String typeChartCellSemantics(
+    String attacker,
+    String defender,
+    String multiplier,
+  ) {
+    return '$attacker contro $defender: $multiplier';
+  }
 }
