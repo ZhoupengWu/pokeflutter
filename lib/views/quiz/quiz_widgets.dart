@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/quiz_model.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/shapes.dart';
 
 String difficultyName(AppLocalizations l10n, QuizDifficulty difficulty) =>
     switch (difficulty) {
@@ -49,7 +50,7 @@ class QuizPrimaryButton extends StatelessWidget {
           foregroundColor: foreground,
           padding: EdgeInsets.symmetric(vertical: verticalPadding ?? 16.h),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(radiusControl.r),
           ),
           elevation: 0,
         ),

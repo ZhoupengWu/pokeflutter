@@ -11,6 +11,7 @@ import '../../core/pokemon_constants.dart';
 import '../../data/pokemon_type_index.dart';
 import '../detail/pokemon_detail_page.dart';
 import 'styled_text.dart';
+import '../../theme/shapes.dart';
 
 /// Card shown in the Pokédex and favourites grids.
 ///
@@ -73,12 +74,12 @@ class GridItem extends StatelessWidget {
       excludeSemantics: true,
       onTap: () => _navigateToDetail(context),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(radiusCard.r),
         onTap: () => _navigateToDetail(context),
         child: Container(
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(radiusCard.r),
           ),
           child: Stack(
             children: [
@@ -96,7 +97,7 @@ class GridItem extends StatelessWidget {
                 ),
               ),
               ClipRRect(
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(radiusCard.r),
                 child: Padding(
                   padding: EdgeInsets.all(10.r),
                   child: Column(

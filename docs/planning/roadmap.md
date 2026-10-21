@@ -91,4 +91,12 @@ Type Filter, Favourites System, Pokémon Comparison.
 - **Release workflow**: a `vX.Y.Z` tag builds the signed APK and drafts a GitHub release with it
   (`.github/workflows/release.yml`); run by hand it only builds.
 
+## ✅ Phase 13 — iOS look (v1.11.0)
+- **Floating, frosted tab bar** (a pill over the content, capsule behind the current tab); the
+  pages scroll under it.
+- Large bold titles, pill buttons, larger radii (`theme/shapes.dart`), a filled search field,
+  grouped Settings, the detail header as an iOS navigation bar (round glass buttons, large title).
+- Release workflow: a tick-box on the manual run drafts the GitHub release.
+- Team cards centred.
+
 See [`backlog.md`](backlog.md) for what is next.

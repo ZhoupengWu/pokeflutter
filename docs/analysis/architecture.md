@@ -43,11 +43,11 @@ lib/
 │   ├── pokemon_repository.dart   # bundled list (assets/pokemonList.json), loaded once
 │   ├── pokemon_type_index.dart   # name -> types (primary first), built from /type/{name}
 │   ├── favourites_manager.dart, team_manager.dart, app_settings.dart, quiz_stats_store.dart  # shared_preferences
-├── theme/                        # theme.dart, app_colors.dart, palette.dart, contrast.dart, responsive.dart
+├── theme/                        # theme.dart, app_colors.dart, palette.dart, contrast.dart, responsive.dart, shapes.dart
 ├── core/                         # pokemon_constants (type colours), type_chart, pokedex (generations,
 │                                 #   sort), team_analysis, quiz_logic, capitalize
 └── views/
-    ├── shell_page.dart           # bottom navigation (IndexedStack, tabs built on first visit; hidden tabs get TickerMode off)
+    ├── shell_page.dart           # floating tab bar over an IndexedStack (tabs built on first visit; hidden tabs get TickerMode off)
     ├── home/                     # home_page, home_widgets, filter_sheet, search_bar, settings_sheet, …
     ├── detail/                   # page, header (shiny toggle), about/abilities/stats (bars or radar), forms, type matchups, evolution
     ├── compare/                  # page, slot cards, stats table, picker sheet
@@ -55,7 +55,7 @@ lib/
     ├── team/                     # team_page, slots, analysis view
     ├── types/                    # type_chart_page (18 × 18)
     ├── favourites/               # favourite_page
-    └── shared/                   # grid_item, pokemon_list, pokemon_image, styled_text
+    └── shared/                   # grid_item, pokemon_list, pokemon_image, styled_text, floating_tab_bar
 ```
 
 ## Startup

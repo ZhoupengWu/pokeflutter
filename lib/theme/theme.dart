@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'app_colors.dart';
 import 'palette.dart';
+import 'shapes.dart';
 
 /// Roboto is bundled with the app (assets/fonts), so text renders correctly
 /// offline and without a first-run download.
@@ -21,14 +22,20 @@ TextStyle _roboto({
 );
 
 TextTheme _textTheme(Color c) => TextTheme(
-  displaySmall: _roboto(fontSize: 36, fontWeight: FontWeight.w400, color: c),
-  headlineLarge: _roboto(fontSize: 32, fontWeight: FontWeight.w400, color: c),
-  headlineMedium: _roboto(fontSize: 28, fontWeight: FontWeight.w400, color: c),
-  headlineSmall: _roboto(fontSize: 24, fontWeight: FontWeight.w400, color: c),
-  titleLarge: _roboto(fontSize: 22, fontWeight: FontWeight.w400, color: c),
+  // Large titles in the iOS manner: big, bold, a little tight.
+  displaySmall: _roboto(
+    fontSize: 34,
+    fontWeight: FontWeight.w700,
+    color: c,
+    letterSpacing: -0.6,
+  ),
+  headlineLarge: _roboto(fontSize: 32, fontWeight: FontWeight.w700, color: c),
+  headlineMedium: _roboto(fontSize: 28, fontWeight: FontWeight.w600, color: c),
+  headlineSmall: _roboto(fontSize: 24, fontWeight: FontWeight.w600, color: c),
+  titleLarge: _roboto(fontSize: 22, fontWeight: FontWeight.w600, color: c),
   titleMedium: _roboto(
     fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     color: c,
     letterSpacing: 0.15,
   ),
@@ -86,14 +93,60 @@ ThemeData _buildTheme(Brightness brightness) {
     scaffoldBackgroundColor: colors.surface,
     canvasColor: colors.surface,
     extensions: [colors],
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedItemColor: colors.strong,
-      unselectedItemColor: colors.subtle,
+    appBarTheme: AppBarTheme(
       backgroundColor: colors.surface,
+      surfaceTintColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+      centerTitle: true,
     ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: colors.surface,
       surfaceTintColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(radiusSheet)),
+      ),
+    ),
+    // Buttons are pills, flat, like the prominent buttons of iOS.
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        shape: const StadiumBorder(),
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(shape: const StadiumBorder()),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        shape: const StadiumBorder(),
+        side: BorderSide(color: colors.border),
+      ),
+    ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        side: const WidgetStatePropertyAll(BorderSide.none),
+        backgroundColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? colors.strong
+              : colors.fill,
+        ),
+        foregroundColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? colors.onStrong
+              : colors.muted,
+        ),
+      ),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: colors.strong,
+      contentTextStyle: TextStyle(
+        fontFamily: _fontFamily,
+        color: colors.onStrong,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radiusControl),
+      ),
     ),
     textTheme: _textTheme(colors.strong),
   );

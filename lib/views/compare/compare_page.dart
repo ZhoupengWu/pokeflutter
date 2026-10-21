@@ -56,7 +56,9 @@ class _ComparePageState extends State<ComparePage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      // Not SafeArea at the bottom: the stats scroll under the floating tab bar.
       body: SafeArea(
+        bottom: false,
         child: ListenableBuilder(
           listenable: _controller,
           builder: (context, _) {
@@ -130,7 +132,12 @@ class _ComparePageState extends State<ComparePage> {
                 Expanded(
                   child: _controller.canCompare
                       ? SingleChildScrollView(
-                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          padding: EdgeInsets.fromLTRB(
+                            24.w,
+                            0,
+                            24.w,
+                            MediaQuery.paddingOf(context).bottom + 16.h,
+                          ),
                           child: StatsComparison(a: a.pokemon!, b: b.pokemon!),
                         )
                       : Center(

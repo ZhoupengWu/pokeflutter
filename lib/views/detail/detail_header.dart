@@ -7,6 +7,7 @@ import '../../model/pokemon.dart';
 import '../../theme/app_colors.dart';
 import '../../model/pokemon_list_item.dart';
 import '../../data/favourites_manager.dart';
+import '../../theme/shapes.dart';
 
 /// Top of the detail page, on the type-coloured background: back button,
 /// name, favourite toggle, Pokédex number, type chips and the artwork.
@@ -55,67 +56,72 @@ class DetailHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Round, translucent buttons on top, the name as a large title below:
+        // the layout of an iOS navigation bar.
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
           child: Row(
             children: [
-              IconButton(
+              _GlassButton(
                 tooltip: l10n.back,
-                icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                icon: Icons.arrow_back_rounded,
                 // After following evolutions the stack can be deep: this arrow
                 // goes straight back to the tabs, while the system back button
                 // still steps back one Pokémon at a time.
                 onPressed: () =>
                     Navigator.of(context).popUntil((route) => route.isFirst),
               ),
-              Expanded(
-                child: Text(
-                  context.pokemonName(pokemon.name),
-                  style: textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              if (pokemon.urlShinyImage != null)
-                IconButton(
+              const Spacer(),
+              if (pokemon.urlShinyImage != null) ...[
+                _GlassButton(
                   tooltip: shiny ? l10n.showNormal : l10n.showShiny,
-                  isSelected: shiny,
-                  icon: const Icon(
-                    Icons.auto_awesome_outlined,
-                    color: Colors.white,
-                  ),
-                  selectedIcon: const Icon(
-                    Icons.auto_awesome_rounded,
-                    color: Colors.white,
-                  ),
+                  icon: shiny
+                      ? Icons.auto_awesome_rounded
+                      : Icons.auto_awesome_outlined,
+                  // Lit up (white disc, gold sparkle) while the shiny shows.
+                  lit: shiny,
+                  litColor: const Color(0xFFB07A00),
                   onPressed: onToggleShiny,
                 ),
+                SizedBox(width: 8.w),
+              ],
               ValueListenableBuilder(
                 valueListenable: favourites.notifier,
                 builder: (_, _, _) {
                   final isFav = favourites.isFavourite(favouriteItem.name);
-                  return IconButton(
+                  return _GlassButton(
                     tooltip: isFav
                         ? l10n.removeFromFavourites
                         : l10n.addToFavourites,
-                    // A red heart disappears on a red Pokémon: a favourite sits
-                    // on a white disc, which reads on every type colour.
-                    style: isFav
-                        ? IconButton.styleFrom(backgroundColor: Colors.white)
-                        : null,
-                    icon: Icon(
-                      isFav
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_border_rounded,
-                      color: isFav ? dangerRed : Colors.white,
-                    ),
+                    icon: isFav
+                        ? Icons.favorite_rounded
+                        : Icons.favorite_border_rounded,
+                    // A red heart disappears on a red Pokémon: a favourite
+                    // sits on a white disc, which reads on every type colour.
+                    lit: isFav,
+                    litColor: dangerRed,
                     onPressed: () => favourites.toggle(favouriteItem),
                   );
                 },
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(24.w, 4.h, 24.w, 4.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Expanded(
+                child: Text(
+                  context.pokemonName(pokemon.name),
+                  style: textTheme.displaySmall?.copyWith(color: Colors.white),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SizedBox(width: 8.w),
               Text(
                 '#${pokemon.id.toString().padLeft(3, '0')}',
                 style: textTheme.titleMedium?.copyWith(color: Colors.white70),
@@ -124,7 +130,7 @@ class DetailHeader extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 32.w, bottom: 8.h),
+          padding: EdgeInsets.only(left: 24.w, bottom: 8.h),
           child: Row(
             children: [
               for (final type in pokemon.typesList) _TypeChip(type: type),
@@ -149,7 +155,7 @@ class _TypeChip extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: Colors.white24,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(radiusPill),
       ),
       child: Text(
         context.l10n.typeName(type),
@@ -159,4 +165,36 @@ class _TypeChip extends StatelessWidget {
       ),
     );
   }
+}
+
+/// A round, translucent icon button for the header: white glass over the type
+/// colour. With [lit] it becomes a white disc with a [litColor] icon.
+class _GlassButton extends StatelessWidget {
+  const _GlassButton({
+    required this.tooltip,
+    required this.icon,
+    required this.onPressed,
+    this.lit = false,
+    this.litColor,
+  });
+
+  final String tooltip;
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final bool lit;
+  final Color? litColor;
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+    tooltip: tooltip,
+    onPressed: onPressed,
+    style: IconButton.styleFrom(
+      backgroundColor: lit
+          ? Colors.white
+          : Colors.white.withValues(alpha: 0.24),
+      fixedSize: Size.square(40.r),
+      padding: EdgeInsets.zero,
+    ),
+    icon: Icon(icon, size: 22.r, color: lit ? litColor : Colors.white),
+  );
 }

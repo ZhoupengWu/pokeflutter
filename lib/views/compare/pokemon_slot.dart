@@ -6,6 +6,7 @@ import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
 import '../../theme/app_colors.dart';
 import '../../core/pokemon_constants.dart';
+import '../../theme/shapes.dart';
 
 /// One of the two cards at the top of Compare: empty, loading, failed
 /// (tap to retry) or showing the chosen Pokémon (tap to change).
@@ -44,10 +45,10 @@ class PokemonSlotCard extends StatelessWidget {
       onTap: onTap,
       child: Material(
         color: color,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(radiusCard.r),
         animationDuration: const Duration(milliseconds: 250),
         child: InkWell(
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(radiusCard.r),
           onTap: onTap,
           child: SizedBox(
             height: 140.h,

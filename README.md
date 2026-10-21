@@ -83,7 +83,8 @@ with a banner instead of showing errors.
 
 ### Looks right everywhere
 
-Edge-to-edge system bars that follow the page colour, light and dark themes with contrast-checked
+An iOS-inspired look: a floating, frosted tab bar the pages scroll under, large bold titles, pill
+buttons and soft corners, grouped settings. Edge-to-edge system bars that follow the page colour, light and dark themes with contrast-checked
 type colours, and a layout that adapts to small phones, large phones and
 tablets (content is capped to a comfortable width). Held sideways, the detail page and the quiz
 use two columns, and every screen is tested at the largest system font size.
@@ -200,13 +201,16 @@ docs/                      # architecture, technical debt, roadmap, backlog
    install an update with a lower or equal build number, and Google Play and App Store Connect
    require it to be unique.
 2. Make sure the checks above pass and merge to the branch you release from.
-3. **Tag it**: `git tag v1.10.0 && git push origin v1.10.0` (or create the tag from GitHub's
-   *Releases* page). The tag must match the version in `pubspec.yaml` (`v1.10.0` for
-   `1.10.0+8`). The **Release** workflow then runs the tests, builds the APK, signs it with the
-   release key, checks it is not debug-signed and attaches it to a **draft** release with
-   generated notes. Review the draft on GitHub's *Releases* page and publish it.
-   To try the build without releasing, run the workflow by hand from the Actions tab: it only keeps
-   the APK as an artifact.
+3. **Start the Release workflow**, in either way:
+   - on GitHub: *Actions → Release → Run workflow*, pick the branch to release and tick
+     **Draft a GitHub release**; or
+   - push a tag matching the version in `pubspec.yaml`: `git tag v1.10.0 && git push origin v1.10.0`
+     (`v1.10.0` for `1.10.0+8`).
+
+   The workflow runs the tests, builds the APK, signs it with the release key, checks it is not
+   debug-signed and attaches it to a **draft** release with generated notes. Review the draft on
+   GitHub's *Releases* page and publish it (publishing creates the tag when it does not exist yet).
+   Run without the tick it only builds and keeps the APK as an artifact.
 4. For the Play Store or the App Store build with `flutter build appbundle` or
    `flutter build ipa` yourself.
 

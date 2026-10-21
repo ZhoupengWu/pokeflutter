@@ -1,13 +1,21 @@
 name: Release
 
-# Pushing a tag such as v1.10.0 builds the release APK, signs it with the release
-# key and attaches it to a *draft* GitHub release with generated notes; review the
-# draft and publish it. Running the workflow by hand (Actions tab) only builds and
-# keeps the APK as an artifact, to try the build without releasing anything.
+# Two ways to start it, both ending in a *draft* GitHub release with the signed APK
+# and generated notes (review the draft and publish it):
+#   - push a tag such as v1.10.0;
+#   - Actions tab → Release → Run workflow, on the branch to release, with "Draft a
+#     GitHub release" ticked (the tag v<version of pubspec.yaml> is created when the
+#     draft is published). Without the tick it only builds and keeps the APK as an
+#     artifact, to try the build.
 on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      draft_release:
+        description: 'Draft a GitHub release with the APK (otherwise only build it)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write # create the release
@@ -90,12 +98,23 @@ jobs:
           retention-days: 30
 
       - name: Draft the GitHub release
-        if: github.ref_type == 'tag'
+        if: github.ref_type == 'tag' || inputs.draft_release
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.version.outputs.name }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
+          # A pushed tag is used as it is; from a branch the tag is made from
+          # the version of pubspec.yaml, on the commit that was built.
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            target=()
+            tag="$GITHUB_REF_NAME"
+          else
+            target=(--target "$GITHUB_SHA")
+            tag="$TAG"
+          fi
+          gh release create "$tag" \
             "pokeflutter-${{ steps.version.outputs.name }}.apk" \
+            "${target[@]}" \
             --draft \
             --generate-notes \
             --title "PokéFlutter ${{ steps.version.outputs.name }}"

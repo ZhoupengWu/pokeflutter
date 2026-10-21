@@ -11,6 +11,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/responsive.dart';
 import '../detail/pokemon_detail_page.dart';
 import '../shared/pokemon_image.dart';
+import '../../theme/shapes.dart';
 
 /// The six slots of the team: a card per member, empty slots to add one.
 class TeamSlots extends StatelessWidget {
@@ -28,6 +29,8 @@ class TeamSlots extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: GridView.count(
         shrinkWrap: true,
+        // No automatic padding: it would add the tab bar's height under the grid.
+        padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         crossAxisCount: 3,
         crossAxisSpacing: 8.w,
@@ -67,9 +70,9 @@ class _EmptySlot extends StatelessWidget {
       onTap: onTap,
       child: Material(
         color: colors.fill,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(radiusCard.r),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(radiusCard.r),
           onTap: onTap,
           child: Center(
             child: Column(
@@ -137,48 +140,56 @@ class _MemberCard extends StatelessWidget {
       },
       child: Material(
         color: color,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(radiusCard.r),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(radiusCard.r),
           onTap: open,
           child: Stack(
             children: [
-              Padding(
-                padding: EdgeInsets.all(8.r),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PokemonImage(
-                      item.spriteUrl,
-                      width: 56.r,
-                      height: 56.r,
-                      fit: BoxFit.contain,
-                      excludeFromSemantics: true,
-                      errorBuilder: (_, _, _) => Icon(
-                        Icons.catching_pokemon,
-                        size: 40.r,
-                        color: Colors.white38,
+              // Fills the card so the column is centred in it (a Stack would
+              // otherwise put the narrow column at the top left).
+              SizedBox.expand(
+                child: Padding(
+                  padding: EdgeInsets.all(8.r),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PokemonImage(
+                        item.spriteUrl,
+                        width: 56.r,
+                        height: 56.r,
+                        fit: BoxFit.contain,
+                        excludeFromSemantics: true,
+                        errorBuilder: (_, _, _) => Icon(
+                          Icons.catching_pokemon,
+                          size: 40.r,
+                          color: Colors.white38,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: types.isEmpty ? colors.strong : Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: 2.h),
-                    for (final type in types)
+                      SizedBox(height: 4.h),
                       Text(
-                        l10n.typeName(type),
-                        style: Theme.of(
-                          context,
-                        ).textTheme.labelSmall?.copyWith(color: Colors.white70),
+                        name,
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: types.isEmpty
+                                  ? colors.strong
+                                  : Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
-                  ],
+                      SizedBox(height: 2.h),
+                      for (final type in types)
+                        Text(
+                          l10n.typeName(type),
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(color: Colors.white70),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/app_services.dart';
 import 'package:pokeflutter/controllers/team_controller.dart';
 import 'package:pokeflutter/data/team_manager.dart';
+import 'package:pokeflutter/views/shared/pokemon_image.dart';
 import 'package:pokeflutter/views/team/team_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +20,7 @@ Future<TeamController> _pump(
   List<int> saved = const [],
   Locale locale = const Locale('en'),
   List<String> types = const ['water'],
+  EdgeInsets padding = EdgeInsets.zero,
 }) async {
   SharedPreferences.setMockInitialValues({
     'team_pokemon_names': [for (final id in saved) 'mon$id'],
@@ -39,7 +41,14 @@ Future<TeamController> _pump(
   addTearDown(controller.dispose);
   await tester.pumpWidget(
     testApp(
-      TeamPage(controller: controller),
+      MediaQuery(
+        data: MediaQueryData(
+          size: const Size(360, 780),
+          padding: padding,
+          viewPadding: padding,
+        ),
+        child: TeamPage(controller: controller),
+      ),
       services: AppServices(
         team: _team,
         pokemonApi: _api,
@@ -83,6 +92,40 @@ void main() {
     expect(find.text('Water'), findsNWidgets(3));
     expect(find.text('Add a Pokémon'), findsNWidgets(4));
     expect(find.text('Clear team'), findsOneWidget);
+  });
+
+  testWidgets('the content of a card is centred in it', (tester) async {
+    await _pump(tester, saved: [1]);
+
+    final card = tester.getRect(
+      find
+          .ancestor(of: find.text('Mon1'), matching: find.byType(InkWell))
+          .first,
+    );
+    final sprite = tester.getCenter(find.byType(PokemonImage).first);
+    final name = tester.getCenter(find.text('Mon1'));
+    final type = tester.getCenter(find.text('Water').first);
+
+    for (final center in [sprite, name, type]) {
+      expect((center.dx - card.center.dx).abs(), lessThan(2));
+    }
+  });
+
+  testWidgets('the slots do not leave a gap under them for the tab bar', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    // As in the app: the floating tab bar makes the bottom padding large.
+    final controller = await _pump(
+      tester,
+      saved: [1],
+      padding: const EdgeInsets.only(bottom: 90),
+    );
+    expect(controller.members, hasLength(1));
+
+    final lastSlot = tester.getRect(find.text('Add a Pokémon').last);
+    final defence = tester.getRect(find.text('Defence'));
+    expect(defence.top - lastSlot.bottom, lessThan(80));
   });
 
   testWidgets('shows what the team is weak to and what it covers', (

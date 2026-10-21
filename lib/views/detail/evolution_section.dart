@@ -8,6 +8,7 @@ import '../../model/pokemon_list_item.dart';
 import '../../theme/app_colors.dart';
 import 'about_sections.dart';
 import 'pokemon_detail_page.dart';
+import '../../theme/shapes.dart';
 
 /// The evolution family of the Pokémon: stages grouped in columns from the
 /// first form to the last, branches stacked, each stage tappable.
@@ -181,7 +182,7 @@ class _StageTile extends StatelessWidget {
       excludeSemantics: true,
       onTap: tappable ? () => _open(context) : null,
       child: InkWell(
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(radiusControl.r),
         onTap: tappable ? () => _open(context) : null,
         child: Container(
           width: 80.w,
@@ -189,7 +190,7 @@ class _StageTile extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 4.w),
           decoration: BoxDecoration(
             color: isCurrent ? accent.withValues(alpha: 0.12) : null,
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(radiusControl.r),
             border: Border.all(
               color: isCurrent ? accent : Colors.transparent,
               width: 1.5,

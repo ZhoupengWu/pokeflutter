@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/shapes.dart';
 
 // ── Empty / error message ─────────────────────────────────────────────────────
 class HomeMessage extends StatelessWidget {
@@ -120,7 +121,7 @@ class ActiveFilterChips extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: filter.color,
-                borderRadius: BorderRadius.circular(20.r),
+                borderRadius: BorderRadius.circular(radiusPill),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -155,7 +156,7 @@ class ActiveFilterChips extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
               decoration: BoxDecoration(
                 border: Border.all(color: context.colors.subtle),
-                borderRadius: BorderRadius.circular(20.r),
+                borderRadius: BorderRadius.circular(radiusPill),
               ),
               child: Text(
                 context.l10n.clearAll,

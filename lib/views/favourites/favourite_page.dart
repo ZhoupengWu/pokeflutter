@@ -4,7 +4,7 @@ import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../theme/app_colors.dart';
 import '../../data/favourites_manager.dart';
-import '../shared/grid_item.dart';
+import '../shared/pokemon_list.dart';
 
 class FavouritePage extends StatelessWidget {
   const FavouritePage({super.key});
@@ -14,7 +14,9 @@ class FavouritePage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
+      // Not SafeArea at the bottom: the list scrolls under the floating tab bar.
       body: SafeArea(
+        bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -71,23 +73,9 @@ class FavouritePage extends StatelessWidget {
                     );
                   }
 
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w),
-                    child: GridView.builder(
-                      clipBehavior: Clip.hardEdge,
-                      itemCount: favourites.length,
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 190.w,
-                        crossAxisSpacing: 8.w,
-                        mainAxisSpacing: 8.h,
-                        mainAxisExtent: 100.h,
-                      ),
-                      itemBuilder: (_, index) => GridItem(
-                        key: ValueKey(favourites[index].name),
-                        pokemon: favourites[index],
-                        heroScope: 'favourites',
-                      ),
-                    ),
+                  return PokemonList(
+                    pokemonList: favourites,
+                    heroScope: 'favourites',
                   );
                 },
               ),

@@ -5,6 +5,7 @@ import '../../model/pokemon_list_item.dart';
 import '../../theme/app_colors.dart';
 import 'about_sections.dart';
 import 'pokemon_detail_page.dart';
+import '../../theme/shapes.dart';
 
 /// The other forms of the species (Mega, regional, Gigantamax…) as chips; the
 /// one on screen is marked and the others open their own detail page.
@@ -73,7 +74,7 @@ class _FormChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shape = BorderRadius.circular(20.r);
+    final shape = BorderRadius.circular(radiusPill);
     return Semantics(
       button: !selected,
       selected: selected,

@@ -336,7 +336,9 @@ void main() {
     final outline = tester.widget<IconButton>(
       find.widgetWithIcon(IconButton, Icons.favorite_border_rounded),
     );
-    expect(outline.style, isNull);
+    // Not a favourite: a translucent white button with a white heart.
+    expect(outline.style?.backgroundColor?.resolve({}), isNot(Colors.white));
+    expect((outline.icon as Icon).color, Colors.white);
   });
 
   testWidgets('the favourite button toggles the Pokémon', (tester) async {
