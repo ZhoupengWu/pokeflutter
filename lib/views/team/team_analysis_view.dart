@@ -5,6 +5,7 @@ import '../../core/pokemon_constants.dart';
 import '../../core/type_chart.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/shapes.dart';
 
 /// What the team is weak to and resists, and which types it hits hard.
 class TeamAnalysisView extends StatelessWidget {
@@ -143,7 +144,7 @@ class _TypeChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: muted ? null : color,
           border: muted ? Border.all(color: color, width: 1.5) : null,
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(radiusPill),
         ),
         child: Text(
           label,

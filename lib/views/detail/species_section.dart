@@ -4,6 +4,7 @@ import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon_species.dart';
 import '../../theme/app_colors.dart';
 import 'about_sections.dart';
+import '../../theme/shapes.dart';
 
 /// The Pokédex entry: category ("Mouse Pokémon"), description in the app's
 /// language (English when the entry has no translation), habitat and
@@ -78,7 +79,7 @@ class _Tag extends StatelessWidget {
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
     decoration: BoxDecoration(
       color: accent.withValues(alpha: 0.1),
-      borderRadius: BorderRadius.circular(20.r),
+      borderRadius: BorderRadius.circular(radiusPill),
       border: Border.all(color: accent.withValues(alpha: 0.3)),
     ),
     child: Text(

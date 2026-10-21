@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/l10n_extensions.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/shapes.dart';
 
 class SearchBarWidget extends StatefulWidget {
   final ValueChanged<String> onSearch;
@@ -67,10 +68,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               height: 48.r,
               width: 48.r,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                color: hasActive
-                    ? context.colors.strong
-                    : context.colors.border,
+                shape: BoxShape.circle,
+                color: hasActive ? context.colors.strong : context.colors.fill,
               ),
               alignment: Alignment.center,
               child: Icon(
@@ -108,11 +107,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   }
 
   Widget _searchBar(BuildContext context) => Container(
+    // A filled field without an outline, as in iOS.
     decoration: BoxDecoration(
-      border: Border.all(width: 1.w, color: context.colors.border),
-      borderRadius: BorderRadius.circular(16.r),
+      color: context.colors.fill,
+      borderRadius: BorderRadius.circular(radiusControl.r),
     ),
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+    padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 4.h),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

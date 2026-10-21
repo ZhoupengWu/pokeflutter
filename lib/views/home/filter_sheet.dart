@@ -5,6 +5,7 @@ import '../../core/pokemon_constants.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/contrast.dart';
+import '../../theme/shapes.dart';
 
 /// What the user picked in the [FilterSheet].
 class FilterSelection {
@@ -232,7 +233,7 @@ class _FilterSheetState extends State<FilterSheet> {
                 foregroundColor: colors.onStrong,
                 padding: EdgeInsets.symmetric(vertical: 14.h),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.r),
+                  borderRadius: BorderRadius.circular(radiusPill),
                 ),
                 elevation: 0,
               ),
@@ -273,7 +274,7 @@ class _TypeChip extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: selected ? color : color.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(20.r),
+            borderRadius: BorderRadius.circular(radiusPill),
             border: Border.all(
               color: selected ? color : color.withValues(alpha: 0.3),
               width: 1.5,

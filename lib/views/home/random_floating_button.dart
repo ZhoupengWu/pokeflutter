@@ -14,8 +14,12 @@ class RandomFloatingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor: const Color(0xFFFFCC00),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 0,
+      shape: const StadiumBorder(),
+      // A soft lift, like a floating control in iOS.
+      elevation: 4,
+      highlightElevation: 6,
+      hoverElevation: 4,
+      focusElevation: 4,
       icon: Icon(Icons.auto_awesome_rounded, color: _onYellow),
       label: StyledText(
         text: context.l10n.random,

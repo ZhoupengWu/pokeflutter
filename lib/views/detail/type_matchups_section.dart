@@ -7,6 +7,7 @@ import '../../core/pokemon_constants.dart';
 import '../../core/type_chart.dart';
 import '../types/type_chart_page.dart';
 import 'about_sections.dart';
+import '../../theme/shapes.dart';
 
 /// How much damage each type of move deals to this Pokémon, grouped into
 /// weaknesses, resistances and immunities. Computed from the static
@@ -124,7 +125,7 @@ class _MatchupChip extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(radiusPill),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

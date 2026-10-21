@@ -6,6 +6,7 @@ import '../../theme/app_colors.dart';
 import '../../core/capitalize.dart';
 import '../shared/styled_text.dart';
 import 'stat_radar.dart';
+import '../../theme/shapes.dart';
 
 /// Heading of a section on the detail card, in the Pokémon's colour.
 class SectionTitle extends StatelessWidget {
@@ -146,7 +147,7 @@ class AbilitiesSection extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: accent.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(radiusPill),
                   border: Border.all(color: accent.withValues(alpha: 0.3)),
                 ),
                 child: Text(

@@ -11,6 +11,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/responsive.dart';
 import '../detail/pokemon_detail_page.dart';
 import '../shared/pokemon_image.dart';
+import '../../theme/shapes.dart';
 
 /// The six slots of the team: a card per member, empty slots to add one.
 class TeamSlots extends StatelessWidget {
@@ -67,9 +68,9 @@ class _EmptySlot extends StatelessWidget {
       onTap: onTap,
       child: Material(
         color: colors.fill,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(radiusCard.r),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(radiusCard.r),
           onTap: onTap,
           child: Center(
             child: Column(
@@ -137,9 +138,9 @@ class _MemberCard extends StatelessWidget {
       },
       child: Material(
         color: color,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(radiusCard.r),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(radiusCard.r),
           onTap: open,
           child: Stack(
             children: [

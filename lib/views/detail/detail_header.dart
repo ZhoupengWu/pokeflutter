@@ -7,6 +7,7 @@ import '../../model/pokemon.dart';
 import '../../theme/app_colors.dart';
 import '../../model/pokemon_list_item.dart';
 import '../../data/favourites_manager.dart';
+import '../../theme/shapes.dart';
 
 /// Top of the detail page, on the type-coloured background: back button,
 /// name, favourite toggle, Pokédex number, type chips and the artwork.
@@ -149,7 +150,7 @@ class _TypeChip extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: Colors.white24,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(radiusPill),
       ),
       child: Text(
         context.l10n.typeName(type),
