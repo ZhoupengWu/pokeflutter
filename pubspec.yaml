@@ -27,6 +27,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   generate: true
@@ -46,3 +47,13 @@ flutter:
     - assets/pokemonNames.json
     - assets/pokeball.svg
     - assets/typesIcons/
+
+# App icon: `python3 tool/generate_app_icon.py` draws the images, then
+# `dart run flutter_launcher_icons` writes the Android and iOS icon files.
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/icon/icon.png
+  adaptive_icon_background: assets/icon/icon_background.png
+  adaptive_icon_foreground: assets/icon/icon_foreground.png
+  remove_alpha_ios: true
