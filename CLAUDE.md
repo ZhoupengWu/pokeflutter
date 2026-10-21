@@ -41,6 +41,8 @@ CI also builds a release APK (job "Build release APK") and checks the INTERNET p
 - The app is edge-to-edge: bottom sheets and scrollables must add
   `MediaQuery.viewPaddingOf(context).bottom`.
 - Pages are split into widgets under `lib/views/<feature>/`; keep files small.
+- Pokémon are shown with `context.pokemonName(apiName)` (table in `assets/pokemonNames.json`), never
+  with `name.capitalize()`; the API name stays the key for caches, favourites and filters.
 - Match the surrounding code's comment density and naming.
 
 ## Sandbox gotchas

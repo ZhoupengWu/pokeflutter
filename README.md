@@ -28,8 +28,9 @@ The app has four tabs: **Pokédex**, **Compare**, **Quiz** and **Favourites**.
 ### Pokédex
 
 - A grid with every Pokémon: sprite, name, number and type badges, tinted with the colour of the
-  primary type. Alternate forms (Mega, regional…) are included.
-- **Search** by name or by number (`#25`, `25`).
+  primary type. Names are shown as in the games ("Mr. Mime", "Tipo Zero"). Alternate forms (Mega,
+  regional…) are included, e.g. "Charizard (Mega X)".
+- **Search** by name (in English or Italian) or by number (`#25`, `25`).
 - **Filters** by type (any of the 18) and by generation (I–IX), combinable, with removable chips
   showing what is active, and **four sort orders** (number or name, ascending or descending).
 - A **Random** button to jump to a Pokémon you didn't think of.
@@ -154,6 +155,11 @@ CI also builds a release APK and verifies that the merged Android manifest decla
 - **Tests.** Unit tests for controllers, caches and rules (quiz scoring, type chart, filtering)
   and widget tests for the pages. HTTP clients and API classes are injected and replaced with
   fakes; shared fakes and fixtures live in `test/support/`.
+- **Data and icon.** `tool/generate_pokemon_names.py` rebuilds `assets/pokemonNames.json` from the
+  PokéAPI CSV data (add a language there to get its names). `tool/generate_app_icon.py` draws the app
+  icon (needs Pillow) and `dart run flutter_launcher_icons` writes the Android and iOS files; if it
+  changes `ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS` in the Xcode project, revert
+  that line.
 - **Translations.** Strings live in `lib/l10n/app_en.arb` and `app_it.arb`; add every new string
   to **both**. `flutter pub get` (or `flutter gen-l10n`) regenerates the committed
   `app_localizations*.dart`.

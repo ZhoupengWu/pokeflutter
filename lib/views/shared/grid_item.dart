@@ -61,9 +61,12 @@ class GridItem extends StatelessWidget {
     return Semantics(
       button: true,
       label: types.isEmpty
-          ? context.l10n.pokemonSemantics(pokemon.name.capitalize(), pokemon.id)
+          ? context.l10n.pokemonSemantics(
+              context.pokemonName(pokemon.name),
+              pokemon.id,
+            )
           : context.l10n.pokemonSemanticsTyped(
-              pokemon.name.capitalize(),
+              context.pokemonName(pokemon.name),
               pokemon.id,
               context.l10n.typeList(types),
             ),
@@ -100,7 +103,7 @@ class GridItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _header(textTheme),
+                      _header(context, textTheme),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -177,13 +180,13 @@ class GridItem extends StatelessWidget {
     return widgets;
   }
 
-  Row _header(TextTheme textTheme) => Row(
+  Row _header(BuildContext context, TextTheme textTheme) => Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Expanded(
         child: StyledText(
           style: textTheme.bodySmall!.copyWith(color: Colors.white),
-          text: pokemon.name.capitalize(),
+          text: context.pokemonName(pokemon.name),
           textHeight: 16.h,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

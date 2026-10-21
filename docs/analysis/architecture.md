@@ -32,6 +32,7 @@ lib/
 │   ├── cached_resource.dart      # memory → disk → network → stale copy, shared by the three below
 │   ├── species_api.dart          # /pokemon-species (entry, category, habitat, chain url)
 │   ├── ability_api.dart          # /ability/{id}: translated names (en, it)
+│   ├── pokemon_names.dart        # display names from assets/pokemonNames.json (context.pokemonName)
 │   ├── offline_prefetcher.dart   # downloads Pokémon (all of the above + images) for offline use
 │   ├── evolution_api.dart        # species -> /evolution-chain
 │   ├── disk_cache.dart           # one JSON file per key, LRU, failures swallowed

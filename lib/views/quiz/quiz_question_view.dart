@@ -5,7 +5,6 @@ import '../../controllers/quiz_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/quiz_model.dart';
 import '../../theme/app_colors.dart';
-import '../../core/capitalize.dart';
 import '../../core/pokemon_constants.dart';
 import '../../theme/responsive.dart';
 import 'quiz_widgets.dart';
@@ -114,7 +113,7 @@ class QuizQuestionView extends StatelessWidget {
       child: Text(
         question.mode == QuizMode.guessName
             ? l10n.quizWhoIsThis
-            : l10n.quizWhatType(question.subject.name.capitalize()),
+            : l10n.quizWhatType(context.pokemonName(question.subject.name)),
         style: Theme.of(
           context,
         ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
@@ -144,7 +143,7 @@ class QuizQuestionView extends StatelessWidget {
                           ? QuizOptionButton(
                               label: question.mode == QuizMode.guessType
                                   ? l10n.typeName(question.options[i])
-                                  : question.options[i].capitalize(),
+                                  : context.pokemonName(question.options[i]),
                               state: _optionState(i),
                               onTap: () => controller.answer(i),
                             )
@@ -321,7 +320,7 @@ class _SpriteCard extends StatelessWidget {
               colorBlendMode: BlendMode.srcATop,
               semanticLabel: hidden
                   ? context.l10n.quizSilhouette
-                  : pokemon.name.capitalize(),
+                  : context.pokemonName(pokemon.name),
               errorBuilder: (_, _, _) => Icon(
                 Icons.catching_pokemon,
                 size: 96.r,
@@ -355,7 +354,7 @@ class _Feedback extends StatelessWidget {
         : correct
         ? l10n.quizCorrect(controller.lastPoints)
         : l10n.quizWrong;
-    final name = pokemon.name.capitalize();
+    final name = context.pokemonName(pokemon.name);
     final reveal = question.mode == QuizMode.guessName
         ? l10n.quizAnswerName(name)
         : l10n.quizAnswerTypes(name, l10n.typeList(pokemon.typesList));

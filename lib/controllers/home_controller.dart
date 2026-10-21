@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../core/pokedex.dart';
 import '../model/pokemon_list_item.dart';
+import '../data/pokemon_names.dart';
 import '../data/pokemon_repository.dart';
 import '../data/pokemon_type_index.dart';
 
@@ -14,13 +15,16 @@ class HomeController extends ChangeNotifier {
   HomeController({
     required PokemonRepository repository,
     required PokemonTypeIndex typeIndex,
+    required PokemonNames names,
     Random? random,
   }) : _repository = repository,
        _typeIndex = typeIndex,
+       _names = names,
        _random = random ?? Random();
 
   final PokemonRepository _repository;
   final PokemonTypeIndex _typeIndex;
+  final PokemonNames _names;
   final Random _random;
 
   List<PokemonListItem> allPokemon = const [];
@@ -31,6 +35,9 @@ class HomeController extends ChangeNotifier {
   /// Selected generations (1…9); empty means all.
   Set<int> activeGenerations = const {};
   PokemonSort sort = PokemonSort.numberAsc;
+
+  /// Language of the names shown, which decides the order of the name sorts.
+  String languageCode = 'en';
 
   /// Number of filters and sort orders that differ from the defaults.
   int get activeFilterCount =>
@@ -129,7 +136,7 @@ class HomeController extends ChangeNotifier {
     filtered = _sorted([
       for (final p in allPokemon)
         if ((searchQuery.isEmpty ||
-                p.name.toLowerCase().contains(searchQuery) ||
+                _names.matches(p.name, searchQuery) ||
                 (number != null && p.id == number)) &&
             (types.isEmpty || _typeIndex.matchesAny(p.name, types)) &&
             (generationsSelected.isEmpty ||
@@ -146,9 +153,25 @@ class HomeController extends ChangeNotifier {
       case PokemonSort.numberDesc:
         return items.reversed.toList();
       case PokemonSort.nameAsc:
-        return items..sort((a, b) => a.name.compareTo(b.name));
+        return items..sort(_byName);
       case PokemonSort.nameDesc:
-        return items..sort((a, b) => b.name.compareTo(a.name));
+        return items..sort((a, b) => _byName(b, a));
+    }
+  }
+
+  /// Alphabetical by the name as shown in [languageCode].
+  int _byName(PokemonListItem a, PokemonListItem b) => _names
+      .display(a.name, languageCode)
+      .toLowerCase()
+      .compareTo(_names.display(b.name, languageCode).toLowerCase());
+
+  /// Tells the controller which language the names are shown in; sorting by
+  /// name follows it.
+  void setLanguage(String code) {
+    if (code == languageCode) return;
+    languageCode = code;
+    if (sort == PokemonSort.nameAsc || sort == PokemonSort.nameDesc) {
+      applyFilters();
     }
   }
 

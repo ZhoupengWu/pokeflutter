@@ -5,7 +5,6 @@ import '../../controllers/compare_controller.dart';
 import '../../l10n/l10n_extensions.dart';
 import '../../model/pokemon.dart';
 import '../../theme/app_colors.dart';
-import '../../core/capitalize.dart';
 import '../../core/pokemon_constants.dart';
 
 /// One of the two cards at the top of Compare: empty, loading, failed
@@ -36,7 +35,10 @@ class PokemonSlotCard extends StatelessWidget {
       label: state.failed
           ? l10n.compareSlotFailedSemantics(label)
           : pokemon != null
-          ? l10n.compareSlotLoadedSemantics(label, pokemon.name.capitalize())
+          ? l10n.compareSlotLoadedSemantics(
+              label,
+              context.pokemonName(pokemon.name),
+            )
           : l10n.compareSlotSelectSemantics(label),
       excludeSemantics: true,
       onTap: onTap,
@@ -107,7 +109,7 @@ class _Loaded extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            pokemon.name.capitalize(),
+            context.pokemonName(pokemon.name),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w700,

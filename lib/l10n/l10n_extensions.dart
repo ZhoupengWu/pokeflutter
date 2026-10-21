@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import '../data/pokemon_names.dart';
 import 'app_localizations.dart';
 
 export 'app_localizations.dart';
@@ -7,6 +9,13 @@ export 'pokemon_labels.dart';
 extension AppLocalizationsContext on BuildContext {
   /// The translated strings of the current locale.
   AppLocalizations get l10n => AppLocalizations.of(this);
+
+  /// How the Pokémon with API id [name] is called in the current language
+  /// ("mr-mime" → "Mr. Mime").
+  String pokemonName(String name) => read<PokemonNames>().display(
+    name,
+    Localizations.localeOf(this).languageCode,
+  );
 }
 
 extension PokemonTypeNames on AppLocalizations {

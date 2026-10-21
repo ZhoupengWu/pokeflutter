@@ -8,12 +8,14 @@ When an item is done, move it to `roadmap.md` / `todo.md` and delete it here.
    favourite heart, fixed). Still to look at on hardware: a tablet, landscape (new two-column
    layouts), 200 % font size, TalkBack/VoiceOver (labels exist, quiz options and evolution stages
    are buttons; nothing audited on a device).
-2. **Localisation follow-ups**: ability names are translated (EN/IT). Not done: Pokémon names (PokéAPI
-   has no bulk endpoint, the list would need a request per Pokémon or an embedded table), move and
-   item names, and more languages (needs the languages to be chosen and translated).
-3. **Release hygiene**: the owner still has to create the release keystore and add the four CI
-   secrets (README, "Release signing"). Confirm/replace `applicationId` (`com.wux.pokeflutter`)
-   before publishing; add an iOS build job if a macOS runner is acceptable.
+2. **Localisation follow-ups**: ability names are translated (EN/IT) and Pokémon get their proper
+   display names from `assets/pokemonNames.json` (the Italian names are the English ones except a
+   handful, e.g. "Tipo Zero"; `tool/generate_pokemon_names.py` takes more languages). Not done: move
+   and item names, and more UI languages (needs the languages to be chosen and every string
+   translated).
+3. **Release hygiene**: release signing works (the CI APK is signed with the owner's key). Confirm or
+   replace `applicationId` (`com.wux.pokeflutter`) before publishing; add an iOS build job if a
+   macOS runner is acceptable; the app label stays `pokeflutter`.
 4. **Navigation (decision, not work)**: the app keeps `Navigator.push`. Named routes / `go_router`
    only pay off with deep links or web URLs, which the app does not have; revisit then.
 
