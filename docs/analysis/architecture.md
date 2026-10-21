@@ -25,6 +25,7 @@ lib/
 │   ├── home_controller.dart      # list, search (name or number), type/generation filters, sort
 │   ├── pokemon_detail_controller.dart  # details, then evolution chain (fails independently)
 │   ├── compare_controller.dart   # two slots, ignores superseded loads
+│   ├── team_controller.dart      # team members, their details, the TeamAnalysis
 │   └── quiz_controller.dart      # game flow, countdown, scoring, saved records
 ├── data/                         # everything that talks to the network or the disk
 │   ├── pokeapi_client.dart       # JSON GET: timeout, retry, typed PokemonApiException, NetworkStatus
@@ -41,16 +42,18 @@ lib/
 │   ├── pokemon_cache.dart        # in-memory cache of Pokemon details
 │   ├── pokemon_repository.dart   # bundled list (assets/pokemonList.json), loaded once
 │   ├── pokemon_type_index.dart   # name -> types (primary first), built from /type/{name}
-│   ├── favourites_manager.dart, app_settings.dart, quiz_stats_store.dart  # shared_preferences
+│   ├── favourites_manager.dart, team_manager.dart, app_settings.dart, quiz_stats_store.dart  # shared_preferences
 ├── theme/                        # theme.dart, app_colors.dart, palette.dart, contrast.dart, responsive.dart
 ├── core/                         # pokemon_constants (type colours), type_chart, pokedex (generations,
-│                                 #   sort), quiz_logic, capitalize
+│                                 #   sort), team_analysis, quiz_logic, capitalize
 └── views/
-    ├── shell_page.dart           # bottom navigation (IndexedStack; hidden tabs get TickerMode off)
+    ├── shell_page.dart           # bottom navigation (IndexedStack, tabs built on first visit; hidden tabs get TickerMode off)
     ├── home/                     # home_page, home_widgets, filter_sheet, search_bar, settings_sheet, …
-    ├── detail/                   # page, header, about/abilities/stats, type matchups, evolution
+    ├── detail/                   # page, header (shiny toggle), about/abilities/stats (bars or radar), forms, type matchups, evolution
     ├── compare/                  # page, slot cards, stats table, picker sheet
     ├── quiz/                     # page, start / question / results views, shared widgets
+    ├── team/                     # team_page, slots, analysis view
+    ├── types/                    # type_chart_page (18 × 18)
     ├── favourites/               # favourite_page
     └── shared/                   # grid_item, pokemon_list, pokemon_image, styled_text
 ```

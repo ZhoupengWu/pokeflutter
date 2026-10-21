@@ -21,25 +21,22 @@ When an item is done, move it to `roadmap.md` / `todo.md` and delete it here.
 
 ## P3 — New features
 **High value**
-- Advanced search: by ability, stat ranges, weakness (the `TypeChart` already makes "weak to X"
-  cheap)
-- Extended details: moves, alternate forms, shiny sprites (Pokédex entry, category and habitat
-  are done)
+- Advanced search: "weak to X" filter (the `TypeChart` makes it cheap); by ability or stat range
+  would need data PokéAPI only gives one Pokémon at a time
+- Extended details: moves (Pokédex entry, category, habitat, forms and the shiny artwork are done)
 
 **Medium**
 - Cry audio playback (`audioplayers`)
-- Team builder (6 Pokémon, type coverage and shared weaknesses — reuse `TypeChart`)
+- Team builder follow-ups: suggest a Pokémon that fixes the biggest weakness; share the team
 - Quiz: more modes (ability, "higher attack", type matchups), daily challenge, share result
 - Compare 3–4 Pokémon; share comparison
 - Favourites: notes, reordering, export/share, optional cloud sync
-- Full type chart screen (18×18 matrix) reachable from the matchups section
 
 **Polish**
 - Skeleton loaders for the grid while the type index downloads, pull-to-refresh
 - Home-screen widget / "Pokémon of the day" notification
 - Share a Pokémon card as an image
 - List view alternative
-- Stat radar chart on the detail page; shiny/regular sprite toggle
 - Search/visit history
 - Opt-in crash reporting / analytics
 
