@@ -143,42 +143,50 @@ class _MemberCard extends StatelessWidget {
           onTap: open,
           child: Stack(
             children: [
-              Padding(
-                padding: EdgeInsets.all(8.r),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PokemonImage(
-                      item.spriteUrl,
-                      width: 56.r,
-                      height: 56.r,
-                      fit: BoxFit.contain,
-                      excludeFromSemantics: true,
-                      errorBuilder: (_, _, _) => Icon(
-                        Icons.catching_pokemon,
-                        size: 40.r,
-                        color: Colors.white38,
+              // Fills the card so the column is centred in it (a Stack would
+              // otherwise put the narrow column at the top left).
+              SizedBox.expand(
+                child: Padding(
+                  padding: EdgeInsets.all(8.r),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PokemonImage(
+                        item.spriteUrl,
+                        width: 56.r,
+                        height: 56.r,
+                        fit: BoxFit.contain,
+                        excludeFromSemantics: true,
+                        errorBuilder: (_, _, _) => Icon(
+                          Icons.catching_pokemon,
+                          size: 40.r,
+                          color: Colors.white38,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: types.isEmpty ? colors.strong : Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: 2.h),
-                    for (final type in types)
+                      SizedBox(height: 4.h),
                       Text(
-                        l10n.typeName(type),
-                        style: Theme.of(
-                          context,
-                        ).textTheme.labelSmall?.copyWith(color: Colors.white70),
+                        name,
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: types.isEmpty
+                                  ? colors.strong
+                                  : Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
-                  ],
+                      SizedBox(height: 2.h),
+                      for (final type in types)
+                        Text(
+                          l10n.typeName(type),
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(color: Colors.white70),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(

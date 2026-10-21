@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/app_services.dart';
 import 'package:pokeflutter/controllers/team_controller.dart';
 import 'package:pokeflutter/data/team_manager.dart';
+import 'package:pokeflutter/views/shared/pokemon_image.dart';
 import 'package:pokeflutter/views/team/team_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -83,6 +84,23 @@ void main() {
     expect(find.text('Water'), findsNWidgets(3));
     expect(find.text('Add a Pokémon'), findsNWidgets(4));
     expect(find.text('Clear team'), findsOneWidget);
+  });
+
+  testWidgets('the content of a card is centred in it', (tester) async {
+    await _pump(tester, saved: [1]);
+
+    final card = tester.getRect(
+      find
+          .ancestor(of: find.text('Mon1'), matching: find.byType(InkWell))
+          .first,
+    );
+    final sprite = tester.getCenter(find.byType(PokemonImage).first);
+    final name = tester.getCenter(find.text('Mon1'));
+    final type = tester.getCenter(find.text('Water').first);
+
+    for (final center in [sprite, name, type]) {
+      expect((center.dx - card.center.dx).abs(), lessThan(2));
+    }
   });
 
   testWidgets('shows what the team is weak to and what it covers', (
