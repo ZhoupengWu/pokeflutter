@@ -1373,6 +1373,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Every type is covered.'**
   String get teamNoGaps;
+
+  /// No description provided for @filterWeakToSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak to'**
+  String get filterWeakToSection;
+
+  /// No description provided for @filterWeakToHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokémon that take double damage or more from any of the chosen types.'**
+  String get filterWeakToHint;
+
+  /// No description provided for @weakToChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak to {type}'**
+  String weakToChip(String type);
 }
 
 class _AppLocalizationsDelegate

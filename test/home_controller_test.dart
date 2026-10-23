@@ -170,6 +170,86 @@ void main() {
     });
   });
 
+  group('weak-to filter', () {
+    // mon1 = fire, mon2 = fire/flying, mon3 = flying (see _types).
+    test('keeps the Pokémon that take super-effective damage', () async {
+      final c = _controller();
+      await c.init();
+
+      await c.setWeakToFilters({'water'});
+      expect(_names(c), ['mon1', 'mon2']);
+
+      await c.setWeakToFilters({'electric'});
+      expect(_names(c), ['mon2', 'mon3']);
+      c.dispose();
+    });
+
+    test('immunities and cancelled weaknesses do not count', () async {
+      final c = _controller();
+      await c.init();
+
+      // Fire/flying is immune to ground (flying) while pure fire is weak.
+      await c.setWeakToFilters({'ground'});
+      expect(_names(c), ['mon1']);
+
+      // Rock is a double weakness for fire/flying, a normal one for the others.
+      await c.setWeakToFilters({'rock'});
+      expect(_names(c), ['mon1', 'mon2', 'mon3']);
+      c.dispose();
+    });
+
+    test('several attackers match any of them, like the type filter', () async {
+      final c = _controller();
+      await c.init();
+
+      await c.setWeakToFilters({'water', 'electric'});
+      expect(_names(c), ['mon1', 'mon2', 'mon3']);
+      c.dispose();
+    });
+
+    test('combines with the type filter and is counted', () async {
+      final c = _controller();
+      await c.init();
+
+      await c.setSelection(
+        types: {'flying'},
+        generations: const {},
+        sort: PokemonSort.numberAsc,
+        weakTo: {'water', 'rock'},
+      );
+      expect(_names(c), ['mon2', 'mon3']);
+      expect(c.activeFilterCount, 3); // 1 type + 2 attackers
+
+      await c.setSelection(
+        types: {'flying'},
+        generations: const {},
+        sort: PokemonSort.numberAsc,
+      ); // no weakTo argument keeps the current one
+      expect(c.activeWeakTo, {'water', 'rock'});
+
+      await c.setWeakToFilters({});
+      expect(_names(c), ['mon2', 'mon3']);
+      expect(c.activeFilterCount, 1);
+      c.dispose();
+    });
+
+    test('reports a failure when the types cannot be loaded', () async {
+      final net = _Network(offline: true);
+      final c = _controller(net);
+      await c.init();
+
+      await c.setWeakToFilters({'water'});
+      expect(c.filterFailed, isTrue);
+      expect(c.isFilterLoading, isFalse);
+
+      net.offline = false;
+      await c.applyFilters();
+      expect(c.filterFailed, isFalse);
+      expect(_names(c), ['mon1', 'mon2']);
+      c.dispose();
+    });
+  });
+
   group('HomeController', () {
     test('shows the whole list once loaded', () async {
       final c = _controller();
@@ -306,6 +386,30 @@ void main() {
       await tester.tap(find.text('Clear all'));
       await tester.pump();
       await tester.pump();
+      expect(find.text('Mon3'), findsOneWidget);
+    });
+
+    testWidgets('shows a removable "Weak to" chip', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2340);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      final controller = _controller();
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(testApp(HomePage(controller: controller)));
+      await tester.pump();
+      await tester.pump();
+
+      await controller.setWeakToFilters({'water'});
+      await tester.pump();
+      expect(find.text('Weak to Water'), findsOneWidget);
+      expect(find.text('Mon3'), findsNothing); // flying is not weak to water
+
+      await tester.tap(find.text('Clear all'));
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('Weak to Water'), findsNothing);
+      expect(controller.activeWeakTo, isEmpty);
       expect(find.text('Mon3'), findsOneWidget);
     });
 

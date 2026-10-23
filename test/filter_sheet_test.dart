@@ -58,7 +58,10 @@ void main() {
   testWidgets('applies the chosen types, generations and sort', (tester) async {
     final applied = await _open(tester);
 
-    await _tap(tester, 'Fire');
+    await tester.ensureVisible(find.text('Fire').first);
+    await tester.pump();
+    await tester.tap(find.text('Fire').first);
+    await tester.pump();
     await _tap(tester, 'Gen II');
     await _tap(tester, 'Gen IV');
     await _tap(tester, 'Name (A–Z)');
@@ -109,6 +112,47 @@ void main() {
     expect(applied.single.sort, PokemonSort.numberAsc);
   });
 
+  testWidgets('the weak-to section is separate from the type section', (
+    tester,
+  ) async {
+    final applied = await _open(tester);
+    expect(find.text('Weak to'), findsOneWidget);
+
+    // The same type name appears in both sections; the second is weak-to.
+    final fire = find.text('Fire');
+    expect(fire, findsNWidgets(2));
+    await tester.ensureVisible(fire.last);
+    await tester.pump();
+    await tester.tap(fire.last);
+    await tester.pump();
+    expect(find.text('Apply (1)'), findsOneWidget);
+
+    await tester.tap(find.text('Apply (1)'));
+    await tester.pump();
+
+    expect(applied.single.weakTo, {'fire'});
+    expect(applied.single.types, isEmpty);
+  });
+
+  testWidgets('Clear all also clears the weak-to types', (tester) async {
+    final applied = await _open(
+      tester,
+      initial: const FilterSelection(
+        types: {},
+        weakTo: {'ground', 'ice'},
+        generations: {},
+        sort: PokemonSort.numberAsc,
+      ),
+    );
+    expect(find.text('Apply (2)'), findsOneWidget);
+
+    await tester.tap(find.text('Clear all'));
+    await tester.pump();
+    await tester.tap(find.text('Show all'));
+
+    expect(applied.single.weakTo, isEmpty);
+  });
+
   testWidgets('is translated', (tester) async {
     await _open(tester, locale: const Locale('it'));
 
@@ -116,7 +160,8 @@ void main() {
     expect(find.text('Generazione'), findsOneWidget);
     expect(find.text('Gen. VII'), findsOneWidget);
     expect(find.text('Nome (A–Z)'), findsOneWidget);
-    expect(find.text('Fuoco'), findsOneWidget);
+    expect(find.text('Debole a'), findsOneWidget);
+    expect(find.text('Fuoco'), findsNWidgets(2));
   });
 
   testWidgets('fits a small phone', (tester) async {

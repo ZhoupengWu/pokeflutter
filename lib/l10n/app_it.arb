@@ -211,5 +211,8 @@
   "teamHits": "Colpisce in modo superefficace",
   "teamMisses": "Non coperti",
   "teamNoCoverage": "Nessun tipo è ancora colpito in modo superefficace.",
-  "teamNoGaps": "Tutti i tipi sono coperti."
+  "teamNoGaps": "Tutti i tipi sono coperti.",
+  "filterWeakToSection": "Debole a",
+  "filterWeakToHint": "Pokémon che subiscono danno doppio o superiore da uno qualsiasi dei tipi scelti.",
+  "weakToChip": "Debole a {type}"
 }

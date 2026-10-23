@@ -754,4 +754,16 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get teamNoGaps => 'Tutti i tipi sono coperti.';
+
+  @override
+  String get filterWeakToSection => 'Debole a';
+
+  @override
+  String get filterWeakToHint =>
+      'Pokémon che subiscono danno doppio o superiore da uno qualsiasi dei tipi scelti.';
+
+  @override
+  String weakToChip(String type) {
+    return 'Debole a $type';
+  }
 }

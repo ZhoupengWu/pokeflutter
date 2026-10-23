@@ -510,5 +510,13 @@
   "teamHits": "Hits super effectively",
   "teamMisses": "Not covered",
   "teamNoCoverage": "No type is hit super effectively yet.",
-  "teamNoGaps": "Every type is covered."
+  "teamNoGaps": "Every type is covered.",
+  "filterWeakToSection": "Weak to",
+  "filterWeakToHint": "Pokémon that take double damage or more from any of the chosen types.",
+  "weakToChip": "Weak to {type}",
+  "@weakToChip": {
+    "placeholders": {
+      "type": {"type": "String"}
+    }
+  }
 }

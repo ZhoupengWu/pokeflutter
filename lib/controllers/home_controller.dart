@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../core/pokedex.dart';
+import '../core/type_chart.dart';
 import '../model/pokemon_list_item.dart';
 import '../data/pokemon_names.dart';
 import '../data/pokemon_repository.dart';
@@ -32,6 +33,9 @@ class HomeController extends ChangeNotifier {
   String searchQuery = '';
   Set<String> activeTypes = const {};
 
+  /// Attacking types: only Pokémon weak to at least one of them are kept.
+  Set<String> activeWeakTo = const {};
+
   /// Selected generations (1…9); empty means all.
   Set<int> activeGenerations = const {};
   PokemonSort sort = PokemonSort.numberAsc;
@@ -42,6 +46,7 @@ class HomeController extends ChangeNotifier {
   /// Number of filters and sort orders that differ from the defaults.
   int get activeFilterCount =>
       activeTypes.length +
+      activeWeakTo.length +
       activeGenerations.length +
       (sort == PokemonSort.numberAsc ? 0 : 1);
 
@@ -86,14 +91,17 @@ class HomeController extends ChangeNotifier {
     return applyFilters();
   }
 
-  /// Replaces the type and generation filters and the sort order at once
-  /// (the filter sheet's Apply).
+  /// Replaces the type, weakness and generation filters and the sort order at
+  /// once (the filter sheet's Apply). [weakTo] left out keeps the current
+  /// weakness filter.
   Future<void> setSelection({
     required Set<String> types,
     required Set<int> generations,
     required PokemonSort sort,
+    Set<String>? weakTo,
   }) {
     activeTypes = Set.of(types);
+    activeWeakTo = Set.of(weakTo ?? activeWeakTo);
     activeGenerations = Set.of(generations);
     this.sort = sort;
     notifyListeners();
@@ -102,6 +110,13 @@ class HomeController extends ChangeNotifier {
 
   Future<void> setGenerationFilters(Set<int> generations) =>
       setSelection(types: activeTypes, generations: generations, sort: sort);
+
+  Future<void> setWeakToFilters(Set<String> weakTo) => setSelection(
+    types: activeTypes,
+    generations: activeGenerations,
+    sort: sort,
+    weakTo: weakTo,
+  );
 
   Future<void> setSort(PokemonSort value) => setSelection(
     types: activeTypes,
@@ -114,8 +129,9 @@ class HomeController extends ChangeNotifier {
   Future<void> applyFilters() async {
     final request = ++_request;
     final types = activeTypes;
+    final weakTo = activeWeakTo;
 
-    if (types.isNotEmpty && !_typeIndex.isLoaded) {
+    if ((types.isNotEmpty || weakTo.isNotEmpty) && !_typeIndex.isLoaded) {
       isFilterLoading = true;
       filterFailed = false;
       notifyListeners();
@@ -139,11 +155,21 @@ class HomeController extends ChangeNotifier {
                 _names.matches(p.name, searchQuery) ||
                 (number != null && p.id == number)) &&
             (types.isEmpty || _typeIndex.matchesAny(p.name, types)) &&
+            (weakTo.isEmpty || _isWeakToAny(p.name, weakTo)) &&
             (generationsSelected.isEmpty ||
                 generationsSelected.contains(generationOf(p.id))))
           p,
     ]);
     notifyListeners();
+  }
+
+  /// Whether the Pokémon takes more than normal damage from any of [attackers]
+  /// (Pokémon whose types are unknown never match).
+  bool _isWeakToAny(String name, Set<String> attackers) {
+    final types = _typeIndex.typesOf(name);
+    if (types == null) return false;
+    final profile = TypeChart.defensiveProfile(types);
+    return attackers.any((attacker) => (profile[attacker] ?? 1) > 1);
   }
 
   List<PokemonListItem> _sorted(List<PokemonListItem> items) {
