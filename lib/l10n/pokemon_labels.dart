@@ -22,6 +22,18 @@ extension PokemonLabels on AppLocalizations {
       stat.length < 3 ? stat.toUpperCase() : stat.substring(0, 3).toUpperCase(),
   };
 
+  /// Full name of a PokéAPI stat id, for the quiz questions
+  /// (`special-attack` → "Sp. Attack").
+  String quizStatName(String stat) => switch (stat) {
+    'hp' => quizStatHp,
+    'attack' => quizStatAttack,
+    'defense' => quizStatDefense,
+    'special-attack' => quizStatSpecialAttack,
+    'special-defense' => quizStatSpecialDefense,
+    'speed' => quizStatSpeed,
+    _ => titleCaseId(stat),
+  };
+
   /// Name of a PokéAPI habitat id (`waters-edge` → "Water's edge").
   String habitatName(String habitat) => switch (habitat) {
     'cave' => habitatCave,

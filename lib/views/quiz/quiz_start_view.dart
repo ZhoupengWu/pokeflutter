@@ -5,6 +5,7 @@ import '../../l10n/l10n_extensions.dart';
 import '../../model/quiz_model.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/responsive.dart';
+import 'quiz_daily_card.dart';
 import 'quiz_widgets.dart';
 
 class QuizStartView extends StatelessWidget {
@@ -18,11 +19,19 @@ class QuizStartView extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, box) {
         final minHeight = box.maxHeight - 32.h;
-        final start = QuizPrimaryButton(
-          label: controller.isLoadingList
-              ? context.l10n.quizLoading
-              : context.l10n.quizStart,
-          onPressed: controller.canStart ? controller.start : null,
+        // Start stays above the fold on a small phone; the daily challenge
+        // comes after it.
+        final start = Column(
+          children: [
+            QuizPrimaryButton(
+              label: controller.isLoadingList
+                  ? context.l10n.quizLoading
+                  : context.l10n.quizStart,
+              onPressed: controller.canStart ? controller.start : null,
+            ),
+            SizedBox(height: 16.h),
+            QuizDailyCard(controller: controller),
+          ],
         );
         final icon = Center(
           child: ExcludeSemantics(

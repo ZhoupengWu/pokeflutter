@@ -13,6 +13,7 @@ Map<String, dynamic> pokemonJson({
   String? sprite = 'https://img/sprite.png',
   String? artwork = 'https://img/artwork.png',
   String? shiny = 'https://img/shiny.png',
+  Map<String, int>? stats,
   Map<String, dynamic>? extraOther,
 }) => {
   'id': id,
@@ -35,14 +36,11 @@ Map<String, dynamic> pokemonJson({
       },
   ],
   'stats': [
-    {
-      'base_stat': 78,
-      'stat': {'name': 'hp'},
-    },
-    {
-      'base_stat': 84,
-      'stat': {'name': 'attack'},
-    },
+    for (final entry in (stats ?? const {'hp': 78, 'attack': 84}).entries)
+      {
+        'base_stat': entry.value,
+        'stat': {'name': entry.key},
+      },
   ],
   'abilities': [
     {

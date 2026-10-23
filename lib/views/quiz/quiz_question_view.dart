@@ -6,6 +6,8 @@ import '../../l10n/l10n_extensions.dart';
 import '../../model/quiz_model.dart';
 import '../../theme/app_colors.dart';
 import '../../core/pokemon_constants.dart';
+import '../../core/type_chart.dart';
+import '../../model/pokemon.dart';
 import '../../theme/responsive.dart';
 import 'quiz_widgets.dart';
 
@@ -108,12 +110,21 @@ class QuizQuestionView extends StatelessWidget {
   Widget _label(BuildContext context) {
     final l10n = context.l10n;
     final question = controller.question;
+    final name = context.pokemonName(question.subject.name);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Text(
-        question.mode == QuizMode.guessName
-            ? l10n.quizWhoIsThis
-            : l10n.quizWhatType(context.pokemonName(question.subject.name)),
+        switch (question.mode) {
+          QuizMode.guessName => l10n.quizWhoIsThis,
+          QuizMode.guessType =>
+            question.asksForPair
+                ? l10n.quizWhatTypes(name)
+                : l10n.quizWhatType(name),
+          QuizMode.superEffective => l10n.quizSuperEffective(name),
+          QuizMode.higherStat => l10n.quizHigherStat(
+            l10n.quizStatName(question.stat ?? ''),
+          ),
+        },
         style: Theme.of(
           context,
         ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
@@ -124,7 +135,6 @@ class QuizQuestionView extends StatelessWidget {
 
   /// Answer options, two per row.
   Widget _options(BuildContext context) {
-    final l10n = context.l10n;
     final question = controller.question;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -141,9 +151,7 @@ class QuizQuestionView extends StatelessWidget {
                     Expanded(
                       child: i < question.options.length
                           ? QuizOptionButton(
-                              label: question.mode == QuizMode.guessType
-                                  ? l10n.typeName(question.options[i])
-                                  : context.pokemonName(question.options[i]),
+                              label: _optionLabel(context, question, i),
                               state: _optionState(i),
                               onTap: () => controller.answer(i),
                             )
@@ -157,6 +165,17 @@ class QuizQuestionView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _optionLabel(BuildContext context, QuizQuestion question, int i) {
+    final option = question.options[i];
+    return switch (question.mode) {
+      QuizMode.guessName || QuizMode.higherStat => context.pokemonName(option),
+      QuizMode.guessType ||
+      QuizMode.superEffective => QuizQuestion.typesOfOption(
+        option,
+      ).map(context.l10n.typeName).join(' / '),
+    };
   }
 
   /// Verdict, reveal and Next button, once answered.
@@ -218,7 +237,7 @@ class _Header extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(accent),
             ),
           ),
-          if (controller.difficulty.isTimed) ...[
+          if (controller.gameDifficulty.isTimed) ...[
             SizedBox(height: 6.h),
             _TimerBar(controller: controller),
           ],
@@ -235,7 +254,7 @@ class _TimerBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = controller.difficulty.secondsPerQuestion!;
+    final total = controller.gameDifficulty.secondsPerQuestion!;
     return ValueListenableBuilder<double>(
       valueListenable: controller.timeLeft,
       builder: (context, fraction, _) {
@@ -301,8 +320,12 @@ class _SpriteCard extends StatelessWidget {
       );
     }
 
-    final hidden =
-        controller.question.mode == QuizMode.guessName && !controller.answered;
+    final question = controller.question;
+    if (question.mode == QuizMode.higherStat && controller.rival != null) {
+      return _Versus(controller: controller);
+    }
+
+    final hidden = question.mode == QuizMode.guessName && !controller.answered;
     // A square that fills the card within reason. No LayoutBuilder here: the
     // page measures its content when it has to scroll.
     return Center(
@@ -355,9 +378,18 @@ class _Feedback extends StatelessWidget {
         ? l10n.quizCorrect(controller.lastPoints)
         : l10n.quizWrong;
     final name = context.pokemonName(pokemon.name);
-    final reveal = question.mode == QuizMode.guessName
-        ? l10n.quizAnswerName(name)
-        : l10n.quizAnswerTypes(name, l10n.typeList(pokemon.typesList));
+    final reveal = switch (question.mode) {
+      QuizMode.guessName => l10n.quizAnswerName(name),
+      QuizMode.guessType => l10n.quizAnswerTypes(
+        name,
+        l10n.typeList(pokemon.typesList),
+      ),
+      QuizMode.superEffective => l10n.quizAnswerWeakness(
+        name,
+        _weaknesses(pokemon.typesList).map(l10n.typeName).join(', '),
+      ),
+      QuizMode.higherStat => _statReveal(context, controller),
+    };
 
     return Padding(
       padding: EdgeInsets.fromLTRB(24.w, 4.h, 24.w, 8.h),
@@ -393,6 +425,81 @@ class _Feedback extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// The attacking types that deal more than normal damage to [types].
+List<String> _weaknesses(List<String> types) {
+  final profile = TypeChart.defensiveProfile(types);
+  return [
+    for (final type in TypeChart.types)
+      if (profile[type]! > 1) type,
+  ];
+}
+
+int _statValue(Pokemon pokemon, String stat) => pokemon.stats
+    .firstWhere(
+      (s) => s.name == stat,
+      orElse: () => PokemonStat(name: stat, value: 0),
+    )
+    .value;
+
+/// "Attack: Pikachu 55 vs Onix 45", in the order the sprites were shown.
+String _statReveal(BuildContext context, QuizController controller) {
+  final question = controller.question;
+  final stat = question.stat ?? '';
+  final pokemon = controller.pokemon!;
+  final rival = controller.rival!;
+  Pokemon of(String apiName) =>
+      apiName == question.subject.name ? pokemon : rival;
+  final first = of(question.options.first);
+  final second = of(question.options.last);
+  return context.l10n.quizAnswerStat(
+    context.l10n.quizStatName(stat),
+    context.pokemonName(first.name),
+    _statValue(first, stat),
+    context.pokemonName(second.name),
+    _statValue(second, stat),
+  );
+}
+
+// ── Two sprites side by side ("higher stat" questions) ───────────────────────
+class _Versus extends StatelessWidget {
+  const _Versus({required this.controller});
+
+  final QuizController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final question = controller.question;
+    // Left and right follow the options, so the buttons read in the same order.
+    final shown = [
+      for (final name in question.options)
+        name == question.subject.name ? controller.pokemon! : controller.rival!,
+    ];
+    return Row(
+      children: [
+        for (final pokemon in shown)
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(8.r),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: PokemonImage(
+                  pokemon.urlImage,
+                  fit: BoxFit.contain,
+                  semanticLabel: context.pokemonName(pokemon.name),
+                  errorBuilder: (_, _, _) => Icon(
+                    Icons.catching_pokemon,
+                    size: 64.r,
+                    color: Colors.white38,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

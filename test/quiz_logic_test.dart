@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pokeflutter/model/pokemon_list_item.dart';
 import 'package:pokeflutter/model/quiz_model.dart';
 import 'package:pokeflutter/core/pokemon_constants.dart';
 import 'package:pokeflutter/core/quiz_logic.dart';
+import 'package:pokeflutter/core/type_chart.dart';
 
 void main() {
   final pool = List.generate(
@@ -14,15 +17,56 @@ void main() {
   );
 
   group('generateQuestions', () {
-    test('creates the requested number of questions, alternating modes', () {
-      final questions = QuizLogic.generateQuestions(pool, count: 10);
+    test('creates the requested number of questions, every mode in turn', () {
+      final questions = QuizLogic.generateQuestions(pool, count: 8);
 
-      expect(questions, hasLength(10));
-      for (var i = 0; i < questions.length; i++) {
-        expect(
-          questions[i].mode,
-          i.isEven ? QuizMode.guessName : QuizMode.guessType,
-        );
+      expect(questions, hasLength(8));
+      // Each group of four holds every mode once.
+      for (final group in [questions.take(4), questions.skip(4)]) {
+        expect(group.map((q) => q.mode).toSet(), QuizMode.values.toSet());
+      }
+    });
+
+    test('asks only the given modes, in that order', () {
+      final questions = QuizLogic.generateQuestions(
+        pool,
+        count: 5,
+        modes: [QuizMode.guessName, QuizMode.guessType],
+      );
+
+      expect(questions.map((q) => q.mode), [
+        QuizMode.guessName,
+        QuizMode.guessType,
+        QuizMode.guessName,
+        QuizMode.guessType,
+        QuizMode.guessName,
+      ]);
+    });
+
+    test('the same random gives the same questions', () {
+      List<String> describe(int seed) => [
+        for (final q in QuizLogic.generateQuestions(pool, random: Random(seed)))
+          '${q.mode.name}:${q.subject.name}:${q.rival?.name}:${q.stat}:'
+              '${q.options.join(",")}:${q.seed}',
+      ];
+
+      expect(describe(7), describe(7));
+      expect(describe(7), isNot(describe(8)));
+    });
+
+    test('stat questions pit two different Pokémon against each other', () {
+      final questions = QuizLogic.generateQuestions(
+        pool,
+        count: 40,
+        modes: [QuizMode.higherStat],
+      );
+
+      for (final q in questions) {
+        expect(q.isResolved, isFalse);
+        expect(q.rival, isNotNull);
+        expect(q.rival!.name, isNot(q.subject.name));
+        expect(q.options.toSet(), {q.subject.name, q.rival!.name});
+        expect(QuizLogic.comparedStats, contains(q.stat));
       }
     });
 
@@ -36,11 +80,11 @@ void main() {
       }
     });
 
-    test('type questions are unresolved until the real types are known', () {
-      final questions = QuizLogic.generateQuestions(pool, count: 10);
+    test('all but the name questions wait for the Pokémon data', () {
+      final questions = QuizLogic.generateQuestions(pool, count: 12);
 
-      for (final q in questions.where((q) => q.mode == QuizMode.guessType)) {
-        expect(q.isResolved, isFalse);
+      for (final q in questions) {
+        expect(q.isResolved, q.mode == QuizMode.guessName);
       }
     });
 
@@ -157,38 +201,206 @@ void main() {
   });
 
   group('resolveTypeQuestion', () {
-    final unresolved = QuizLogic.generateQuestions(
-      pool,
-      count: 2,
-    ).firstWhere((q) => q.mode == QuizMode.guessType);
+    QuizQuestion unresolved(int seed) => QuizQuestion(
+      subject: pool.first,
+      options: const [],
+      correctIndex: -1,
+      mode: QuizMode.guessType,
+      seed: seed,
+    );
 
-    test('the correct option is the real type of a single-type Pokémon', () {
-      for (var i = 0; i < 100; i++) {
-        final q = QuizLogic.resolveTypeQuestion(unresolved, ['fire']);
+    test('a single-type Pokémon is asked for one type, among single types', () {
+      for (var seed = 0; seed < 100; seed++) {
+        final q = QuizLogic.resolveTypeQuestion(unresolved(seed), ['fire']);
 
         expect(q.isResolved, isTrue);
-        expect(q.subject, unresolved.subject);
+        expect(q.asksForPair, isFalse);
+        expect(q.subject, pool.first);
         expect(q.options.toSet(), hasLength(4));
         expect(q.correctAnswer, 'fire');
+        expect(q.options.where((o) => o == 'fire'), hasLength(1));
         expect(listPokemonTypeColor.keys, containsAll(q.options));
       }
     });
 
-    test('dual-type Pokémon: exactly one of their types is offered', () {
-      for (var i = 0; i < 100; i++) {
-        final q = QuizLogic.resolveTypeQuestion(unresolved, [
+    test('a dual-type Pokémon is asked for both types, among pairs', () {
+      for (var seed = 0; seed < 300; seed++) {
+        final q = QuizLogic.resolveTypeQuestion(unresolved(seed), [
           'grass',
           'poison',
         ]);
 
-        expect(['grass', 'poison'], contains(q.correctAnswer));
-        final ownTypes = q.options.where(['grass', 'poison'].contains);
-        expect(ownTypes, hasLength(1));
+        expect(q.asksForPair, isTrue);
+        expect(q.options, hasLength(4));
+        expect(q.correctAnswer, 'grass/poison');
+
+        // Every option is two different real types ...
+        final sets = <String>{};
+        for (final option in q.options) {
+          final types = QuizQuestion.typesOfOption(option);
+          expect(types, hasLength(2));
+          expect(types.toSet(), hasLength(2));
+          expect(TypeChart.types, containsAll(types));
+          sets.add((types..sort()).join('/'));
+        }
+        // ... and no two options are the same pair, in either order.
+        expect(sets, hasLength(4));
       }
     });
 
+    test('a pair is never also offered the other way round', () {
+      for (var seed = 0; seed < 100; seed++) {
+        final q = QuizLogic.resolveTypeQuestion(unresolved(seed), [
+          'fire',
+          'flying',
+        ]);
+
+        expect(q.options, isNot(contains('flying/fire')));
+      }
+    });
+
+    test('the same seed gives the same options', () {
+      final a = QuizLogic.resolveTypeQuestion(unresolved(5), ['water', 'ice']);
+      final b = QuizLogic.resolveTypeQuestion(unresolved(5), ['water', 'ice']);
+
+      expect(a.options, b.options);
+      expect(a.correctIndex, b.correctIndex);
+    });
+
     test('leaves the question untouched when no types are given', () {
-      expect(QuizLogic.resolveTypeQuestion(unresolved, []), unresolved);
+      final q = unresolved(1);
+      expect(QuizLogic.resolveTypeQuestion(q, []), q);
+    });
+  });
+
+  group('resolveSuperEffective', () {
+    QuizQuestion unresolved(int seed) => QuizQuestion(
+      subject: pool.first,
+      options: const [],
+      correctIndex: -1,
+      mode: QuizMode.superEffective,
+      seed: seed,
+    );
+
+    test('the answer is a weakness and no other option is', () {
+      for (final types in [
+        ['fire'],
+        ['grass', 'poison'],
+        ['water', 'flying'],
+        ['dragon', 'flying'],
+      ]) {
+        final profile = TypeChart.defensiveProfile(types);
+        for (var seed = 0; seed < 100; seed++) {
+          final q = QuizLogic.resolveSuperEffective(unresolved(seed), types);
+
+          expect(q.mode, QuizMode.superEffective);
+          expect(q.options.toSet(), hasLength(4));
+          expect(profile[q.correctAnswer], greaterThan(1));
+          final others = [
+            for (var i = 0; i < 4; i++)
+              if (i != q.correctIndex) q.options[i],
+          ];
+          for (final other in others) {
+            expect(profile[other], lessThanOrEqualTo(1));
+          }
+        }
+      }
+    });
+
+    test('a Pokémon without weaknesses gets a type question instead', () {
+      final q = QuizLogic.resolveSuperEffective(unresolved(1), ['unknown']);
+
+      expect(q.mode, QuizMode.guessType);
+      expect(q.isResolved, isTrue);
+      expect(q.correctAnswer, 'unknown');
+    });
+  });
+
+  group('resolveHigherStat', () {
+    final question = QuizQuestion(
+      subject: pool[0],
+      rival: pool[1],
+      options: [pool[1].name, pool[0].name],
+      correctIndex: -1,
+      mode: QuizMode.higherStat,
+      stat: 'attack',
+      seed: 3,
+    );
+
+    test('the Pokémon with the higher stat is the answer', () {
+      final stronger = QuizLogic.resolveHigherStat(
+        question,
+        types: ['fire'],
+        stats: {'attack': 90},
+        rivalStats: {'attack': 50},
+      );
+      expect(stronger.isResolved, isTrue);
+      expect(stronger.correctAnswer, pool[0].name);
+
+      final weaker = QuizLogic.resolveHigherStat(
+        question,
+        types: ['fire'],
+        stats: {'attack': 40},
+        rivalStats: {'attack': 50},
+      );
+      expect(weaker.correctAnswer, pool[1].name);
+      expect(weaker.stat, 'attack');
+    });
+
+    test('a tie moves on to the next stat', () {
+      final q = QuizLogic.resolveHigherStat(
+        question,
+        types: ['fire'],
+        stats: {'attack': 50, 'defense': 70},
+        rivalStats: {'attack': 50, 'defense': 60},
+      );
+
+      expect(q.mode, QuizMode.higherStat);
+      expect(q.stat, 'defense');
+      expect(q.correctAnswer, pool[0].name);
+    });
+
+    test('a tie on every stat becomes a type question', () {
+      final q = QuizLogic.resolveHigherStat(
+        question,
+        types: ['fire', 'flying'],
+        stats: {'attack': 50},
+        rivalStats: {'attack': 50},
+      );
+
+      expect(q.mode, QuizMode.guessType);
+      expect(q.isResolved, isTrue);
+      expect(q.asksForPair, isTrue);
+    });
+  });
+
+  group('resolve', () {
+    test('picks the right resolution for the mode', () {
+      final byMode = {
+        for (final q in QuizLogic.generateQuestions(pool, count: 8))
+          q.mode: QuizLogic.resolve(
+            q,
+            types: ['fire'],
+            stats: {for (final s in QuizLogic.comparedStats) s: 100},
+            rivalStats: {for (final s in QuizLogic.comparedStats) s: 50},
+          ),
+      };
+
+      for (final q in byMode.values) {
+        expect(q.isResolved, isTrue);
+      }
+      expect(byMode[QuizMode.higherStat]!.correctAnswer, isNotEmpty);
+      expect(byMode[QuizMode.superEffective]!.mode, QuizMode.superEffective);
+    });
+
+    test('leaves a resolved question alone', () {
+      final q = QuizLogic.generateQuestions(
+        pool,
+        count: 1,
+        modes: [QuizMode.guessName],
+      ).single;
+
+      expect(QuizLogic.resolve(q, types: ['fire']), same(q));
     });
   });
 }

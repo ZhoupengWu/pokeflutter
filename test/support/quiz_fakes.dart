@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:pokeflutter/model/pokemon.dart';
 import 'package:pokeflutter/data/pokemon_api.dart';
 import 'package:pokeflutter/data/pokemon_repository.dart';
+import 'package:pokeflutter/data/share_service.dart';
 
 import 'fixtures.dart';
 
@@ -23,14 +24,34 @@ class FakePokemonApi extends PokemonApi {
     this.types = const ['fire'],
     Set<String>? failing,
     this.shiny = true,
+    this.varyingStats = false,
   }) : failing = failing ?? <String>{};
 
   final List<String> types;
 
   /// Whether the Pokémon have a shiny artwork.
   final bool shiny;
+
+  /// Whether the base stats differ from one Pokémon to the next (see
+  /// [statsOf]); otherwise they all have the fixtures' default stats.
+  final bool varyingStats;
   final Set<String> failing;
   final List<String> requested = [];
+
+  /// Base stats that grow with the number in the name (`mon7` beats `mon3`
+  /// at every stat), so that two different Pokémon never tie.
+  static Map<String, int> statsOf(String name) {
+    final n = int.tryParse(name.replaceAll(RegExp(r'\D'), '')) ?? 0;
+    const stats = [
+      'hp',
+      'attack',
+      'defense',
+      'special-attack',
+      'special-defense',
+      'speed',
+    ];
+    return {for (var i = 0; i < stats.length; i++) stats[i]: 20 + n * 3 + i};
+  }
 
   @override
   Future<Pokemon> getPokemonDetails(String name) async {
@@ -43,8 +64,17 @@ class FakePokemonApi extends PokemonApi {
         name: name,
         speciesName: name,
         types: types,
+        stats: varyingStats ? statsOf(name) : null,
         shiny: shiny ? 'https://img/shiny.png' : null,
       ),
     );
   }
+}
+
+/// Remembers what was shared instead of opening the system sheet.
+class FakeShareService implements ShareService {
+  final List<String> shared = [];
+
+  @override
+  Future<void> shareText(String text) async => shared.add(text);
 }

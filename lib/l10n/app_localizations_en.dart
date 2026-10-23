@@ -186,7 +186,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quizIntro =>
-      'Test your Pokémon knowledge! Guess the name from the silhouette or the type from the name.';
+      'Test your Pokémon knowledge! Guess who is behind the silhouette, name the types, compare stats and spot weaknesses.';
 
   @override
   String get quizDifficulty => 'Difficulty';
@@ -244,6 +244,100 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String quizWhatType(String name) {
     return 'What type is $name?';
+  }
+
+  @override
+  String quizWhatTypes(String name) {
+    return 'What types does $name have?';
+  }
+
+  @override
+  String quizHigherStat(String stat) {
+    return 'Which one has the higher $stat?';
+  }
+
+  @override
+  String quizSuperEffective(String name) {
+    return 'Which type is super effective against $name?';
+  }
+
+  @override
+  String get quizStatHp => 'HP';
+
+  @override
+  String get quizStatAttack => 'Attack';
+
+  @override
+  String get quizStatDefense => 'Defense';
+
+  @override
+  String get quizStatSpecialAttack => 'Sp. Attack';
+
+  @override
+  String get quizStatSpecialDefense => 'Sp. Defense';
+
+  @override
+  String get quizStatSpeed => 'Speed';
+
+  @override
+  String quizAnswerStat(
+    String stat,
+    String first,
+    int firstValue,
+    String second,
+    int secondValue,
+  ) {
+    return '$stat: $first $firstValue vs $second $secondValue';
+  }
+
+  @override
+  String quizAnswerWeakness(String name, String types) {
+    return '$name takes extra damage from $types';
+  }
+
+  @override
+  String get quizDailyTitle => 'Daily challenge';
+
+  @override
+  String get quizDailyHint =>
+      'The same questions for everyone today. One try a day.';
+
+  @override
+  String get quizDailyPlay => 'Play today\'s challenge';
+
+  @override
+  String quizDailyDone(int correct, int total, int score) {
+    return 'Today: $correct / $total · $score pts';
+  }
+
+  @override
+  String quizDailyStreak(int count) {
+    return '$count-day streak';
+  }
+
+  @override
+  String get quizShare => 'Share result';
+
+  @override
+  String quizShareGame(
+    String difficulty,
+    int correct,
+    int total,
+    int score,
+    String grid,
+  ) {
+    return 'PokéFlutter Quiz ($difficulty)\n$correct/$total · $score pts\n$grid';
+  }
+
+  @override
+  String quizShareDaily(
+    String date,
+    int correct,
+    int total,
+    int score,
+    String grid,
+  ) {
+    return 'PokéFlutter Daily $date\n$correct/$total · $score pts\n$grid';
   }
 
   @override
