@@ -43,6 +43,7 @@ lib/
 │   ├── pokemon_repository.dart   # bundled list (assets/pokemonList.json), loaded once
 │   ├── pokemon_type_index.dart   # name -> types (primary first), built from /type/{name}
 │   ├── favourites_manager.dart, team_manager.dart, app_settings.dart, quiz_stats_store.dart  # shared_preferences
+│   ├── share_service.dart        # ShareService: the system share sheet (share_plus) behind an interface
 ├── theme/                        # theme.dart, app_colors.dart, palette.dart, contrast.dart, responsive.dart, shapes.dart
 ├── core/                         # pokemon_constants (type colours), type_chart, pokedex (generations,
 │                                 #   sort), team_analysis, quiz_logic, capitalize
@@ -70,7 +71,7 @@ page colour.
 ## Dependency injection
 
 `AppServices` owns one instance of each service (repository, `PokemonApi`, `EvolutionApi`,
-`PokemonTypeIndex`, `FavouritesManager`, `AppSettings`, `QuizStatsStore`, `NetworkStatus`) plus the
+`PokemonTypeIndex`, `FavouritesManager`, `AppSettings`, `QuizStatsStore`, `ShareService`, `NetworkStatus`) plus the
 `ImageProviderFactory`. `AppProviders` exposes them with `Provider`; pages call `context.read<T>()`
 once to build their controller (`HomeController(repository: context.read(), …)`). There are no
 `.instance` singletons: tests build `AppServices(…)` with fakes (see `test/support/test_app.dart`).
@@ -111,9 +112,16 @@ TypeChart (static) ──> Detail (type matchups)
   `parse`), retries network/5xx once and times out after 15 s. Screens show a Retry.
 - **Detail page**: `PokemonDetailController` loads the Pokémon, then the evolution chain; the chain
   failing shows a retry in its section only. Type matchups come from `TypeChart` (no network).
-- **Quiz**: `QuizController` owns the game. "Guess the type" questions start unresolved
-  (`QuizQuestion.isResolved == false`) and are completed with `QuizLogic.resolveTypeQuestion` once
-  the real types are fetched. Difficulty: easy = Pokédex 1–151, no timer; normal/hard = every species
+- **Quiz**: `QuizController` owns the game. Four `QuizMode`s: name, type, higher stat, super
+  effective. Everything but the name questions starts unresolved (`correctIndex == -1`) and is
+  completed by `QuizLogic.resolve` once the Pokémon data is fetched (a stat question fetches the
+  subject *and* its rival). Resolution only depends on the question's `seed` and the data, so it is
+  reproducible. A dual-type Pokémon's type question has *pair* options (`"fire/flying"`, no two the
+  same as a set); a stat tie moves on to the next stat, and a question that cannot be asked (tied on
+  everything, no weakness) falls back to a type question. The **daily challenge** seeds
+  `generateQuestions` with the date (`QuizStatsStore.dailySeed`), is played at normal difficulty once a
+  day and is kept in `DailyRecord` (streak of days). The results screen shares the score through
+  `ShareService` (`share_plus` in production, a fake in tests). Difficulty: easy = Pokédex 1–151, no timer; normal/hard = every species
   (never alternate forms), 20 s / 10 s per question. Score: 100 per correct answer + 25 per answer
   already in the streak (max four steps). The countdown pauses when the tab is hidden
   (`TickerMode`).
@@ -150,6 +158,7 @@ type names and stat labels are.
 | Type index | `shared_preferences` | `pokemon_type_index_v2` (JSON: name -> types) |
 | Settings | `shared_preferences` | `settings_theme_mode`, `settings_locale` |
 | Quiz records | `shared_preferences` | `quiz_records_v1` (JSON per difficulty) |
+| Daily challenge | `shared_preferences` | `quiz_daily_v1` (last date, score, answers, streak) |
 | Pokémon details (compact JSON), evolution chains | `DiskCache` files in the app support dir (`pokeapi_cache/`, 400 entries, LRU) + memory | `pokemon-{name}`, `chain-{species}` |
 | Images | `cached_network_image` cache | – |
 

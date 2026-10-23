@@ -21,14 +21,14 @@ When an item is done, move it to `roadmap.md` / `todo.md` and delete it here.
 
 ## P3 — New features
 **High value**
-- Advanced search: "weak to X" filter (the `TypeChart` makes it cheap); by ability or stat range
-  would need data PokéAPI only gives one Pokémon at a time
+- Advanced search by ability or stat range: needs data PokéAPI only gives one Pokémon at a time
+  (the "weak to" filter is done)
 - Extended details: moves (Pokédex entry, category, habitat, forms and the shiny artwork are done)
 
 **Medium**
 - Cry audio playback (`audioplayers`)
 - Team builder follow-ups: suggest a Pokémon that fixes the biggest weakness; share the team
-- Quiz: more modes (ability, "higher attack", type matchups), daily challenge, share result
+- Quiz: more modes (ability, move type), a daily-challenge reminder notification
 - Compare 3–4 Pokémon; share comparison
 - Favourites: notes, reordering, export/share, optional cloud sync
 

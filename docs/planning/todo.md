@@ -19,6 +19,7 @@
 - Phase 11 (v1.10.0): Team tab, full type chart, shiny toggle, stats radar, forms
 - Phase 12 (v1.10.1): release workflow (tag → signed APK in a draft release)
 - Phase 13 (v1.11.0): iOS look (floating tab bar, large titles, soft shapes), release draft from the Actions tab
+- Phase 14 (v1.12.0): weak-to filter, quiz rework (pair type answers, higher stat, super effective), daily challenge, share result
 
 ## 🔲 Next
 Everything left is in [`backlog.md`](backlog.md). Suggested first steps:
