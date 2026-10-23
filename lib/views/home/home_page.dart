@@ -68,11 +68,13 @@ class _HomePageState extends State<HomePage> {
         child: FilterSheet(
           initial: FilterSelection(
             types: _controller.activeTypes,
+            weakTo: _controller.activeWeakTo,
             generations: _controller.activeGenerations,
             sort: _controller.sort,
           ),
           onApply: (selection) => _controller.setSelection(
             types: selection.types,
+            weakTo: selection.weakTo,
             generations: selection.generations,
             sort: selection.sort,
           ),
@@ -110,6 +112,14 @@ class _HomePageState extends State<HomePage> {
           color: listPokemonTypeColor[type] ?? colors.muted,
           onRemove: () => _controller.setTypeFilters(
             Set.of(_controller.activeTypes)..remove(type),
+          ),
+        ),
+      for (final type in _controller.activeWeakTo)
+        ActiveFilter(
+          label: l10n.weakToChip(l10n.typeName(type)),
+          color: listPokemonTypeColor[type] ?? colors.muted,
+          onRemove: () => _controller.setWeakToFilters(
+            Set.of(_controller.activeWeakTo)..remove(type),
           ),
         ),
       for (final number in _controller.activeGenerations.toList()..sort())
@@ -217,6 +227,7 @@ class _HomePageState extends State<HomePage> {
                 filters: _activeFilters(context),
                 onClearAll: () => _controller.setSelection(
                   types: const {},
+                  weakTo: const {},
                   generations: const {},
                   sort: PokemonSort.numberAsc,
                 ),

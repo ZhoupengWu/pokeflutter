@@ -187,7 +187,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get quizIntro =>
-      'Metti alla prova la tua conoscenza dei Pokémon! Indovina il nome dalla silhouette o il tipo dal nome.';
+      'Metti alla prova la tua conoscenza dei Pokémon! Indovina chi si nasconde nella silhouette, i tipi, confronta le statistiche e scova i punti deboli.';
 
   @override
   String get quizDifficulty => 'Difficoltà';
@@ -245,6 +245,100 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String quizWhatType(String name) {
     return 'Di che tipo è $name?';
+  }
+
+  @override
+  String quizWhatTypes(String name) {
+    return 'Che tipi ha $name?';
+  }
+
+  @override
+  String quizHigherStat(String stat) {
+    return 'Chi ha $stat più alto?';
+  }
+
+  @override
+  String quizSuperEffective(String name) {
+    return 'Quale tipo è superefficace contro $name?';
+  }
+
+  @override
+  String get quizStatHp => 'PS';
+
+  @override
+  String get quizStatAttack => 'Attacco';
+
+  @override
+  String get quizStatDefense => 'Difesa';
+
+  @override
+  String get quizStatSpecialAttack => 'Att. Speciale';
+
+  @override
+  String get quizStatSpecialDefense => 'Dif. Speciale';
+
+  @override
+  String get quizStatSpeed => 'Velocità';
+
+  @override
+  String quizAnswerStat(
+    String stat,
+    String first,
+    int firstValue,
+    String second,
+    int secondValue,
+  ) {
+    return '$stat: $first $firstValue contro $second $secondValue';
+  }
+
+  @override
+  String quizAnswerWeakness(String name, String types) {
+    return '$name subisce danni extra da $types';
+  }
+
+  @override
+  String get quizDailyTitle => 'Sfida del giorno';
+
+  @override
+  String get quizDailyHint =>
+      'Le stesse domande per tutti, oggi. Un tentativo al giorno.';
+
+  @override
+  String get quizDailyPlay => 'Gioca la sfida di oggi';
+
+  @override
+  String quizDailyDone(int correct, int total, int score) {
+    return 'Oggi: $correct / $total · $score pt';
+  }
+
+  @override
+  String quizDailyStreak(int count) {
+    return '$count giorni di fila';
+  }
+
+  @override
+  String get quizShare => 'Condividi il risultato';
+
+  @override
+  String quizShareGame(
+    String difficulty,
+    int correct,
+    int total,
+    int score,
+    String grid,
+  ) {
+    return 'PokéFlutter Quiz ($difficulty)\n$correct/$total · $score pt\n$grid';
+  }
+
+  @override
+  String quizShareDaily(
+    String date,
+    int correct,
+    int total,
+    int score,
+    String grid,
+  ) {
+    return 'PokéFlutter Sfida del giorno $date\n$correct/$total · $score pt\n$grid';
   }
 
   @override
@@ -754,4 +848,16 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get teamNoGaps => 'Tutti i tipi sono coperti.';
+
+  @override
+  String get filterWeakToSection => 'Debole a';
+
+  @override
+  String get filterWeakToHint =>
+      'Pokémon che subiscono danno doppio o superiore da uno qualsiasi dei tipi scelti.';
+
+  @override
+  String weakToChip(String type) {
+    return 'Debole a $type';
+  }
 }

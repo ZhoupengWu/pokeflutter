@@ -99,4 +99,12 @@ Type Filter, Favourites System, Pokémon Comparison.
 - Release workflow: a tick-box on the manual run drafts the GitHub release.
 - Team cards centred.
 
+## ✅ Phase 14 — Search and quiz (v1.12.0)
+- Home filter: **weak to** a type (any of the chosen ones), with its own chips.
+- Quiz rework: a dual-type Pokémon is asked for both types among pairs (the old single-type
+  question was ambiguous); new **higher stat** and **super effective** questions; reproducible
+  questions (seeded).
+- **Daily challenge** (same questions for everyone on a date, once a day, day streak) and
+  **share the result** (🟩/🟥 grid) with the system share sheet.
+
 See [`backlog.md`](backlog.md) for what is next.

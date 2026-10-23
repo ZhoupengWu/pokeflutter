@@ -2,7 +2,7 @@ name: pokeflutter
 description: "A Flutter Pokédex app — browse, search and explore Pokémon."
 publish_to: 'none'
 
-version: 1.11.0+10
+version: 1.12.0+11
 
 environment:
   sdk: ^3.11.1
@@ -18,6 +18,7 @@ dependencies:
   flutter_svg: ^2.2.4
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.3.2
+  share_plus: ^12.0.0
   provider: ^6.1.5
   path_provider: ^2.1.5
   cached_network_image: ^3.4.1

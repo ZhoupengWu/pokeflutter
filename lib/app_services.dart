@@ -15,6 +15,7 @@ import 'data/network_status.dart';
 import 'data/offline_prefetcher.dart';
 import 'data/offline_storage.dart';
 import 'data/quiz_stats_store.dart';
+import 'data/share_service.dart';
 import 'data/species_api.dart';
 import 'data/team_manager.dart';
 import 'views/shared/pokemon_image.dart';
@@ -34,6 +35,7 @@ class AppServices {
     FavouritesManager? favourites,
     AppSettings? settings,
     QuizStatsStore? quizStats,
+    ShareService? share,
     NetworkStatus? networkStatus,
     ImageProviderFactory? imageProvider,
     OfflineStorage? storage,
@@ -54,7 +56,8 @@ class AppServices {
        typeIndex = typeIndex ?? PokemonTypeIndex(),
        favourites = favourites ?? FavouritesManager(),
        settings = settings ?? AppSettings(),
-       quizStats = quizStats ?? QuizStatsStore();
+       quizStats = quizStats ?? QuizStatsStore(),
+       share = share ?? const SystemShareService();
 
   /// The services the app runs with: details and evolutions kept on disk,
   /// images cached by `cached_network_image`, every request reporting to one
@@ -97,6 +100,7 @@ class AppServices {
   final FavouritesManager favourites;
   final AppSettings settings;
   final QuizStatsStore quizStats;
+  final ShareService share;
   final NetworkStatus networkStatus;
   final ImageProviderFactory imageProvider;
   final OfflineStorage storage;
@@ -153,6 +157,7 @@ class AppProviders extends StatelessWidget {
         Provider<FavouritesManager>.value(value: services.favourites),
         InheritedProvider<AppSettings>.value(value: services.settings),
         Provider<QuizStatsStore>.value(value: services.quizStats),
+        Provider<ShareService>.value(value: services.share),
         InheritedProvider<NetworkStatus>.value(value: services.networkStatus),
         Provider<ImageProviderFactory>.value(value: services.imageProvider),
         Provider<OfflineStorage>.value(value: services.storage),

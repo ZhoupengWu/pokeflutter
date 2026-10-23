@@ -108,7 +108,7 @@
   "typeSteel": "Steel",
   "typeFairy": "Fairy",
   "quizTitle": "Quiz",
-  "quizIntro": "Test your Pokémon knowledge! Guess the name from the silhouette or the type from the name.",
+  "quizIntro": "Test your Pokémon knowledge! Guess who is behind the silhouette, name the types, compare stats and spot weaknesses.",
   "quizDifficulty": "Difficulty",
   "difficultyEasy": "Easy",
   "difficultyNormal": "Normal",
@@ -165,6 +165,133 @@
   "@quizWhatType": {
     "placeholders": {
       "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizWhatTypes": "What types does {name} have?",
+  "@quizWhatTypes": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizHigherStat": "Which one has the higher {stat}?",
+  "@quizHigherStat": {
+    "placeholders": {
+      "stat": {
+        "type": "String"
+      }
+    }
+  },
+  "quizSuperEffective": "Which type is super effective against {name}?",
+  "@quizSuperEffective": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizStatHp": "HP",
+  "quizStatAttack": "Attack",
+  "quizStatDefense": "Defense",
+  "quizStatSpecialAttack": "Sp. Attack",
+  "quizStatSpecialDefense": "Sp. Defense",
+  "quizStatSpeed": "Speed",
+  "quizAnswerStat": "{stat}: {first} {firstValue} vs {second} {secondValue}",
+  "@quizAnswerStat": {
+    "placeholders": {
+      "stat": {
+        "type": "String"
+      },
+      "first": {
+        "type": "String"
+      },
+      "firstValue": {
+        "type": "int"
+      },
+      "second": {
+        "type": "String"
+      },
+      "secondValue": {
+        "type": "int"
+      }
+    }
+  },
+  "quizAnswerWeakness": "{name} takes extra damage from {types}",
+  "@quizAnswerWeakness": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "types": {
+        "type": "String"
+      }
+    }
+  },
+  "quizDailyTitle": "Daily challenge",
+  "quizDailyHint": "The same questions for everyone today. One try a day.",
+  "quizDailyPlay": "Play today's challenge",
+  "quizDailyDone": "Today: {correct} / {total} · {score} pts",
+  "@quizDailyDone": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "quizDailyStreak": "{count}-day streak",
+  "@quizDailyStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quizShare": "Share result",
+  "quizShareGame": "PokéFlutter Quiz ({difficulty})\n{correct}/{total} · {score} pts\n{grid}",
+  "@quizShareGame": {
+    "placeholders": {
+      "difficulty": {
+        "type": "String"
+      },
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "score": {
+        "type": "int"
+      },
+      "grid": {
+        "type": "String"
+      }
+    }
+  },
+  "quizShareDaily": "PokéFlutter Daily {date}\n{correct}/{total} · {score} pts\n{grid}",
+  "@quizShareDaily": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "score": {
+        "type": "int"
+      },
+      "grid": {
         "type": "String"
       }
     }
@@ -510,5 +637,13 @@
   "teamHits": "Hits super effectively",
   "teamMisses": "Not covered",
   "teamNoCoverage": "No type is hit super effectively yet.",
-  "teamNoGaps": "Every type is covered."
+  "teamNoGaps": "Every type is covered.",
+  "filterWeakToSection": "Weak to",
+  "filterWeakToHint": "Pokémon that take double damage or more from any of the chosen types.",
+  "weakToChip": "Weak to {type}",
+  "@weakToChip": {
+    "placeholders": {
+      "type": {"type": "String"}
+    }
+  }
 }

@@ -55,11 +55,12 @@ Future<void> _pumpDetail(WidgetTester tester, {required bool landscape}) async {
   );
 }
 
-QuizController _quiz() => QuizController(
-  api: FakePokemonApi(),
+QuizController _quiz({List<QuizMode>? modes}) => QuizController(
+  api: FakePokemonApi(types: ['fire', 'flying'], varyingStats: true),
   repository: fakeRepository(),
   stats: QuizStatsStore(),
   questionCount: 1,
+  modes: modes ?? [QuizMode.guessName],
 );
 
 void main() {
@@ -126,5 +127,31 @@ void main() {
       );
       expect(tester.takeException(), isNull);
     });
+
+    for (final mode in [QuizMode.guessType, QuizMode.higherStat]) {
+      testWidgets('sideways, a ${mode.name} question fits', (tester) async {
+        final controller = _quiz(modes: [mode]);
+        addTearDown(controller.dispose);
+        await _pump(tester, QuizPage(controller: controller), landscape: true);
+        controller.setDifficulty(QuizDifficulty.easy);
+        await tester.runAsync(controller.start);
+        for (var i = 0; i < 3; i++) {
+          await tester.pump();
+        }
+
+        final options = find.byType(QuizOptionButton);
+        expect(options, findsNWidgets(mode == QuizMode.higherStat ? 2 : 4));
+        for (var i = 0; i < options.evaluate().length; i++) {
+          expect(tester.getRect(options.at(i)).bottom, lessThanOrEqualTo(390));
+        }
+        await tester.tap(options.at(controller.question.correctIndex));
+        await tester.pump();
+        expect(
+          tester.getRect(find.byType(QuizPrimaryButton)).bottom,
+          lessThanOrEqualTo(390),
+        );
+        expect(tester.takeException(), isNull);
+      });
+    }
   });
 }

@@ -66,4 +66,90 @@ void main() {
     final records = await QuizStatsStore().load();
     expect(records[QuizDifficulty.easy]!.bestScore, 0);
   });
+
+  group('daily challenge', () {
+    test('starts empty', () async {
+      final daily = await QuizStatsStore().loadDaily();
+
+      expect(daily.lastDate, isNull);
+      expect(daily.gamesPlayed, 0);
+      expect(daily.isDoneOn('2026-10-23'), isFalse);
+      expect(daily.streakOn(DateTime(2026, 10, 23)), 0);
+    });
+
+    test('dates are keyed and seeded by their day only', () {
+      expect(
+        QuizStatsStore.dateKey(DateTime(2026, 3, 5, 23, 59)),
+        '2026-03-05',
+      );
+      expect(QuizStatsStore.dailySeed(DateTime(2026, 3, 5, 8)), 20260305);
+      expect(
+        QuizStatsStore.dailySeed(DateTime(2026, 3, 5, 8)),
+        QuizStatsStore.dailySeed(DateTime(2026, 3, 5, 22)),
+      );
+      expect(
+        QuizStatsStore.dailySeed(DateTime(2026, 3, 6)),
+        isNot(QuizStatsStore.dailySeed(DateTime(2026, 3, 5))),
+      );
+    });
+
+    test('saves the result of the day, with every answer', () async {
+      final store = QuizStatsStore();
+      final result = QuizResult(totalQuestions: 3)
+        ..record(isCorrect: true)
+        ..record(isCorrect: false)
+        ..record(isCorrect: true);
+
+      await store.submitDaily(DateTime(2026, 10, 23), result);
+      final daily = await store.loadDaily();
+
+      expect(daily.isDoneOn('2026-10-23'), isTrue);
+      expect(daily.score, 200);
+      expect(daily.outcomes, [true, false, true]);
+      expect(daily.correct, 2);
+      expect(daily.streak, 1);
+      expect(daily.gamesPlayed, 1);
+    });
+
+    test(
+      'playing on consecutive days builds a streak, a gap breaks it',
+      () async {
+        final store = QuizStatsStore();
+        final result = _game(correct: 5);
+
+        await store.submitDaily(DateTime(2026, 10, 30), result);
+        await store.submitDaily(DateTime(2026, 10, 31), result); // month end
+        var daily = await store.submitDaily(DateTime(2026, 11, 1), result);
+        expect(daily.streak, 3);
+        expect(daily.streakOn(DateTime(2026, 11, 2)), 3); // still alive
+        expect(daily.streakOn(DateTime(2026, 11, 3)), 0); // missed a day
+
+        daily = await store.submitDaily(DateTime(2026, 11, 3), result);
+        expect(daily.streak, 1);
+        expect(daily.bestStreak, 3);
+        expect(daily.gamesPlayed, 4);
+      },
+    );
+
+    test('a second game on the same day changes nothing', () async {
+      final store = QuizStatsStore();
+      await store.submitDaily(DateTime(2026, 10, 23), _game(correct: 4));
+
+      final again = await store.submitDaily(
+        DateTime(2026, 10, 23),
+        _game(correct: 10),
+      );
+
+      expect(again.gamesPlayed, 1);
+      expect(again.correct, 4);
+    });
+
+    test('corrupted data starts over', () async {
+      SharedPreferences.setMockInitialValues({'quiz_daily_v1': '{oops'});
+
+      final daily = await QuizStatsStore().loadDaily();
+
+      expect(daily.gamesPlayed, 0);
+    });
+  });
 }

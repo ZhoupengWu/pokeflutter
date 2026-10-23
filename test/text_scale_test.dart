@@ -87,28 +87,67 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('Quiz question and results at 200 % ($name)', (tester) async {
+    for (final mode in QuizMode.values) {
+      testWidgets('Quiz ${mode.name} question and results at 200 % ($name)', (
+        tester,
+      ) async {
+        final controller = QuizController(
+          api: FakePokemonApi(types: ['fire', 'flying'], varyingStats: true),
+          repository: fakeRepository(),
+          stats: QuizStatsStore(),
+          questionCount: 1,
+          modes: [mode],
+        );
+        addTearDown(controller.dispose);
+        await _pump(tester, QuizPage(controller: controller), locale: locale);
+
+        controller.setDifficulty(QuizDifficulty.easy);
+        await tester.runAsync(controller.start);
+        for (var i = 0; i < 3; i++) {
+          await tester.pump();
+        }
+        expect(controller.screen.name, 'quiz');
+        expect(tester.takeException(), isNull);
+
+        // Answer, to see the feedback area, then the results.
+        await tester.tap(
+          find.byType(QuizOptionButton).at(controller.question.correctIndex),
+        );
+        await tester.pump();
+        expect(tester.takeException(), isNull);
+
+        await tester.runAsync(controller.next);
+        await tester.pump();
+        expect(controller.screen.name, 'results');
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('Quiz start with the daily challenge at 200 % ($name)', (
+      tester,
+    ) async {
       final controller = QuizController(
-        api: FakePokemonApi(),
+        api: FakePokemonApi(varyingStats: true),
         repository: fakeRepository(),
         stats: QuizStatsStore(),
         questionCount: 1,
       );
       addTearDown(controller.dispose);
       await _pump(tester, QuizPage(controller: controller), locale: locale);
-
-      controller.setDifficulty(QuizDifficulty.easy);
-      await tester.runAsync(controller.start);
-      for (var i = 0; i < 3; i++) {
-        await tester.pump();
-      }
-      expect(controller.screen.name, 'quiz');
       expect(tester.takeException(), isNull);
 
-      // Answer, to see the feedback area, then the results.
+      // After today's game the card shows the result and the streak.
+      controller.setDifficulty(QuizDifficulty.easy);
+      await tester.runAsync(controller.startDaily);
+      await tester.pump();
       await tester.tap(
         find.byType(QuizOptionButton).at(controller.question.correctIndex),
       );
+      await tester.pump();
+      await tester.runAsync(controller.next);
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      controller.backToStart();
       await tester.pump();
       expect(tester.takeException(), isNull);
     });

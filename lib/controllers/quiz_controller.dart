@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../model/pokemon.dart';
 import '../model/pokemon_list_item.dart';
@@ -12,7 +13,7 @@ enum QuizScreen { start, quiz, results }
 
 /// State and rules of a quiz game; the page only renders it.
 ///
-/// Flow: [init] → choose [difficulty] → [start] → for each question
+/// Flow: [init] → choose [difficulty] → [start] (or [startDaily]) → for each question
 /// [answer] (or the timer runs out) → [next] → results, where the game is
 /// saved to the [QuizStatsStore].
 class QuizController extends ChangeNotifier {
@@ -22,14 +23,25 @@ class QuizController extends ChangeNotifier {
     required QuizStatsStore stats,
     this.questionCount = 10,
     this.tick = const Duration(milliseconds: 100),
+    DateTime Function()? clock,
+    this.random,
+    this.modes,
   }) : _api = api,
        _repository = repository,
-       _stats = stats;
+       _stats = stats,
+       _clock = clock ?? DateTime.now;
 
   final PokemonApi _api;
   final PokemonRepository _repository;
   final QuizStatsStore _stats;
   final int questionCount;
+  final DateTime Function() _clock;
+
+  /// Source of chance for ordinary games (the daily challenge uses its date).
+  final Random? random;
+
+  /// The kinds of question to ask, in order (a random mix when null).
+  final List<QuizMode>? modes;
 
   /// Resolution of the countdown. Tests may use a coarser one.
   final Duration tick;
@@ -47,8 +59,19 @@ class QuizController extends ChangeNotifier {
   int index = 0;
   late QuizResult result = QuizResult(totalQuestions: questionCount);
 
+  /// The daily challenge is being played (always at normal difficulty).
+  bool isDaily = false;
+  DailyRecord daily = const DailyRecord();
+  DateTime _dailyDate = DateTime.now();
+
+  /// The day of the daily game being played or just finished.
+  DateTime get dailyDate => _dailyDate;
+
   /// Details of the current question's subject (null while loading/failed).
   Pokemon? pokemon;
+
+  /// Details of the opponent of a "higher stat" question.
+  Pokemon? rival;
   bool isLoadingPokemon = true;
 
   /// Option picked this round (null when none, e.g. the time ran out).
@@ -83,10 +106,26 @@ class QuizController extends ChangeNotifier {
       pokemon != null &&
       question.isResolved;
 
+  /// The difficulty of the game being played (or about to start): the daily
+  /// challenge always plays at normal.
+  QuizDifficulty get gameDifficulty =>
+      isDaily ? QuizDifficulty.normal : difficulty;
+
   QuizRecord get record => records[difficulty]!;
 
   bool get canStart =>
       allPokemon.where(difficulty.includes).length >= 4 && !isLoadingList;
+
+  /// Today's challenge has not been played yet.
+  bool get canStartDaily =>
+      !isLoadingList &&
+      !dailyDone &&
+      allPokemon.where(QuizDifficulty.normal.includes).length >= 4;
+
+  bool get dailyDone => daily.isDoneOn(QuizStatsStore.dateKey(_clock()));
+
+  /// Consecutive days with a daily game, as of today.
+  int get dailyStreak => daily.streakOn(_clock());
 
   bool isLoadingList = true;
 
@@ -101,8 +140,15 @@ class QuizController extends ChangeNotifier {
     } catch (_) {
       saved = null; // records are a nicety; play without them
     }
+    DailyRecord? savedDaily;
+    try {
+      savedDaily = await _stats.loadDaily();
+    } catch (_) {
+      savedDaily = null;
+    }
     allPokemon = list;
     if (saved != null) records = saved;
+    if (savedDaily != null) daily = savedDaily;
     isLoadingList = false;
     notifyListeners();
   }
@@ -113,14 +159,26 @@ class QuizController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> start() async {
+  Future<void> start() => _begin(daily: false);
+
+  /// Plays today's challenge: the questions come from the date alone, so
+  /// everybody gets the same ones. It can be played once a day.
+  Future<void> startDaily() => _begin(daily: true);
+
+  Future<void> _begin({required bool daily}) async {
+    if (daily && dailyDone) return;
+    final date = _clock();
     final generated = QuizLogic.generateQuestions(
       allPokemon,
       count: questionCount,
-      difficulty: difficulty,
+      difficulty: daily ? QuizDifficulty.normal : difficulty,
+      random: daily ? Random(QuizStatsStore.dailySeed(date)) : random,
+      modes: modes,
     );
     if (generated.isEmpty) return;
     _stopTimer();
+    isDaily = daily;
+    _dailyDate = date;
     questions = generated;
     index = 0;
     result = QuizResult(totalQuestions: generated.length);
@@ -137,6 +195,7 @@ class QuizController extends ChangeNotifier {
     _stopTimer();
     isLoadingPokemon = true;
     pokemon = null;
+    rival = null;
     answered = false;
     timedOut = false;
     selectedOption = null;
@@ -145,26 +204,32 @@ class QuizController extends ChangeNotifier {
     notifyListeners();
 
     final questionIndex = index;
+    final current = questions[questionIndex];
     Pokemon? loaded;
+    Pokemon? loadedRival;
     try {
-      loaded = await _api.getPokemonDetails(
-        questions[questionIndex].subject.name,
-      );
+      final rivalName = current.rival?.name;
+      final results = await Future.wait([
+        _api.getPokemonDetails(current.subject.name),
+        if (rivalName != null) _api.getPokemonDetails(rivalName),
+      ]);
+      loaded = results.first;
+      if (rivalName != null) loadedRival = results.last;
     } on PokemonApiException {
       loaded = null; // the page offers Retry
     }
     if (epoch != _epoch) return;
 
     pokemon = loaded;
+    rival = loadedRival;
     isLoadingPokemon = false;
-    final current = questions[questionIndex];
-    if (loaded != null &&
-        current.mode == QuizMode.guessType &&
-        !current.isResolved) {
-      // Type questions get their options from the real types.
-      questions[questionIndex] = QuizLogic.resolveTypeQuestion(
+    if (loaded != null && !current.isResolved) {
+      // Everything but the name questions gets its options from the data.
+      questions[questionIndex] = QuizLogic.resolve(
         current,
-        loaded.typesList,
+        types: loaded.typesList,
+        stats: _statsOf(loaded),
+        rivalStats: loadedRival == null ? const {} : _statsOf(loadedRival),
       );
     }
     notifyListeners();
@@ -197,11 +262,20 @@ class QuizController extends ChangeNotifier {
     await _loadCurrent();
   }
 
+  static Map<String, int> _statsOf(Pokemon pokemon) => {
+    for (final stat in pokemon.stats) stat.name: stat.value,
+  };
+
   Future<void> _finishGame() async {
     _epoch++;
     try {
-      isNewRecord = await _stats.submit(difficulty, result);
-      records = await _stats.load();
+      if (isDaily) {
+        daily = await _stats.submitDaily(_dailyDate, result);
+        isNewRecord = false;
+      } else {
+        isNewRecord = await _stats.submit(difficulty, result);
+        records = await _stats.load();
+      }
     } catch (_) {
       isNewRecord = false; // storage problems must not block the results
     }
@@ -227,7 +301,7 @@ class QuizController extends ChangeNotifier {
   }
 
   void _startTimer({required bool fresh}) {
-    final seconds = difficulty.secondsPerQuestion;
+    final seconds = gameDifficulty.secondsPerQuestion;
     if (seconds == null) return;
     _stopTimer();
     if (fresh) _remainingMs = seconds * 1000;

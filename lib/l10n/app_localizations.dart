@@ -425,7 +425,7 @@ abstract class AppLocalizations {
   /// No description provided for @quizIntro.
   ///
   /// In en, this message translates to:
-  /// **'Test your Pokémon knowledge! Guess the name from the silhouette or the type from the name.'**
+  /// **'Test your Pokémon knowledge! Guess who is behind the silhouette, name the types, compare stats and spot weaknesses.'**
   String get quizIntro;
 
   /// No description provided for @quizDifficulty.
@@ -517,6 +517,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'What type is {name}?'**
   String quizWhatType(String name);
+
+  /// No description provided for @quizWhatTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'What types does {name} have?'**
+  String quizWhatTypes(String name);
+
+  /// No description provided for @quizHigherStat.
+  ///
+  /// In en, this message translates to:
+  /// **'Which one has the higher {stat}?'**
+  String quizHigherStat(String stat);
+
+  /// No description provided for @quizSuperEffective.
+  ///
+  /// In en, this message translates to:
+  /// **'Which type is super effective against {name}?'**
+  String quizSuperEffective(String name);
+
+  /// No description provided for @quizStatHp.
+  ///
+  /// In en, this message translates to:
+  /// **'HP'**
+  String get quizStatHp;
+
+  /// No description provided for @quizStatAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'Attack'**
+  String get quizStatAttack;
+
+  /// No description provided for @quizStatDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'Defense'**
+  String get quizStatDefense;
+
+  /// No description provided for @quizStatSpecialAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'Sp. Attack'**
+  String get quizStatSpecialAttack;
+
+  /// No description provided for @quizStatSpecialDefense.
+  ///
+  /// In en, this message translates to:
+  /// **'Sp. Defense'**
+  String get quizStatSpecialDefense;
+
+  /// No description provided for @quizStatSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed'**
+  String get quizStatSpeed;
+
+  /// No description provided for @quizAnswerStat.
+  ///
+  /// In en, this message translates to:
+  /// **'{stat}: {first} {firstValue} vs {second} {secondValue}'**
+  String quizAnswerStat(
+    String stat,
+    String first,
+    int firstValue,
+    String second,
+    int secondValue,
+  );
+
+  /// No description provided for @quizAnswerWeakness.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} takes extra damage from {types}'**
+  String quizAnswerWeakness(String name, String types);
+
+  /// No description provided for @quizDailyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily challenge'**
+  String get quizDailyTitle;
+
+  /// No description provided for @quizDailyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The same questions for everyone today. One try a day.'**
+  String get quizDailyHint;
+
+  /// No description provided for @quizDailyPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Play today\'s challenge'**
+  String get quizDailyPlay;
+
+  /// No description provided for @quizDailyDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Today: {correct} / {total} · {score} pts'**
+  String quizDailyDone(int correct, int total, int score);
+
+  /// No description provided for @quizDailyStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}-day streak'**
+  String quizDailyStreak(int count);
+
+  /// No description provided for @quizShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share result'**
+  String get quizShare;
+
+  /// No description provided for @quizShareGame.
+  ///
+  /// In en, this message translates to:
+  /// **'PokéFlutter Quiz ({difficulty})\n{correct}/{total} · {score} pts\n{grid}'**
+  String quizShareGame(
+    String difficulty,
+    int correct,
+    int total,
+    int score,
+    String grid,
+  );
+
+  /// No description provided for @quizShareDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'PokéFlutter Daily {date}\n{correct}/{total} · {score} pts\n{grid}'**
+  String quizShareDaily(
+    String date,
+    int correct,
+    int total,
+    int score,
+    String grid,
+  );
 
   /// No description provided for @quizSilhouette.
   ///
@@ -1373,6 +1505,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Every type is covered.'**
   String get teamNoGaps;
+
+  /// No description provided for @filterWeakToSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak to'**
+  String get filterWeakToSection;
+
+  /// No description provided for @filterWeakToHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokémon that take double damage or more from any of the chosen types.'**
+  String get filterWeakToHint;
+
+  /// No description provided for @weakToChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak to {type}'**
+  String weakToChip(String type);
 }
 
 class _AppLocalizationsDelegate

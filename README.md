@@ -31,7 +31,9 @@ The app has five tabs: **Pokédex**, **Compare**, **Quiz**, **Team** and **Favou
   primary type. Names are shown as in the games ("Mr. Mime", "Tipo Zero"). Alternate forms (Mega,
   regional…) are included, e.g. "Charizard (Mega X)".
 - **Search** by name (in English or Italian) or by number (`#25`, `25`).
-- **Filters** by type (any of the 18) and by generation (I–IX), combinable, with removable chips
+- **Filters** by type (any of the 18), by **weakness** ("weak to Water": the Pokémon that take
+  super-effective damage from a type, any of the chosen ones) and by generation (I–IX),
+  combinable, with removable chips
   showing what is active, and **four sort orders** (number or name, ascending or descending).
 - A **Random** button to jump to a Pokémon you didn't think of.
 - Settings (gear icon): theme (system / light / dark) and language (system / English / Italian).
@@ -57,11 +59,17 @@ of each pair highlighted in green.
 
 ### Quiz
 
-- 10 questions: **"Who's that silhouette?"** and **"What type is it?"**
+- 10 questions of four kinds: **"Who's that silhouette?"**, **"What type is it?"** (a dual-type
+  Pokémon is asked for *both* types, among pairs of types, so no single option is also true),
+  **"Which one has the higher Attack/Speed/…?"** (two Pokémon side by side) and **"Which type is
+  super effective against it?"**
 - Three difficulties — *easy* (original 151, no timer), *normal* (every species, 20 s per
   question) and *hard* (every species, 10 s).
 - Score: 100 points per correct answer plus a streak bonus (+25 per consecutive correct answer, up
   to +100). Your best scores are saved per difficulty.
+- **Daily challenge**: the same 10 questions for everyone on the same day (they come from the date),
+  at normal difficulty, once a day, with a streak of consecutive days.
+- **Share** the result from the results screen: score and one 🟩/🟥 square per answer.
 - Options are exposed to screen readers, so the quiz is playable with TalkBack/VoiceOver.
 
 ### Team

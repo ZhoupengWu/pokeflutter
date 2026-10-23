@@ -13,15 +13,20 @@ class FilterSelection {
     required this.types,
     required this.generations,
     required this.sort,
+    this.weakTo = const {},
   });
 
   final Set<String> types;
+
+  /// Attacking types the Pokémon must be weak to (any of them).
+  final Set<String> weakTo;
   final Set<int> generations;
   final PokemonSort sort;
 
   /// Filters and sort orders that differ from "show everything, by number".
   int get count =>
       types.length +
+      weakTo.length +
       generations.length +
       (sort == PokemonSort.numberAsc ? 0 : 1);
 }
@@ -48,6 +53,7 @@ class FilterSheet extends StatefulWidget {
 
 class _FilterSheetState extends State<FilterSheet> {
   late Set<String> _types;
+  late Set<String> _weakTo;
   late Set<int> _generations;
   late PokemonSort _sort;
 
@@ -55,12 +61,17 @@ class _FilterSheetState extends State<FilterSheet> {
   void initState() {
     super.initState();
     _types = Set.of(widget.initial.types);
+    _weakTo = Set.of(widget.initial.weakTo);
     _generations = Set.of(widget.initial.generations);
     _sort = widget.initial.sort;
   }
 
-  FilterSelection get _selection =>
-      FilterSelection(types: _types, generations: _generations, sort: _sort);
+  FilterSelection get _selection => FilterSelection(
+    types: _types,
+    weakTo: _weakTo,
+    generations: _generations,
+    sort: _sort,
+  );
 
   void _toggle<T>(Set<T> set, T value) => setState(() {
     if (!set.remove(value)) set.add(value);
@@ -68,6 +79,7 @@ class _FilterSheetState extends State<FilterSheet> {
 
   void _clearAll() => setState(() {
     _types.clear();
+    _weakTo.clear();
     _generations.clear();
     _sort = PokemonSort.numberAsc;
   });
@@ -170,6 +182,31 @@ class _FilterSheetState extends State<FilterSheet> {
                         ),
                     ],
                   ),
+                  SizedBox(height: 20.h),
+
+                  heading(l10n.filterWeakToSection),
+                  Wrap(
+                    spacing: 8.w,
+                    runSpacing: 8.h,
+                    children: [
+                      for (final type in types)
+                        _TypeChip(
+                          type: type,
+                          selected: _weakTo.contains(type),
+                          onTap: () => _toggle(_weakTo, type),
+                        ),
+                    ],
+                  ),
+                  if (_weakTo.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.only(top: 6.h),
+                      child: Text(
+                        l10n.filterWeakToHint,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.subtle,
+                        ),
+                      ),
+                    ),
                   SizedBox(height: 20.h),
 
                   heading(l10n.filterGenerationSection),
