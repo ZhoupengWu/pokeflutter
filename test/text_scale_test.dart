@@ -20,6 +20,7 @@ import 'package:pokeflutter/views/quiz/quiz_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/detail_fakes.dart';
+import 'support/fixtures.dart';
 import 'support/fonts.dart';
 import 'support/quiz_fakes.dart';
 import 'support/test_app.dart';
@@ -28,7 +29,15 @@ import 'support/test_app.dart';
 /// offers) on a small phone, no screen may overflow or throw.
 AppServices _services() => AppServices(
   repository: fakeRepository(),
-  pokemonApi: FakePokemonApi(types: ['fire', 'flying']),
+  pokemonApi: FakePokemonApi(
+    types: ['fire', 'flying'],
+    moves: [
+      for (var i = 1; i <= 25; i++)
+        moveJson('a-rather-long-move-name-$i', [
+          ('scarlet-violet', 'level-up', i),
+        ]),
+    ],
+  ),
   evolutionApi: FakeEvolutionApi(),
   speciesApi: FakeSpeciesApi(),
   abilityApi: FakeAbilityApi(),

@@ -726,6 +726,30 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get movesTitle => 'Mosse';
+
+  @override
+  String get movesHint =>
+      'Dai giochi più recenti in cui compare il Pokémon. I nomi delle mosse vengono da PokéAPI, in inglese.';
+
+  @override
+  String get movesLevelUp => 'Livello';
+
+  @override
+  String get movesMachine => 'MT / MN';
+
+  @override
+  String get movesEgg => 'Uova';
+
+  @override
+  String get movesTutor => 'Istruttore';
+
+  @override
+  String movesShowAll(int count) {
+    return 'Mostra tutte ($count)';
+  }
+
+  @override
   String get typeChartOpen => 'Tabella completa dei tipi';
 
   @override

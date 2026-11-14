@@ -1,3 +1,5 @@
+import 'pokemon_move.dart';
+
 class Pokemon {
   final int id;
 
@@ -23,6 +25,10 @@ class Pokemon {
   final List<PokemonStat> stats;
   final List<String> abilities;
 
+  /// Moves in the newest games the Pokémon appears in; null for copies saved
+  /// by older versions of the app (they are refreshed when online).
+  final List<PokemonMove>? moves;
+
   Pokemon({
     required this.id,
     required this.name,
@@ -35,6 +41,7 @@ class Pokemon {
     required this.typesList,
     required this.stats,
     required this.abilities,
+    this.moves,
   }) : speciesName = speciesName ?? name;
 
   /// Parses a PokéAPI `/pokemon/{name}` response.
@@ -70,6 +77,7 @@ class Pokemon {
       typesList: _parseTypes(json['types'] as List<dynamic>),
       stats: _parseStats(json['stats'] as List<dynamic>),
       abilities: _parseAbilities(json['abilities'] as List<dynamic>),
+      moves: PokemonMove.parseAll(json['moves'] as List<dynamic>? ?? const []),
     );
   }
 
@@ -89,6 +97,7 @@ class Pokemon {
       for (final s in stats) {'name': s.name, 'value': s.value},
     ],
     'abilities': abilities,
+    if (moves != null) 'moves': [for (final m in moves!) m.toCacheJson()],
   };
 
   factory Pokemon.fromCacheJson(Map<String, dynamic> json) => Pokemon(
@@ -110,6 +119,10 @@ class Pokemon {
         ),
     ],
     abilities: (json['abilities'] as List<dynamic>).cast<String>(),
+    moves: (json['moves'] as List<dynamic>?)
+        ?.map(PokemonMove.fromCacheJson)
+        .whereType<PokemonMove>()
+        .toList(),
   );
 
   static String? _nested(

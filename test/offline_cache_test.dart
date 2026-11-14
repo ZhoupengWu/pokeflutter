@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -84,6 +85,50 @@ void main() {
         expect(requests, 0);
       },
     );
+
+    test('a copy saved before moves were kept is refreshed once', () async {
+      final old = Pokemon.fromJson(pokemonJson()).toCacheJson()
+        ..remove('moves');
+      await disk.write('pokemon-charizard', jsonEncode(old), now: now);
+
+      var requests = 0;
+      final body = http.Response(
+        pokemonBody(
+          pokemonJson(
+            moves: [
+              moveJson('ember', [('scarlet-violet', 'level-up', 9)]),
+            ],
+          ),
+        ),
+        200,
+      );
+      final refreshed = await api((_) async {
+        requests++;
+        return body;
+      }).getPokemonDetails('charizard');
+      expect(requests, 1);
+      expect(refreshed.moves!.single.name, 'ember');
+
+      // Now complete, so the next run reads it from disk.
+      await api((_) async {
+        requests++;
+        return body;
+      }).getPokemonDetails('charizard');
+      expect(requests, 1);
+    });
+
+    test('such a copy still serves while offline', () async {
+      final old = Pokemon.fromJson(pokemonJson()).toCacheJson()
+        ..remove('moves');
+      await disk.write('pokemon-charizard', jsonEncode(old), now: now);
+
+      final pokemon = await api(
+        (_) async => throw const SocketException('offline'),
+      ).getPokemonDetails('charizard');
+
+      expect(pokemon.name, 'charizard');
+      expect(pokemon.moves, isNull);
+    });
 
     test('an old copy is refreshed from the network', () async {
       await api((_) async => ok()).getPokemonDetails('charizard');

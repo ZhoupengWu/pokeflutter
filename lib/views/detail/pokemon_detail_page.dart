@@ -17,6 +17,7 @@ import 'about_sections.dart';
 import 'detail_header.dart';
 import 'evolution_section.dart';
 import 'forms_section.dart';
+import 'moves_section.dart';
 import 'species_section.dart';
 import 'type_matchups_section.dart';
 
@@ -335,6 +336,10 @@ class _DetailCard extends StatelessWidget {
               SizedBox(height: 24.h),
               TypeMatchupsSection(pokemon: pokemon, accent: readableAccent),
               SizedBox(height: 24.h),
+              if (pokemon.moves?.isNotEmpty ?? false) ...[
+                MovesSection(pokemon: pokemon, accent: readableAccent),
+                SizedBox(height: 24.h),
+              ],
               EvolutionSection(controller: controller, accent: readableAccent),
             ],
           ),

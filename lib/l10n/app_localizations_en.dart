@@ -724,6 +724,30 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get movesTitle => 'Moves';
+
+  @override
+  String get movesHint =>
+      'From the newest games this Pokémon appears in. Move names come from PokéAPI, in English.';
+
+  @override
+  String get movesLevelUp => 'Level up';
+
+  @override
+  String get movesMachine => 'TM / HM';
+
+  @override
+  String get movesEgg => 'Egg';
+
+  @override
+  String get movesTutor => 'Tutor';
+
+  @override
+  String movesShowAll(int count) {
+    return 'Show all $count';
+  }
+
+  @override
   String get typeChartOpen => 'Full type chart';
 
   @override
