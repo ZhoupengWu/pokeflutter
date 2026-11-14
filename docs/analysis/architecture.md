@@ -25,7 +25,7 @@ lib/
 │   ├── home_controller.dart      # list, search (name or number), type/generation filters, sort
 │   ├── pokemon_detail_controller.dart  # details, then evolution chain (fails independently)
 │   ├── compare_controller.dart   # two slots, ignores superseded loads
-│   ├── team_controller.dart      # team members, their details, the TeamAnalysis
+│   ├── team_controller.dart      # team members, their details, the TeamAnalysis, suggestions
 │   └── quiz_controller.dart      # game flow, countdown, scoring, saved records
 ├── data/                         # everything that talks to the network or the disk
 │   ├── pokeapi_client.dart       # JSON GET: timeout, retry, typed PokemonApiException, NetworkStatus
@@ -46,7 +46,7 @@ lib/
 │   ├── share_service.dart        # ShareService: the system share sheet (share_plus) behind an interface
 ├── theme/                        # theme.dart, app_colors.dart, palette.dart, contrast.dart, responsive.dart, shapes.dart
 ├── core/                         # pokemon_constants (type colours), type_chart, pokedex (generations,
-│                                 #   sort), team_analysis, quiz_logic, capitalize
+│                                 #   sort), team_analysis, team_suggestions, quiz_logic, capitalize
 └── views/
     ├── shell_page.dart           # floating tab bar over an IndexedStack (tabs built on first visit; hidden tabs get TickerMode off)
     ├── home/                     # home_page, home_widgets, filter_sheet, search_bar, settings_sheet, …
@@ -112,6 +112,13 @@ TypeChart (static) ──> Detail (type matchups)
   `parse`), retries network/5xx once and times out after 15 s. Screens show a Retry.
 - **Detail page**: `PokemonDetailController` loads the Pokémon, then the evolution chain; the chain
   failing shows a retry in its section only. Type matchups come from `TypeChart` (no network).
+  **Moves** come from the same `/pokemon` response (`PokemonMove.parseAll` keeps the newest version
+  group the Pokémon has moves in, as `[name, method, level]` in the compact disk copy). A disk copy
+  saved before moves existed has `moves == null`: `PokemonApi` refetches it once when online and still
+  serves it offline (the section is simply hidden).
+- **Team**: `TeamController` analyses the members' types (`TeamAnalysis`) and, once the
+  `PokemonTypeIndex` is loaded, asks `TeamSuggestions` for the Pokémon whose addition removes the most
+  weakness trouble (and newly covers types), one per type combination, five at most.
 - **Quiz**: `QuizController` owns the game. Four `QuizMode`s: name, type, higher stat, super
   effective. Everything but the name questions starts unresolved (`correctIndex == -1`) and is
   completed by `QuizLogic.resolve` once the Pokémon data is fetched (a stat question fetches the

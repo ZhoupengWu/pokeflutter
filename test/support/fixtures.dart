@@ -14,6 +14,7 @@ Map<String, dynamic> pokemonJson({
   String? artwork = 'https://img/artwork.png',
   String? shiny = 'https://img/shiny.png',
   Map<String, int>? stats,
+  List<Map<String, dynamic>>? moves,
   Map<String, dynamic>? extraOther,
 }) => {
   'id': id,
@@ -46,6 +47,24 @@ Map<String, dynamic> pokemonJson({
     {
       'ability': {'name': 'blaze'},
     },
+  ],
+  'moves': ?moves,
+};
+
+/// One entry of the API's `moves` array: a move and how it is learned in each
+/// version group (`(group, method, level)`).
+Map<String, dynamic> moveJson(
+  String name,
+  List<(String, String, int)> learnedIn,
+) => {
+  'move': {'name': name},
+  'version_group_details': [
+    for (final (group, method, level) in learnedIn)
+      {
+        'level_learned_at': level,
+        'move_learn_method': {'name': method},
+        'version_group': {'name': group},
+      },
   ],
 };
 

@@ -103,6 +103,97 @@ void main() {
     expect(find.text('78'), findsOneWidget);
   });
 
+  group('moves', () {
+    final moves = [
+      moveJson('ember', [('scarlet-violet', 'level-up', 9)]),
+      moveJson('scratch', [('scarlet-violet', 'level-up', 1)]),
+      moveJson('fly', [('scarlet-violet', 'machine', 0)]),
+      moveJson('dragon-dance', [('scarlet-violet', 'egg', 0)]),
+    ];
+
+    testWidgets('are listed by way of learning, level up first', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        api: FakePokemonApi(types: ['fire', 'flying'], moves: moves),
+      );
+      final title = find.text('Moves');
+      await tester.ensureVisible(title);
+      await tester.pump();
+
+      expect(title, findsOneWidget);
+      expect(find.text('Level up · 2'), findsOneWidget);
+      expect(find.text('TM / HM · 1'), findsOneWidget);
+      expect(find.text('Egg · 1'), findsOneWidget);
+      expect(find.text('Tutor · 0'), findsNothing); // nothing to show
+      // Level up is selected and sorted by level.
+      expect(find.textContaining('Scratch'), findsOneWidget);
+      final scratch = tester.getTopLeft(find.textContaining('Scratch'));
+      final ember = tester.getTopLeft(find.textContaining('Ember'));
+      expect(
+        scratch.dy < ember.dy ||
+            (scratch.dy == ember.dy && scratch.dx < ember.dx),
+        isTrue,
+      );
+      expect(find.textContaining('Lv. 9'), findsOneWidget);
+      expect(find.text('Fly'), findsNothing);
+
+      await tester.tap(find.text('TM / HM · 1'));
+      await tester.pump();
+      expect(find.text('Fly'), findsOneWidget);
+      expect(find.textContaining('Scratch'), findsNothing);
+    });
+
+    testWidgets('a long list starts short and can be shown in full', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        api: FakePokemonApi(
+          types: ['fire', 'flying'],
+          moves: [
+            for (var i = 1; i <= 30; i++)
+              moveJson('move-$i', [('scarlet-violet', 'machine', 0)]),
+          ],
+        ),
+      );
+      await tester.ensureVisible(find.text('Moves'));
+      await tester.pump();
+
+      expect(find.text('Move 1'), findsOneWidget);
+      expect(find.text('Move 30'), findsNothing);
+
+      await tester.ensureVisible(find.text('Show all 30'));
+      await tester.pump();
+      await tester.tap(find.text('Show all 30'));
+      await tester.pump();
+      expect(find.text('Show all 30'), findsNothing);
+      await tester.ensureVisible(find.text('Move 30'));
+      expect(find.text('Move 30'), findsOneWidget);
+    });
+
+    testWidgets('are hidden when the Pokémon has none', (tester) async {
+      await _pump(tester);
+
+      expect(find.text('Moves'), findsNothing);
+    });
+
+    testWidgets('are translated', (tester) async {
+      await _pump(
+        tester,
+        api: FakePokemonApi(types: ['fire', 'flying'], moves: moves),
+        locale: const Locale('it'),
+      );
+      await tester.ensureVisible(find.text('Mosse'));
+      await tester.pump();
+
+      expect(find.text('Livello · 2'), findsOneWidget);
+      expect(find.text('MT / MN · 1'), findsOneWidget);
+      expect(find.text('Uova · 1'), findsOneWidget);
+    });
+  });
+
   testWidgets('abilities are shown with their translated name', (tester) async {
     await _pump(tester, locale: const Locale('it'));
 

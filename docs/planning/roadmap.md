@@ -107,4 +107,9 @@ Type Filter, Favourites System, Pokémon Comparison.
 - **Daily challenge** (same questions for everyone on a date, once a day, day streak) and
   **share the result** (🟩/🟥 grid) with the system share sheet.
 
+## ✅ Phase 15 — Moves and team suggestions (v1.13.0)
+- Detail page: the **moves** a Pokémon learns (level up, TM/HM, egg, tutor), no extra requests.
+- Team tab: **suggested Pokémon** that patch the team's weaknesses, from types alone.
+- CI and release builds pinned to Flutter 3.47.x (3.50 deprecates `material.dart`).
+
 See [`backlog.md`](backlog.md) for what is next.

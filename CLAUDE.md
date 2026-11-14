@@ -51,6 +51,10 @@ CI also builds a release APK (job "Build release APK") and checks the INTERNET p
 
 ## Sandbox gotchas
 - Flutter SDK is at `/opt/fl/flutter/bin` (add it to `PATH`). The "running as root" warning is harmless.
+  If it is missing (fresh container), download **3.47.x** from
+  `https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json` and unpack it
+  there: CI and the release workflow are pinned to `3.47.x` because Flutter 3.50 deprecates
+  `package:flutter/material.dart` (every import becomes an analyzer finding).
 - `flutter pub get`/`analyze`/`test` with the cloud SDK rewrites SDK-pinned entries in
   `pubspec.lock`. Keep the committed lock and change only the lines for packages you added
   (`git checkout pubspec.lock`, then edit by hand or merge only the new packages).
@@ -58,6 +62,9 @@ CI also builds a release APK (job "Build release APK") and checks the INTERNET p
 - `rsync` is not installed; copy with `cp -r`.
 - Don't `pkill -f` a pattern that matches your own command line (it kills the shell); start
   background servers with `(nohup … &)` and stop them by PID.
+- A page that starts a load of a service the test did not pre-load (e.g. `PokemonTypeIndex`) runs it
+  on the fake clock; a later `tester.runAsync(controller.init)` then waits for it forever. Load such
+  services up front with `tester.runAsync(index.ensureLoaded)` (see `team_page_test.dart`).
 - `tester.pageBack()` taps any "Back" tooltip; use `tester.binding.handlePopRoute()` for system back.
   `IndexedStack` does not pause tickers (the shell wraps tabs in `TickerMode`). The Ahem test font
   makes `Row`s overflow: use `Expanded`. Tests that judge layout against real text widths call

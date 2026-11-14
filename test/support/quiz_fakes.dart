@@ -25,6 +25,7 @@ class FakePokemonApi extends PokemonApi {
     Set<String>? failing,
     this.shiny = true,
     this.varyingStats = false,
+    this.moves,
   }) : failing = failing ?? <String>{};
 
   final List<String> types;
@@ -35,6 +36,9 @@ class FakePokemonApi extends PokemonApi {
   /// Whether the base stats differ from one Pokémon to the next (see
   /// [statsOf]); otherwise they all have the fixtures' default stats.
   final bool varyingStats;
+
+  /// The `moves` array every Pokémon is answered with (none when null).
+  final List<Map<String, dynamic>>? moves;
   final Set<String> failing;
   final List<String> requested = [];
 
@@ -65,6 +69,7 @@ class FakePokemonApi extends PokemonApi {
         speciesName: name,
         types: types,
         stats: varyingStats ? statsOf(name) : null,
+        moves: moves,
         shiny: shiny ? 'https://img/shiny.png' : null,
       ),
     );

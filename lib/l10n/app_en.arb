@@ -583,6 +583,46 @@
       "count": {"type": "int"}
     }
   },
+  "movesTitle": "Moves",
+  "movesHint": "From the newest games this Pokémon appears in. Move names come from PokéAPI, in English.",
+  "movesLevelUp": "Level up",
+  "movesMachine": "TM / HM",
+  "movesEgg": "Egg",
+  "movesTutor": "Tutor",
+  "movesShowAll": "Show all {count}",
+  "@movesShowAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "teamSuggestions": "Suggestions",
+  "teamSuggestionsHint": "Pokémon that would patch the team's weaknesses. Tap one to add it.",
+  "teamSuggestionResists": "Resists {types}",
+  "@teamSuggestionResists": {
+    "placeholders": {
+      "types": {
+        "type": "String"
+      }
+    }
+  },
+  "teamSuggestionHits": "Hits {types}",
+  "@teamSuggestionHits": {
+    "placeholders": {
+      "types": {
+        "type": "String"
+      }
+    }
+  },
+  "teamSuggestionAdd": "Add {name} to the team",
+  "@teamSuggestionAdd": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "typeChartOpen": "Full type chart",
   "typeChartTitle": "Type chart",
   "typeChartHint": "Rows are the attacking type, columns the defending type. Pinch to zoom, drag to move.",

@@ -89,7 +89,10 @@ class PokemonApi {
 
   Future<Pokemon> _load(String name) async {
     final stored = await _readDisk(name);
-    if (stored != null && _now().difference(stored.savedAt) < maxAge) {
+    // A copy saved before moves were kept is refreshed once, when online.
+    if (stored != null &&
+        stored.pokemon.moves != null &&
+        _now().difference(stored.savedAt) < maxAge) {
       _cache.set(stored.pokemon);
       return stored.pokemon;
     }

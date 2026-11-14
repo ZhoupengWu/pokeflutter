@@ -726,6 +726,52 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get movesTitle => 'Mosse';
+
+  @override
+  String get movesHint =>
+      'Dai giochi più recenti in cui compare il Pokémon. I nomi delle mosse vengono da PokéAPI, in inglese.';
+
+  @override
+  String get movesLevelUp => 'Livello';
+
+  @override
+  String get movesMachine => 'MT / MN';
+
+  @override
+  String get movesEgg => 'Uova';
+
+  @override
+  String get movesTutor => 'Istruttore';
+
+  @override
+  String movesShowAll(int count) {
+    return 'Mostra tutte ($count)';
+  }
+
+  @override
+  String get teamSuggestions => 'Suggerimenti';
+
+  @override
+  String get teamSuggestionsHint =>
+      'Pokémon che coprirebbero le debolezze della squadra. Tocca per aggiungerlo.';
+
+  @override
+  String teamSuggestionResists(String types) {
+    return 'Resiste a $types';
+  }
+
+  @override
+  String teamSuggestionHits(String types) {
+    return 'Colpisce $types';
+  }
+
+  @override
+  String teamSuggestionAdd(String name) {
+    return 'Aggiungi $name alla squadra';
+  }
+
+  @override
   String get typeChartOpen => 'Tabella completa dei tipi';
 
   @override

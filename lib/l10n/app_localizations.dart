@@ -1304,6 +1304,78 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 Pokémon could not be saved} other{{count} Pokémon could not be saved}}. Check your connection.'**
   String storageSaveFailed(int count);
 
+  /// No description provided for @movesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Moves'**
+  String get movesTitle;
+
+  /// No description provided for @movesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'From the newest games this Pokémon appears in. Move names come from PokéAPI, in English.'**
+  String get movesHint;
+
+  /// No description provided for @movesLevelUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Level up'**
+  String get movesLevelUp;
+
+  /// No description provided for @movesMachine.
+  ///
+  /// In en, this message translates to:
+  /// **'TM / HM'**
+  String get movesMachine;
+
+  /// No description provided for @movesEgg.
+  ///
+  /// In en, this message translates to:
+  /// **'Egg'**
+  String get movesEgg;
+
+  /// No description provided for @movesTutor.
+  ///
+  /// In en, this message translates to:
+  /// **'Tutor'**
+  String get movesTutor;
+
+  /// No description provided for @movesShowAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all {count}'**
+  String movesShowAll(int count);
+
+  /// No description provided for @teamSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get teamSuggestions;
+
+  /// No description provided for @teamSuggestionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokémon that would patch the team\'s weaknesses. Tap one to add it.'**
+  String get teamSuggestionsHint;
+
+  /// No description provided for @teamSuggestionResists.
+  ///
+  /// In en, this message translates to:
+  /// **'Resists {types}'**
+  String teamSuggestionResists(String types);
+
+  /// No description provided for @teamSuggestionHits.
+  ///
+  /// In en, this message translates to:
+  /// **'Hits {types}'**
+  String teamSuggestionHits(String types);
+
+  /// No description provided for @teamSuggestionAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {name} to the team'**
+  String teamSuggestionAdd(String name);
+
   /// No description provided for @typeChartOpen.
   ///
   /// In en, this message translates to:

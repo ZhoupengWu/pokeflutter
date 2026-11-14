@@ -11,6 +11,7 @@ import 'support/detail_fakes.dart';
 import 'support/fonts.dart';
 import 'support/quiz_fakes.dart';
 import 'support/test_app.dart';
+import 'support/type_index_fakes.dart';
 
 late TeamManager _team;
 late FakePokemonApi _api;
@@ -21,6 +22,8 @@ Future<TeamController> _pump(
   Locale locale = const Locale('en'),
   List<String> types = const ['water'],
   EdgeInsets padding = EdgeInsets.zero,
+  bool suggestions = false,
+  double textScale = 1,
 }) async {
   SharedPreferences.setMockInitialValues({
     'team_pokemon_names': [for (final id in saved) 'mon$id'],
@@ -33,10 +36,16 @@ Future<TeamController> _pump(
   _team = TeamManager();
   await tester.runAsync(() async => _team.init(await repository.getAll()));
   _api = FakePokemonApi(types: types);
+  // Loaded up front: a load started by the page would run on the test's fake
+  // clock, where the fake network cannot answer. Without `suggestions` the
+  // index knows no Pokémon, so nothing can be suggested.
+  final typeIndex = fakeTypeIndex(typesByName: suggestions ? null : {});
+  await tester.runAsync(typeIndex.ensureLoaded);
   final controller = TeamController(
     team: _team,
     api: _api,
     repository: repository,
+    typeIndex: typeIndex,
   );
   addTearDown(controller.dispose);
   await tester.pumpWidget(
@@ -46,6 +55,7 @@ Future<TeamController> _pump(
           size: const Size(360, 780),
           padding: padding,
           viewPadding: padding,
+          textScaler: TextScaler.linear(textScale),
         ),
         child: TeamPage(controller: controller),
       ),
@@ -159,6 +169,65 @@ void main() {
     expect(find.text('Mon3'), findsOneWidget); // now on a card
     expect(find.text('Add a Pokémon'), findsNWidgets(5));
     expect(_team.members.map((p) => p.name), ['mon3']);
+  });
+
+  group('suggestions', () {
+    testWidgets('are listed below the analysis and add on tap', (tester) async {
+      final controller = await _pump(tester, saved: [1], suggestions: true);
+      expect(controller.suggestions, isNotEmpty);
+      final first = controller.suggestions.first.pokemon;
+
+      await tester.ensureVisible(find.text('Suggestions'));
+      await tester.pump();
+      expect(find.text('Suggestions'), findsOneWidget);
+      expect(find.textContaining('Resists'), findsWidgets);
+
+      final name = 'Mon${first.id}';
+      await tester.ensureVisible(find.text(name));
+      await tester.pump();
+      await tester.tap(find.text(name));
+      await tester.pump();
+      await tester.pump();
+
+      expect(_team.contains(first.name), isTrue);
+      expect(find.text('Add a Pokémon'), findsNWidgets(4));
+    });
+
+    testWidgets('are absent for an empty team and when no types are known', (
+      tester,
+    ) async {
+      await _pump(tester, suggestions: true);
+      expect(find.text('Suggestions'), findsNothing);
+
+      await _pump(tester, saved: [1]);
+      expect(find.text('Suggestions'), findsNothing);
+    });
+
+    testWidgets('fit a large font in both languages', (tester) async {
+      for (final locale in const [Locale('en'), Locale('it')]) {
+        await _pump(
+          tester,
+          saved: [1],
+          suggestions: true,
+          textScale: 2,
+          locale: locale,
+        );
+        expect(tester.takeException(), isNull);
+      }
+    });
+
+    testWidgets('are translated', (tester) async {
+      await _pump(
+        tester,
+        saved: [1],
+        suggestions: true,
+        locale: const Locale('it'),
+      );
+      await tester.ensureVisible(find.text('Suggerimenti'));
+
+      expect(find.text('Suggerimenti'), findsOneWidget);
+      expect(find.textContaining('Resiste a'), findsWidgets);
+    });
   });
 
   testWidgets('the picker does not offer Pokémon already in the team', (
