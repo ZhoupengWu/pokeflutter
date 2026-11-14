@@ -4,30 +4,27 @@ Everything left to do, by priority. Items come from project reviews (Oct 2026).
 When an item is done, move it to `roadmap.md` / `todo.md` and delete it here.
 
 ## P2 — Quality and architecture
-1. **Device pass, rest of it**: the release APK has been tried on a phone (all fine except the
-   favourite heart, fixed). Still to look at on hardware: a tablet, landscape (new two-column
-   layouts), 200 % font size, TalkBack/VoiceOver (labels exist, quiz options and evolution stages
-   are buttons; nothing audited on a device).
-2. **Localisation follow-ups**: ability names are translated (EN/IT) and Pokémon get their proper
+1. **Localisation follow-ups**: ability names are translated (EN/IT) and Pokémon get their proper
    display names from `assets/pokemonNames.json` (the Italian names are the English ones except a
    handful, e.g. "Tipo Zero"; `tool/generate_pokemon_names.py` takes more languages). Not done: move
    and item names, and more UI languages (needs the languages to be chosen and every string
    translated).
-3. **Release hygiene**: release signing works (the CI APK is signed with the owner's key). Confirm or
-   replace `applicationId` (`com.wux.pokeflutter`) before publishing; add an iOS build job if a
+2. **Release hygiene**: release signing works (the CI APK is signed with the owner's key). `applicationId` stays
+   `com.wux.pokeflutter` (decided); add an iOS build job if a
    macOS runner is acceptable; the app label stays `pokeflutter`.
-4. **Navigation (decision, not work)**: the app keeps `Navigator.push`. Named routes / `go_router`
+3. **Navigation (decision, not work)**: the app keeps `Navigator.push`. Named routes / `go_router`
    only pay off with deep links or web URLs, which the app does not have; revisit then.
 
 ## P3 — New features
 **High value**
 - Advanced search by ability or stat range: needs data PokéAPI only gives one Pokémon at a time
   (the "weak to" filter is done)
-- Extended details: moves (Pokédex entry, category, habitat, forms and the shiny artwork are done)
+- Extended details: move type / power / category (names, level and method are done; each needs one
+  request per move) and translated move names
 
 **Medium**
 - Cry audio playback (`audioplayers`)
-- Team builder follow-ups: suggest a Pokémon that fixes the biggest weakness; share the team
+- Team builder follow-ups: share the team; suggestions that account for moves, not just types
 - Quiz: more modes (ability, move type), a daily-challenge reminder notification
 - Compare 3–4 Pokémon; share comparison
 - Favourites: notes, reordering, export/share, optional cloud sync

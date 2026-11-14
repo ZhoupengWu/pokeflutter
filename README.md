@@ -48,6 +48,8 @@ The app has five tabs: **Pokédex**, **Compare**, **Quiz**, **Team** and **Favou
 - **Type matchups**: what the Pokémon is weak to, resists and is immune to, with the damage
   multiplier (4×, 2×, ½×, ¼×, 0×) computed from its types, and a link to the **full 18 × 18
   type chart** (pan and zoom).
+- **Moves**: what the Pokémon learns by level up, TM/HM, egg and tutor, from the newest games it
+  appears in (names as PokéAPI gives them, in English).
 - **Evolution chain**: every stage, including branches such as Eevee's; tap a stage to open it.
 - Favourite toggle and a back arrow that returns straight to the list, while the system back
   button steps back through the Pokémon you opened.
@@ -76,7 +78,9 @@ of each pair highlighted in green.
 
 Pick up to six Pokémon (saved on the device). The tab shows which types the team is **weak to** and
 **resists** (×N = how many members), and which types its own types **hit super effectively** or
-leave **uncovered**. It is based on types only, not on moves.
+leave **uncovered**. It is based on types only, not on moves. Below it, up to five
+**suggested Pokémon** that would patch the team's weaknesses (and the types they newly hit); tap one
+to add it.
 
 ### Favourites
 

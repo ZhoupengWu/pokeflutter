@@ -20,9 +20,9 @@
 - Phase 12 (v1.10.1): release workflow (tag → signed APK in a draft release)
 - Phase 13 (v1.11.0): iOS look (floating tab bar, large titles, soft shapes), release draft from the Actions tab
 - Phase 14 (v1.12.0): weak-to filter, quiz rework (pair type answers, higher stat, super effective), daily challenge, share result
+- Phase 15 (v1.13.0): moves on the detail page, team suggestions, CI pinned to Flutter 3.47.x
 
 ## 🔲 Next
 Everything left is in [`backlog.md`](backlog.md). Suggested first steps:
-1. Manual pass on a device/emulator (P2-1): the UI was only checked in a headless web build.
-2. Named routes / `go_router` (P2-5) and localised Pokémon names (P2-6).
-3. The remaining features: extended details, team builder, cry playback, …
+1. More languages (needs the languages chosen) and translated move names (P2-1).
+2. The remaining features: cry playback, compare 3–4 Pokémon, share the team, …
