@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import '../core/team_analysis.dart';
+import '../core/team_suggestions.dart';
 import '../data/pokemon_api.dart';
 import '../data/pokemon_repository.dart';
+import '../data/pokemon_type_index.dart';
 import '../data/team_manager.dart';
 import '../model/pokemon.dart';
 import '../model/pokemon_list_item.dart';
@@ -13,15 +15,18 @@ class TeamController extends ChangeNotifier {
     required TeamManager team,
     required PokemonApi api,
     required PokemonRepository repository,
+    required PokemonTypeIndex typeIndex,
   }) : _team = team,
        _api = api,
-       _repository = repository {
+       _repository = repository,
+       _typeIndex = typeIndex {
     _team.notifier.addListener(_onTeamChanged);
   }
 
   final TeamManager _team;
   final PokemonApi _api;
   final PokemonRepository _repository;
+  final PokemonTypeIndex _typeIndex;
 
   /// The whole list, for the picker; empty until [init] has run.
   List<PokemonListItem> allPokemon = const [];
@@ -50,6 +55,32 @@ class TeamController extends ChangeNotifier {
       if (details[m.name] != null) details[m.name]!.typesList,
   ]);
 
+  /// Highest Pokédex number suggested (alternate forms are left out).
+  static const _maxSuggestedId = 1025;
+
+  String? _suggestionsKey;
+  List<TeamSuggestion> _suggestions = const [];
+
+  /// Pokémon that would patch the team's weaknesses, best first. Empty while
+  /// the team is empty or full, or the type index is not available.
+  List<TeamSuggestion> get suggestions {
+    final loaded = [
+      for (final m in members)
+        if (details[m.name] != null) details[m.name]!.typesList,
+    ];
+    if (isFull || loaded.isEmpty || !_typeIndex.isLoaded) return const [];
+    final key = [for (final types in loaded) types.join('/')].join(',');
+    if (key != _suggestionsKey) {
+      _suggestionsKey = key;
+      _suggestions = TeamSuggestions.suggest(
+        memberTypes: loaded,
+        candidates: available.where((p) => p.id <= _maxSuggestedId),
+        typesOf: _typeIndex.typesOf,
+      );
+    }
+    return _suggestions;
+  }
+
   /// Members counted in the [analysis].
   int get analysedCount => members.where((m) => details[m.name] != null).length;
 
@@ -60,7 +91,14 @@ class TeamController extends ChangeNotifier {
     );
     if (_disposed) return;
     notifyListeners();
-    await loadDetails();
+    await Future.wait([
+      loadDetails(),
+      // Suggestions need the types of the whole list; without them the tab
+      // simply has none.
+      _typeIndex.ensureLoaded().then((_) {
+        if (!_disposed) notifyListeners();
+      }),
+    ]);
   }
 
   /// Loads the details of the members that have none yet (also the Retry

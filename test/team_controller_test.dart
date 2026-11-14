@@ -5,6 +5,7 @@ import 'package:pokeflutter/model/pokemon_list_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support/quiz_fakes.dart';
+import 'support/type_index_fakes.dart';
 
 PokemonListItem _item(int id) => PokemonListItem(
   name: 'mon$id',
@@ -15,6 +16,7 @@ Future<(TeamController, TeamManager, FakePokemonApi)> _controller({
   List<int> team = const [],
   FakePokemonApi? api,
   List<String> types = const ['fire'],
+  bool typesOffline = false,
 }) async {
   SharedPreferences.setMockInitialValues({
     'team_pokemon_names': [for (final id in team) 'mon$id'],
@@ -27,12 +29,64 @@ Future<(TeamController, TeamManager, FakePokemonApi)> _controller({
     team: manager,
     api: pokemonApi,
     repository: repository,
+    typeIndex: fakeTypeIndex(offline: typesOffline),
   );
   await controller.init();
   return (controller, manager, pokemonApi);
 }
 
 void main() {
+  group('suggestions', () {
+    test('are Pokémon that patch the team, never members', () async {
+      final (c, _, _) = await _controller(team: [1, 2]); // two fire types
+
+      final suggestions = c.suggestions;
+      expect(suggestions, isNotEmpty);
+      expect(suggestions.length, lessThanOrEqualTo(5));
+      expect(
+        suggestions.map((s) => s.pokemon.name),
+        isNot(anyOf(contains('mon1'), contains('mon2'))),
+      );
+      // One per combination of types: a single water and a single grass mon.
+      final combos = suggestions.map((s) => s.types.join('/')).toList();
+      expect(combos.toSet(), hasLength(combos.length));
+      expect(suggestions.first.resists, isNotEmpty);
+      c.dispose();
+    });
+
+    test('follow the team and stop when it is full or empty', () async {
+      final (c, manager, _) = await _controller(team: [1]);
+      final before = c.suggestions.map((s) => s.pokemon.name).toList();
+      expect(before, isNotEmpty);
+
+      await c.add(_item(11)); // a water type joins
+      await Future<void>.delayed(Duration.zero);
+      expect(
+        c.suggestions.map((s) => s.pokemon.name),
+        isNot(contains('mon11')),
+      );
+
+      for (final id in [2, 3, 4, 5]) {
+        await manager.add(_item(id));
+      }
+      await Future<void>.delayed(Duration.zero);
+      expect(c.isFull, isTrue);
+      expect(c.suggestions, isEmpty);
+
+      await c.clear();
+      expect(c.suggestions, isEmpty);
+      c.dispose();
+    });
+
+    test('are unavailable without the type index', () async {
+      final (c, _, _) = await _controller(team: [1], typesOffline: true);
+
+      expect(c.analysedCount, 1);
+      expect(c.suggestions, isEmpty);
+      c.dispose();
+    });
+  });
+
   test('loads the list and the details of the saved team', () async {
     final (c, _, api) = await _controller(team: [1, 2]);
 

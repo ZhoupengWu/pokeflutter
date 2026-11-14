@@ -1346,6 +1346,36 @@ abstract class AppLocalizations {
   /// **'Show all {count}'**
   String movesShowAll(int count);
 
+  /// No description provided for @teamSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get teamSuggestions;
+
+  /// No description provided for @teamSuggestionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokémon that would patch the team\'s weaknesses. Tap one to add it.'**
+  String get teamSuggestionsHint;
+
+  /// No description provided for @teamSuggestionResists.
+  ///
+  /// In en, this message translates to:
+  /// **'Resists {types}'**
+  String teamSuggestionResists(String types);
+
+  /// No description provided for @teamSuggestionHits.
+  ///
+  /// In en, this message translates to:
+  /// **'Hits {types}'**
+  String teamSuggestionHits(String types);
+
+  /// No description provided for @teamSuggestionAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {name} to the team'**
+  String teamSuggestionAdd(String name);
+
   /// No description provided for @typeChartOpen.
   ///
   /// In en, this message translates to:

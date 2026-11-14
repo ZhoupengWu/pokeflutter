@@ -32,6 +32,7 @@ class _TeamPageState extends State<TeamPage> {
           team: context.read(),
           api: context.read(),
           repository: context.read(),
+          typeIndex: context.read(),
         );
     _controller.init();
   }

@@ -750,6 +750,28 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get teamSuggestions => 'Suggerimenti';
+
+  @override
+  String get teamSuggestionsHint =>
+      'Pokémon che coprirebbero le debolezze della squadra. Tocca per aggiungerlo.';
+
+  @override
+  String teamSuggestionResists(String types) {
+    return 'Resiste a $types';
+  }
+
+  @override
+  String teamSuggestionHits(String types) {
+    return 'Colpisce $types';
+  }
+
+  @override
+  String teamSuggestionAdd(String name) {
+    return 'Aggiungi $name alla squadra';
+  }
+
+  @override
   String get typeChartOpen => 'Tabella completa dei tipi';
 
   @override
